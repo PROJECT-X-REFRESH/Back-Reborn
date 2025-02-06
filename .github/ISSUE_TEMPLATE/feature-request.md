@@ -1,3 +1,11 @@
+---
+name: Feature request
+about: Suggest an idea for this project
+title: 'Feature : '
+labels: "✨ Feature"
+assignees: ''
+---
+
 ### Structre Example
 
 ![예시 이미지](링크를 넣자) 
