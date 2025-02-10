@@ -1,36 +1,50 @@
-package com.reborn.back.domain.comment;
+package com.reborn.back.domain.entity;
 
-import com.reborn.back.domain.board.Board;
-import com.reborn.back.domain.entity.BaseEntity;
-import com.reborn.back.domain.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "comment")
 @Getter
-@Builder
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "comment")
+@Builder
 public class Comment extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "cId", nullable = false)
+    private Integer id;
 
+    @Lob
+    @Column(name = "cContents", columnDefinition = "longtext", nullable = false)
+    private String contents;
+
+    @Column(name = "cDate", nullable = false)
+    private LocalDateTime date;
+
+    @Column(name = "cIsDeleted", nullable = false)
+    private Boolean isDeleted;
+
+    // FK: bId → Board(bId)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "bId", nullable = false)
     private Board board;
 
+    // 답글인 경우 상위 댓글
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "cPid")
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Comment> replies = new ArrayList<>();
+
+    // FK: uid → User(uid)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "uid", nullable = false)
     private User user;
-
-    @Column(length = 20, nullable = false)
-    private String commentWriter;
-
-    @Column(length = 1000, nullable = false)
-    private String commentContent;
-}

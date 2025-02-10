@@ -1,29 +1,29 @@
-package com.reborn.back.domain.board;
+package com.reborn.back.domain.entity;
 
-import com.reborn.back.domain.entity.BaseEntity;
-import com.reborn.back.domain.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
+@Table(name = "boardBookmark")
 @Getter
-@Builder
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BoardBookmark extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "bbId", nullable = false)
+    private Integer id;
 
+    // FK: bId → Board(bId)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "bId", nullable = false)
     private Board board;
 
+    // FK: uid → User(uid)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "uid", nullable = false)
+    private User user;
 }

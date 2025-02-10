@@ -1,72 +1,48 @@
-package com.reborn.back.domain.user;
+package com.reborn.back.domain.entity;
 
-import com.reborn.back.domain.board.Board;
-import com.reborn.back.domain.board.BoardBookmark;
-import com.reborn.back.domain.board.BoardLike;
-import com.reborn.back.domain.comment.Comment;
-import com.reborn.back.domain.diary.Rediary;
-import com.reborn.back.domain.entity.BaseEntity;
-import com.reborn.back.domain.pet.Pet;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user")
+@Builder
 public class User extends BaseEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "uid", updatable = false, nullable = false, length = 36)
+    private String uid;
 
-    @Column(nullable = true, unique = true)
-    private String phoneNum;
+    @Column(name = "name", length = 40)
+    private String name;
 
-    @Column(nullable = true)
-    private Long contentPetId;
-
-    @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false)
-    private String nickname;
-
-    @Column(nullable = false)
+    @Column(name = "email", length = 50)
     private String email;
 
-    @Column(nullable = true)
-    private String profileImage;
+    @Column(name = "createTime")
+    private LocalDateTime createTime;
 
-    @Column(nullable = true)
-    private String backgroundImage;
+    @Column(name = "lastTime")
+    private LocalDateTime lastTime;
 
-    @Column(nullable = true)
-    private String deviceToken;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private User0
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SocialAccount> socialAccounts = new ArrayList<>();
+    private List<Notice> noticeList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Pet> petList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boardList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<Comment> commentList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<BoardBookmark> boardBookmarkList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<BoardLike> boardLikeList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<Rediary> rediaryList = new ArrayList<>();
+    
 }
