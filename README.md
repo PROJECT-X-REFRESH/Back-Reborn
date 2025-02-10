@@ -2,17 +2,18 @@
 
 REFRESH 팀의 프로젝트, REBORN(반려동물 동반 애플리케이션)의 백엔드(서버)입니다.
 
-
 ### MEMBER
-|강민준|차정은|
-|:----:|:----:|
-|[GITHUB](https://github.com/MinJunKKang)|[GITHUB](https://github.com/jyc0011)|
 
+|                   강민준                    |                 차정은                  |
+|:----------------------------------------:|:------------------------------------:|
+| [GITHUB](https://github.com/MinJunKKang) | [GITHUB](https://github.com/jyc0011) |
 
 ### IMPLEMENTATION FEATURES
+
 [ISSUE](https://github.com/PROJECT-X-REFRESH/Back-Reborn/issues) 참고
 
 ### TECHNICAL STACK
+
 <div align="center">
 
 ![Java](https://img.shields.io/badge/Java-ED272C?logo=Java&logoColor=white&style=for-the-badge)
@@ -34,7 +35,7 @@ REFRESH 팀의 프로젝트, REBORN(반려동물 동반 애플리케이션)의 �
 
 ![GIT](https://img.shields.io/badge/git-F05032?logo=git&logoColor=white&style=for-the-badge)
 ![GITHUB](https://img.shields.io/badge/github-181717?logo=github&logoColor=white&style=for-the-badge)
-![GIT ACTION](https://img.shields.io/badge/gitaction-278CFF?logo=gitaction&logoColor=white&style=for-the-badge)
+![GIT ACTION](https://img.shields.io/badge/git%20action-278CFF?logo=gitaction&logoColor=white&style=for-the-badge)
 ![SWAGGER](https://img.shields.io/badge/SWAGGER-85EA2D?logo=swagger&logoColor=black&style=for-the-badge)
 
 </div>

@@ -1,5 +1,7 @@
-package com.reborn.back.domain.entity;
+package com.reborn.back.domain.contents.farewell;
 
+import com.reborn.back.domain.entity.BaseEntity;
+import com.reborn.back.domain.entity.Emotion;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,10 +40,10 @@ public class Reveal extends BaseEntity {
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "pos", column = @Column(name = "vealPos")),
-        @AttributeOverride(name = "neg", column = @Column(name = "vealNeg")),
-        @AttributeOverride(name = "neu", column = @Column(name = "vealNeu")),
-        @AttributeOverride(name = "state", column = @Column(name = "vealState")),
+            @AttributeOverride(name = "pos", column = @Column(name = "vealPos")),
+            @AttributeOverride(name = "neg", column = @Column(name = "vealNeg")),
+            @AttributeOverride(name = "neu", column = @Column(name = "vealNeu")),
+            @AttributeOverride(name = "state", column = @Column(name = "vealState")),
     })
     private Emotion emotion;
 

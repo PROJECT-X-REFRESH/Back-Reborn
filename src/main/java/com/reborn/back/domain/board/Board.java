@@ -1,7 +1,11 @@
-package com.reborn.back.domain.entity;
+package com.reborn.back.domain.board;
 
+import com.reborn.back.domain.entity.BaseEntity;
+import com.reborn.back.domain.entity.BoardType;
+import com.reborn.back.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Entity

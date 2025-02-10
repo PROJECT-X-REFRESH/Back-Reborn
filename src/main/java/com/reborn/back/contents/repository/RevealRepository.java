@@ -1,6 +1,6 @@
 package com.reborn.back.contents.repository;
 
-import com.reborn.back.domain.contents.Reveal;
+import com.reborn.back.domain.contents.farewell.Reveal;
 import com.reborn.back.domain.pet.Pet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

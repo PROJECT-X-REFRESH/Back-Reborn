@@ -1,5 +1,8 @@
-package com.reborn.back.domain.entity;
+package com.reborn.back.domain.comment;
 
+import com.reborn.back.domain.board.Board;
+import com.reborn.back.domain.entity.BaseEntity;
+import com.reborn.back.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -48,3 +51,4 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid", nullable = false)
     private User user;
+}

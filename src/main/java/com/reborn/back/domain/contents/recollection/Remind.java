@@ -1,5 +1,7 @@
-package com.reborn.back.domain.entity;
+package com.reborn.back.domain.contents.recollection;
 
+import com.reborn.back.domain.entity.BaseEntity;
+import com.reborn.back.domain.pet.Pet;
 import jakarta.persistence.*;
 import lombok.*;
 

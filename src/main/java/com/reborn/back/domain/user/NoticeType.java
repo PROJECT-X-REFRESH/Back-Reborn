@@ -1,8 +1,8 @@
-package com.reborn.back.domain.entity;
+package com.reborn.back.domain.user;
 
 public enum NoticeType {
     COMMENT,
-    CHAT,  
+    CHAT,
     BIRTH,
     DEATH,
 }

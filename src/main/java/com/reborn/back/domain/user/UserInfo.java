@@ -1,5 +1,7 @@
-package com.reborn.back.domain.entity;
+package com.reborn.back.domain.user;
 
+import com.reborn.back.domain.entity.Address;
+import com.reborn.back.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,15 +29,15 @@ public class UserInfo extends BaseEntity {
     @Column(name = "uiWallpaper", length = 255)
     private String wallpaper;
 
-@Embedded
-@AttributeOverrides({
-    @AttributeOverride(name = "latitude", column = @Column(name = "uiLatitude")),
-    @AttributeOverride(name = "longitude", column = @Column(name = "uiLongitude")),
-    @AttributeOverride(name = "addressS", column = @Column(name = "uiAddressS", length = 20, nullable = false)),
-    @AttributeOverride(name = "addressG", column = @Column(name = "uiAddressG", length = 20, nullable = false)),
-    @AttributeOverride(name = "addressM", column = @Column(name = "uiAddressM", length = 20, nullable = false)),
-    @AttributeOverride(name = "addressD", column = @Column(name = "uiAddressD", length = 20, nullable = false))
-})
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "latitude", column = @Column(name = "uiLatitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "uiLongitude")),
+            @AttributeOverride(name = "addressS", column = @Column(name = "uiAddressS", length = 20, nullable = false)),
+            @AttributeOverride(name = "addressG", column = @Column(name = "uiAddressG", length = 20, nullable = false)),
+            @AttributeOverride(name = "addressM", column = @Column(name = "uiAddressM", length = 20, nullable = false)),
+            @AttributeOverride(name = "addressD", column = @Column(name = "uiAddressD", length = 20, nullable = false))
+    })
     private Address address;
 
     // FK: uid → User(uid)

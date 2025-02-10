@@ -1,5 +1,6 @@
-package com.reborn.back.domain.entity;
+package com.reborn.back.domain.chat;
 
+import com.reborn.back.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

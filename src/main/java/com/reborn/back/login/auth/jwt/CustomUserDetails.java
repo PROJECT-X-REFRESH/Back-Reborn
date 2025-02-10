@@ -1,5 +1,6 @@
 package com.reborn.back.login.auth.jwt;
 
+import com.reborn.back.domain.user.Oauth;
 import com.reborn.back.domain.user.SocialAccount;
 import com.reborn.back.domain.user.User;
 import lombok.AllArgsConstructor;
@@ -25,13 +26,13 @@ public class CustomUserDetails implements UserDetails {
     private String nickname;
     private String provider;
 
-    public static CustomUserDetails fromEntity(User entity, SocialAccount socialAccount) {
+    public static CustomUserDetails fromEntity(User entity, Oauth oauth) {
         return CustomUserDetails.builder()
                 .id(entity.getId())
                 .username(entity.getUsername())
                 .email(entity.getEmail())
                 .nickname(entity.getNickname())
-                .provider(socialAccount.getProvider())
+                .provider(oauth.getProvider())
                 .build();
     }
 

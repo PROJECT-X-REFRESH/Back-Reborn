@@ -1,5 +1,6 @@
-package com.reborn.back.domain.entity;
+package com.reborn.back.domain.user;
 
+import com.reborn.back.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,7 +36,7 @@ public class Oauth extends BaseEntity {
     private String provider;
 
     // FK: uid → User(uid)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid", nullable = false)
     private User user;
 }

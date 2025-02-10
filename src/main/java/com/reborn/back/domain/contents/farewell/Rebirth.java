@@ -1,5 +1,6 @@
-package com.reborn.back.domain.entity;
+package com.reborn.back.domain.contents.farewell;
 
+import com.reborn.back.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReBirth extends BaseEntity {
+public class Rebirth extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

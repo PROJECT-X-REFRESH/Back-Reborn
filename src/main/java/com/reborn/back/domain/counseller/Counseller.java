@@ -1,5 +1,7 @@
-package com.reborn.back.domain.entity;
+package com.reborn.back.domain.counseller;
 
+import com.reborn.back.domain.entity.Address;
+import com.reborn.back.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,14 +37,14 @@ public class Counseller extends BaseEntity {
     @Column(name = "coInfo", columnDefinition = "longtext")
     private String info;
 
-@Embedded
-@AttributeOverrides({
-    @AttributeOverride(name = "latitude", column = @Column(name = "coLatitude")),
-    @AttributeOverride(name = "longitude", column = @Column(name = "coLongitude")),
-    @AttributeOverride(name = "addressS", column = @Column(name = "coAddressS", length = 20, nullable = false)),
-    @AttributeOverride(name = "addressG", column = @Column(name = "coAddressG", length = 20, nullable = false)),
-    @AttributeOverride(name = "addressM", column = @Column(name = "coAddressM", length = 20, nullable = false)),
-    @AttributeOverride(name = "addressD", column = @Column(name = "coAddressD", length = 20, nullable = false))
-})
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "latitude", column = @Column(name = "coLatitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "coLongitude")),
+            @AttributeOverride(name = "addressS", column = @Column(name = "coAddressS", length = 20, nullable = false)),
+            @AttributeOverride(name = "addressG", column = @Column(name = "coAddressG", length = 20, nullable = false)),
+            @AttributeOverride(name = "addressM", column = @Column(name = "coAddressM", length = 20, nullable = false)),
+            @AttributeOverride(name = "addressD", column = @Column(name = "coAddressD", length = 20, nullable = false))
+    })
     private Address address;
 }

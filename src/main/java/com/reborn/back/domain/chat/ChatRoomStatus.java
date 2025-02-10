@@ -1,4 +1,4 @@
-package com.reborn.back.domain.entity;
+package com.reborn.back.domain.chat;
 
 public enum ChatRoomStatus {
     NORMAL,    // 기본 (0)
