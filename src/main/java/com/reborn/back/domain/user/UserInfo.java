@@ -26,9 +26,6 @@ public class UserInfo extends BaseEntity {
     @Column(name = "uiBio", columnDefinition = "longtext")
     private String bio;
 
-    @Column(name = "uiWallpaper", length = 255)
-    private String wallpaper;
-
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "latitude", column = @Column(name = "uiLatitude")),

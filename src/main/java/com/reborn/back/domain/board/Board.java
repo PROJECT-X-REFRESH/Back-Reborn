@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "board")
@@ -25,9 +27,6 @@ public class Board extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "bCategory", nullable = false)
     private BoardType category;
-
-    @Column(name = "bTitle", length = 255, nullable = false)
-    private String title;
 
     @Lob
     @Column(name = "bContent", columnDefinition = "longtext", nullable = false)

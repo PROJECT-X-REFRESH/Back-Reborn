@@ -39,19 +39,9 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "bId", nullable = false)
     private Board board;
 
-    // 답글인 경우 상위 댓글
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cPid")
-    private Comment parent;
-
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Comment> replies = new ArrayList<>();
-
     // FK: uid → User(uid)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> commentLikeList = new ArrayList<>();
 }
