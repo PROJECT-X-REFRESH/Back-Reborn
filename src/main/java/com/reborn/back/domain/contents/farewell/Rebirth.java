@@ -32,7 +32,7 @@ public class Rebirth extends BaseEntity {
     private String post;
 
     // FK: fId → Farewell(fId)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fId", nullable = false)
     private Farewell farewell;
 }

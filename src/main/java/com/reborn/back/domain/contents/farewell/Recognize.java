@@ -22,7 +22,7 @@ public class Recognize extends BaseEntity {
     private Integer score;
 
     // FK: fId → Farewell(fId)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fId", nullable = false)
     private Farewell farewell;
 }

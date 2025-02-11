@@ -45,4 +45,13 @@ public class Pet extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid", nullable = false)
     private User user;
+
+    @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Farewell farewell;
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Record> record = new ArrayList<>();
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Remind> remind = new ArrayList<>();
 }

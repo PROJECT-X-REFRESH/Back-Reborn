@@ -52,4 +52,7 @@ public class ChatRoom extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crFrom", nullable = false)
     private User fromUser;
+
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatMessage> messageList = new ArrayList<>();
 }

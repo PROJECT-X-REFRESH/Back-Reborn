@@ -26,4 +26,16 @@ public class Farewell extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pId", nullable = false)
     private Pet pet;
+
+    @OneToOne(mappedBy = "farewell", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Rebirth rebirth;
+
+    @OneToOne(mappedBy = "farewell", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Recognize recognize;
+
+    @OneToMany(mappedBy = "farewell", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Remember> rememberList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "farewell", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reveal> revealList = new ArrayList<>();
 }
