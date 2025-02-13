@@ -1,4 +1,4 @@
-package com.reborn.back.contents.repository;
+package com.reborn.back.contents.recollection.repository;
 
 import com.reborn.back.domain.contents.recollection.Remind;
 import com.reborn.back.domain.pet.Pet;
