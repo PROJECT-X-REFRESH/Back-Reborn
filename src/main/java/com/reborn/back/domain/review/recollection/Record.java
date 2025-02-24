@@ -1,4 +1,4 @@
-package com.reborn.back.domain.contents.recollection;
+package com.reborn.back.domain.review.recollection;
 
 import com.reborn.back.domain.entity.BaseEntity;
 import com.reborn.back.domain.entity.Emotion;

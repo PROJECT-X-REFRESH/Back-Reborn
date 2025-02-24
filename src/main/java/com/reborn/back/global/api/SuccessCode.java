@@ -14,15 +14,11 @@ public enum SuccessCode implements BaseCode { // 성공
     USER_LOGOUT_SUCCESS(HttpStatus.OK, "USER_2001", "로그아웃 되었습니다."),
     USER_REISSUE_SUCCESS(HttpStatus.OK, "USER_2002", "토큰 재발급이 완료되었습니다."),
     USER_DELETE_SUCCESS(HttpStatus.OK, "USER_2003", "회원탈퇴가 완료되었습니다."),
-    USER_PHONE_VERIFICATION_SUCCESS(HttpStatus.OK, "USER_2004", "전화번호 인증이 완료되었습니다."),
     USER_INFO_SUCCESS(HttpStatus.OK, "USER_2008", "개인 정보 열람이 완료되었습니다."),
-    USER_NICKNAME_SUCCESS(HttpStatus.OK, "USER_2009", "닉네임 생성이 완료되었습니다."),
     MAIN_INFO_SUCCESS(HttpStatus.OK, "USER_2010", "메인 화면의 개인 정보 열람이 완료되었습니다."),
 
     USER_PROFILE_IMAGE_UPDATED(HttpStatus.OK, "USER_2004", "프로필 사진 업데이트가 완료되었습니다."),
-    USER_BACKGROUND_IMAGE_UPDATED(HttpStatus.OK, "USER_2005", "배경 사진 업데이트가 완료되었습니다."),
     USER_PROFILE_IMAGE_BROWSE(HttpStatus.OK, "USER_2006", "프로필 사진 열람이 완료되었습니다."),
-    USER_BACKGROUND_IMAGE_BROWSE(HttpStatus.OK, "USER_2007", "배경 사진 열람이 완료되었습니다."),
 
     FILE_DELETE_SUCCESS(HttpStatus.OK, "FILE_2001", "파일 삭제가 완료되었습니다."),
 

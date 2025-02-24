@@ -10,6 +10,7 @@ import com.reborn.back.login.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,25 +20,21 @@ import java.util.Map;
 @Tag(name = "토큰", description = "access token 관련 api 입니다.")
 @RestController
 @RequestMapping("/token")
+@RequiredArgsConstructor
 public class TokenController {
 
     private final UserService userService;
 
-    // 생성자 - 의존성 주입
-    // userService 로직 처리
-    public TokenController(UserService userService) {
-        this.userService = userService;
-    }
-
     // 프론트엔드로 토큰 반환
     // 클라이언트->유저 정보->회원 가입 or JWT 생성 -> return
+    // 로그인이 시작되는 부분이라고 볼 수 있음
     @Operation(summary = "토큰 반환", description = "프론트에게 유저 정보 받아 토큰 반환하는 메서드입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_2011", description = "회원가입 & 로그인 성공"),
     })
     @PostMapping("/generate")
     public ApiResponse<JwtDto> tokenToFront(
-            @RequestBody UserRequestDto.UserReqDto userReqDto
+            @RequestBody UserRequestDto userReqDto
     ) {
         // 1. 받은 email로 회원 여부 확인
         Boolean isMember = userService.checkMemberByEmail(userReqDto.getEmail());

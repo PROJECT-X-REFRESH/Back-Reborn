@@ -45,7 +45,7 @@ public class User extends BaseEntity {
     private String deviceToken;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Oauth auth;
+    private OAuth auth;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserInfo info;

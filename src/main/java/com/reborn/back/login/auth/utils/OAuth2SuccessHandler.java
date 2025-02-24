@@ -1,10 +1,9 @@
 package com.reborn.back.login.auth.utils;
 
+import com.reborn.back.global.utils.Redis.RedisUtil;
 import com.reborn.back.login.auth.dto.JwtDto;
 import com.reborn.back.login.auth.jwt.CustomUserDetails;
 import com.reborn.back.login.auth.jwt.JwtTokenUtils;
-import com.reborn.back.login.auth.jwt.RefreshToken;
-import com.reborn.back.login.repository.RefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,10 +27,9 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
+    private final RedisUtil redisUtil;
     private final JwtTokenUtils tokenUtils;
     private final UserDetailsManager userDetailsManager;
-    private final RefreshTokenRepository refreshTokenRepository;
     // 리다이렉트할 기본 URL
     @Value("${oauth2.redirect-url}")
     private String baseRedirectUrl;
@@ -57,7 +55,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 CustomUserDetails newUser = CustomUserDetails.builder()
                         .username(username)
                         .email(email)
-                        .nickname(nickname)
                         .provider(provider)
                         .build();
                 userDetailsManager.createUser(newUser);
@@ -91,20 +88,21 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     // Refresh Token 저장 로직
     private void saveRefreshToken(JwtDto jwt, String username) {
         Claims refreshTokenClaims = tokenUtils.parseClaims(jwt.getRefreshToken());
+        // 발급 시간과 만료 시간의 차이를 초 단위로 계산
         long validPeriod = refreshTokenClaims.getExpiration().toInstant().getEpochSecond()
                 - refreshTokenClaims.getIssuedAt().toInstant().getEpochSecond();
 
-        // 기존 Refresh Token 삭제 후 새로 저장
-        refreshTokenRepository.findById(username)
-                .ifPresent(existingToken -> refreshTokenRepository.deleteById(username));
+        // 기존에 Redis에 저장된 Refresh Token이 있으면 삭제
+        String existingToken = redisUtil.getData(username);
+        if (existingToken != null) {
+            redisUtil.deleteData(username);
+        }
 
-        refreshTokenRepository.save(
-                RefreshToken.builder()
-                        .id(username)
-                        .ttl(validPeriod)
-                        .refreshToken(jwt.getRefreshToken())
-                        .build()
-        );
+        // 새 Refresh Token을 Redis에 저장 (TTL 설정)
+        // 두 번째 파라미터: 저장할 값 (Refresh Token)
+        // 세 번째 파라미터: 만료까지 남은 시간(초 단위)
+        redisUtil.setDataExpire(username, jwt.getRefreshToken(), validPeriod);
+
         log.info("RefreshToken 저장 완료: {}", username);
     }
 }

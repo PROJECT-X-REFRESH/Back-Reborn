@@ -1,6 +1,7 @@
 package com.reborn.back.login.repository;
 
 import com.reborn.back.domain.user.User;
+import com.reborn.back.domain.user.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -25,4 +26,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // 전화번호(고유)로 검색
     Optional<User> findByPhoneNum(String phoneNum);
+
 }

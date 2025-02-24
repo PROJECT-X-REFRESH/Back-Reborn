@@ -1,6 +1,7 @@
 package com.reborn.back.login.controller;
 
 import com.reborn.back.domain.user.User;
+import com.reborn.back.domain.user.UserInfo;
 import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.global.utils.S3.AmazonS3Manager;
@@ -80,22 +81,6 @@ public class UserController {
         return ApiResponse.onSuccess(SuccessCode.USER_PROFILE_IMAGE_UPDATED, true);
     }
 
-    @Operation(summary = "배경 사진 첨부", description = "배경 사진을 첨부하는 메서드입니다.")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_2005", description = "배경 사진 첨부가 완료되었습니다.")
-    })
-    @PostMapping(value = "/background-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<Boolean> createBackgroundImage(
-            @RequestPart(value = "background") MultipartFile file,
-            @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ) throws IOException {
-        String dirName = "background/";
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
-        userService.createBackgroundImage(dirName, file, user);
-
-        return ApiResponse.onSuccess(SuccessCode.USER_BACKGROUND_IMAGE_UPDATED, true);
-    }
-
     @Operation(summary = "사진 삭제", description = "s3에 업로드 된 사진을 삭제하는 메서드입니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "FILE_2001", description = "사진 삭제가 완료되었습니다.")
@@ -125,20 +110,6 @@ public class UserController {
         return ApiResponse.onSuccess(SuccessCode.USER_PROFILE_IMAGE_BROWSE, imageUrl);
     }
 
-    @Operation(summary = "배경 사진 열람", description = "배경 사진을 url로 열람하는 메서드입니다.")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_2007", description = "배경 사진 열람이 완료되었습니다.")
-    })
-    @GetMapping(value = "/show-background-image")
-    public ApiResponse<String> showBackgroundImage(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ) {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
-        String imageUrl = userService.showBackgroundImage(user);
-
-        return ApiResponse.onSuccess(SuccessCode.USER_BACKGROUND_IMAGE_BROWSE, imageUrl);
-    }
-
     @Operation(summary = "내 정보 열람", description = "내 정보(since, email) 열람하는 메서드입니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_2008", description = "유저 정보 열람이 완료되었습니다.")
@@ -152,21 +123,6 @@ public class UserController {
         return ApiResponse.onSuccess(SuccessCode.USER_INFO_SUCCESS, UserConverter.infoDto(user));
     }
 
-    @Operation(summary = "닉네임 입력", description = "중복 안되는 닉네임을 입력받는 메서드입니다.")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_2009", description = "닉네임 생성이 완료되었습니다.")
-    })
-    @PostMapping(value = "/nickname")
-    public ApiResponse<Boolean> nickname(
-            @RequestBody UserRequestDto.UserNicknameReqDto nicknameReqDto,
-            @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ) {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
-        userService.saveNickname(nicknameReqDto, user);
-
-        return ApiResponse.onSuccess(SuccessCode.USER_NICKNAME_SUCCESS, true);
-    }
-
     @Operation(summary = "메인 화면의 닉네임, 사진", description = "메인 화면에 띄울 정보들을 보이는 메서드입니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_2010", description = "닉네임, 사진 전달이 완료되었습니다.")
@@ -175,7 +131,7 @@ public class UserController {
     public ApiResponse<UserResponseDto.MainInfoResDto> mainInfo(
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
+        UserInfo user = userService.findUserInfoByUserName(customUserDetails.getUsername());
 
         return ApiResponse.onSuccess(SuccessCode.MAIN_INFO_SUCCESS, UserConverter.mainDto(user));
     }

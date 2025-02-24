@@ -13,9 +13,6 @@ public enum ErrorCode implements BaseCode { // 실패
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_4041", "존재하지 않는 회원입니다."),
     USER_NOT_FOUND_BY_EMAIL(HttpStatus.NOT_FOUND, "USER_4042", "EMAIL이 존재하지 않는 회원입니다."),
     USER_NOT_FOUND_BY_USERNAME(HttpStatus.NOT_FOUND, "USER_4043", "USERNAME이 존재하지 않는 회원입니다."),
-    SMS_CODE_MISMATCH(HttpStatus.FORBIDDEN, "USER_4044", "유효하지 않은 인증입니다."),
-    SMS_CODE_EXPIRED_OR_NOT_FOUND(HttpStatus.FORBIDDEN, "USER_4045", "인증 시간을 초과하였습니다."),
-    ALREADY_USED_NICKNAME(HttpStatus.FORBIDDEN, "USER_4031", "이미 사용중인 닉네임입니다."),
 
     MISMATCH_IMAGE_FILE(HttpStatus.FORBIDDEN, "FILE_4031", "첨부할 사진은 png, jpeg 유형만 가능합니다."),
 

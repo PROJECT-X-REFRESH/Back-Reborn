@@ -1,7 +1,6 @@
 package com.reborn.back.login.auth.jwt;
 
-import com.reborn.back.domain.user.Oauth;
-import com.reborn.back.domain.user.SocialAccount;
+import com.reborn.back.domain.user.OAuth;
 import com.reborn.back.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,18 +19,16 @@ import java.util.Collections;
 @AllArgsConstructor
 @Getter
 public class CustomUserDetails implements UserDetails {
-    private Long id;
+    private String id;
     private String username;
     private String email;
-    private String nickname;
     private String provider;
 
-    public static CustomUserDetails fromEntity(User entity, Oauth oauth) {
+    public static CustomUserDetails fromEntity(User entity, OAuth oauth) {
         return CustomUserDetails.builder()
-                .id(entity.getId())
-                .username(entity.getUsername())
+                .id(entity.getUid())
+                .username(entity.getName())
                 .email(entity.getEmail())
-                .nickname(entity.getNickname())
                 .provider(oauth.getProvider())
                 .build();
     }
@@ -76,9 +73,8 @@ public class CustomUserDetails implements UserDetails {
 
     public User toEntity() {
         return User.builder()
-                .username(this.username)
+                .name(this.username)
                 .email(this.email)
-                .nickname(this.nickname)
                 .build();
     }
 
@@ -90,7 +86,6 @@ public class CustomUserDetails implements UserDetails {
                 ", username='" + username + '\'' +
                 ", password='[PROTECTED]'" +
                 ", email='" + email + '\'' +
-                ", nickname='" + nickname + '\'' +
                 '}';
     }
 }
