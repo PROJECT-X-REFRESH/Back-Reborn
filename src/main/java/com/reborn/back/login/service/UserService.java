@@ -66,8 +66,8 @@ public class UserService {
     }
 
     public UserInfo findUserInfoByUserName(String userName) {
-        return userInfoRepository.findByUsername(userName)
-                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND_BY_USERNAME)).getInfo();
+        User user= findUserByUserName(userName);
+        return userInfoRepository.findByUser(user);
     }
 
     public User findByEmail(String email) {
@@ -266,25 +266,10 @@ public class UserService {
         return userInfo.getImg();
     }
 
-
-    @Transactional
-    public void setContentPetId(User user, Long id) {
-        user.setContentPetId(id);
-    }
-
-    @Transactional
-    public void resetContentPetId(User user) {
-        user.setContentPetId(null);
-    }
-
     public User getCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
-    }
-
-    public User findByPhoneNum(String phoneNum) {
-        return (User) userRepository.findByPhoneNum(phoneNum).orElse(null);
     }
 
     public void save(User user) {
