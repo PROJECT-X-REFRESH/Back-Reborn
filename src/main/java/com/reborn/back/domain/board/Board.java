@@ -1,78 +1,54 @@
 package com.reborn.back.domain.board;
 
-import com.reborn.back.domain.comment.Comment;
 import com.reborn.back.domain.entity.BaseEntity;
 import com.reborn.back.domain.entity.BoardType;
 import com.reborn.back.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "board")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "board")
+@Builder
 public class Board extends BaseEntity {
-    /*
-    1. EmotionShareBoard
-    2. ActivityShareBoard
-    3. ChatShareBoard
-     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "bId", nullable = false)
+    private Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 45, columnDefinition = "varchar(45) default 'ACTIVE'", nullable = false)
-    private BoardType boardType;
+    @Column(name = "bCategory", nullable = false)
+    private BoardType category;
 
+    @Lob
+    @Column(name = "bContent", columnDefinition = "longtext", nullable = false)
+    private String content;
+
+    @Column(name = "bAttachImg", length = 255)
+    private String attachImg;
+
+    @Column(name = "bDate", nullable = false)
+    private LocalDateTime date;
+
+    // FK: uid → User(uid)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "uid", nullable = false)
     private User user;
 
-    @Column(length = 20, nullable = false)
-    private String boardWriter;
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardView> boardViewList = new ArrayList<>();
 
-    @Column
-    private Long likeCount;
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardLike> boardLikeList = new ArrayList<>();
 
-    @Column
-    private Long commentCount;
-
-    @Column(length = 5000, nullable = false)
-    private String boardContent;
-
-    @Column
-    private String boardImage;
-
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Comment> commentList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<BoardBookmark> bookmarkList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<BoardLike> likeList = new ArrayList<>();
-
-    public void updateLikeCount(Long likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    public void updateCommentCount(Long commentCount) {
-        this.commentCount = commentCount;
-    }
-
-    @PrePersist
-    @PreUpdate
-    private void validateBoardType() {
-        if (this.boardType == null) {
-            throw new IllegalArgumentException("BoardType을 선택하셔야 게시판이 생성됩니다.");
-        }
-    }
-
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardBookmark> boardBookmarkList = new ArrayList<>();
 }

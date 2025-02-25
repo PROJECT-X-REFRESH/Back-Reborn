@@ -8,7 +8,7 @@ assignees: ''
 
 ### Structre Example
 
-![예시 이미지](링크를 넣자) 
+![예시 이미지](링크를 넣자)
 
 ### Object
 

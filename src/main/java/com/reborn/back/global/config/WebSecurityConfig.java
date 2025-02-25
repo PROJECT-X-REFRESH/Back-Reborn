@@ -36,6 +36,8 @@ public class WebSecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/oauth2/authorization/naver",
+                                "/oauth2/authorization/kakao",
+                                "/oauth2/authorization/google",
                                 "/login/oauth2/code/**",
                                 "/token/**",
                                 "/oauth/**"

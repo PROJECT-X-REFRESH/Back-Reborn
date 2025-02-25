@@ -1,14 +1,19 @@
 package com.reborn.back.domain.user;
 
+import com.reborn.back.domain.aiPost.AiPostBookmark;
+import com.reborn.back.domain.aiPost.AiPostLike;
+import com.reborn.back.domain.aiPost.AiPostView;
 import com.reborn.back.domain.board.Board;
 import com.reborn.back.domain.board.BoardBookmark;
 import com.reborn.back.domain.board.BoardLike;
+import com.reborn.back.domain.board.BoardView;
+import com.reborn.back.domain.chat.ChatRoom;
 import com.reborn.back.domain.comment.Comment;
-import com.reborn.back.domain.diary.Rediary;
 import com.reborn.back.domain.entity.BaseEntity;
 import com.reborn.back.domain.pet.Pet;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,57 +21,65 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user")
+@Builder
 public class User extends BaseEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "uid", updatable = false, nullable = false, length = 36)
+    private String uid;
 
-    @Column(nullable = true, unique = true)
-    private String phoneNum;
+    @Column(name = "name", length = 40)
+    private String name;
 
-    @Column(nullable = true)
-    private Long contentPetId;
-
-    @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false)
-    private String nickname;
-
-    @Column(nullable = false)
+    @Column(name = "email", length = 50)
     private String email;
-
-    @Column(nullable = true)
-    private String profileImage;
-
-    @Column(nullable = true)
-    private String backgroundImage;
 
     @Column(nullable = true)
     private String deviceToken;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private OAuth auth;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserInfo info;
+
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatRoom> toChatList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatRoom> fromChatList = new ArrayList<>();
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SocialAccount> socialAccounts = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<Pet> petList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
     private List<Board> boardList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Comment> commentList = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardView> boardViewList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<BoardBookmark> boardBookmarkList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardLike> boardLikeList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Rediary> rediaryList = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardBookmark> boardBookmarkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AiPostView> aiPostViewList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AiPostLike> aiPostLikeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AiPostBookmark> aiPostBookmarkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pet> petList = new ArrayList<>();
 }
