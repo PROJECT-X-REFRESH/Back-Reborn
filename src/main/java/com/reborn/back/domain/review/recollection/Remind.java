@@ -28,9 +28,6 @@ public class Remind extends BaseEntity {
     @Column(name = "mindContents", columnDefinition = "longtext")
     private String contents;
 
-    @Column(name = "mindDate")
-    private LocalDateTime date;
-
     // FK: pId → Pet(pId)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pId", nullable = false)

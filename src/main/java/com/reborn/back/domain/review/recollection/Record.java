@@ -2,7 +2,6 @@ package com.reborn.back.domain.review.recollection;
 
 import com.reborn.back.domain.entity.BaseEntity;
 import com.reborn.back.domain.entity.Emotion;
-import com.reborn.back.domain.entity.WeatherType;
 import com.reborn.back.domain.pet.Pet;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,11 +30,6 @@ public class Record extends BaseEntity {
     private String content;
 
     @Column(name = "cordDate")
-    private LocalDateTime date;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "cordWeather")
-    private WeatherType weather;
 
     @Embedded
     @AttributeOverrides({

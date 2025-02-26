@@ -61,7 +61,7 @@ public class UserService {
 
     // username으로 User찾기
     public User findUserByUserName(String userName) {
-        return userRepository.findByUsername(userName)
+        return userRepository.findByName(userName)
                 .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND_BY_USERNAME));
     }
 
@@ -196,7 +196,7 @@ public class UserService {
 
     // 회원 탈퇴
     public void deleteUser(String username) {
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByName(username)
                 .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
 
         // 연관된 펫 엔티티들 삭제 -> 15일 컨텐츠 함께 삭제됨
@@ -268,7 +268,7 @@ public class UserService {
 
     public User getCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByUsername(username)
+        return userRepository.findByName(username)
                 .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
     }
 

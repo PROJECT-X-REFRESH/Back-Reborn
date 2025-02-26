@@ -29,9 +29,6 @@ public class AiPost extends BaseEntity {
     @Column(name = "apAttachImg", length = 255)
     private String attachImg;
 
-    @Column(name = "apDate", nullable = false)
-    private LocalDateTime date;
-
     @OneToMany(mappedBy = "aiPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AiPostView> aiPostViewList = new ArrayList<>();
 

@@ -35,9 +35,6 @@ public class Board extends BaseEntity {
     @Column(name = "bAttachImg", length = 255)
     private String attachImg;
 
-    @Column(name = "bDate", nullable = false)
-    private LocalDateTime date;
-
     // FK: uid → User(uid)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid", nullable = false)
