@@ -19,9 +19,6 @@ public class Reveal extends BaseEntity {
     @Column(name = "vealMind")
     private Integer id;
 
-    @Column(name = "vealDay")
-    private Integer day;
-
     @Column(name = "vealPet")
     private Boolean pet;
 

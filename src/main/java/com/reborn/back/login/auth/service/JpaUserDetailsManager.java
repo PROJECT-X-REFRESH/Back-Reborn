@@ -36,7 +36,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("유저 이름 로드 중: {}", username);
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByName(username)
                 .orElseThrow(() -> {
                     log.warn("유저 정보 없음: {}", username);
                     return new GeneralException(ErrorCode.USER_NOT_FOUND);
@@ -69,7 +69,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
     // 사용자 이름으로 존재 여부 체크
     public boolean userExists(String username) {
         log.info("사용자 존재 여부: {}", username);
-        return userRepository.existsByUsername(username);
+        return userRepository.existsByName(username);
     }
 
     // 사용자 정보 업데이트

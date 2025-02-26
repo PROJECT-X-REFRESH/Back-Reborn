@@ -9,6 +9,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BoardBookmarkRepository extends JpaRepository<BoardBookmark, Long> {
 
-    // 사용자와 게시판에 대한 북마크 정보 조회
-    BoardBookmark findByUserAndBoard(User user, Board board);
 }

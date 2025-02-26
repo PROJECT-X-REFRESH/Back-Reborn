@@ -3,11 +3,16 @@ package com.reborn.back.domain.pet;
 import com.reborn.back.domain.entity.BaseEntity;
 import com.reborn.back.domain.entity.PetColor;
 import com.reborn.back.domain.entity.PetType;
+import com.reborn.back.domain.review.farewell.Farewell;
+import com.reborn.back.domain.review.recollection.Remind;
+import com.reborn.back.domain.review.recollection.Record;
 import com.reborn.back.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "pet")

@@ -28,9 +28,6 @@ public class Comment extends BaseEntity {
     @Column(name = "cContents", columnDefinition = "longtext", nullable = false)
     private String contents;
 
-    @Column(name = "cDate", nullable = false)
-    private LocalDateTime date;
-
     @Column(name = "cIsDeleted", nullable = false)
     private Boolean isDeleted;
 

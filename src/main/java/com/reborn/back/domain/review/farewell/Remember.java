@@ -21,9 +21,6 @@ public class Remember extends BaseEntity {
     @Column(name = "memberDay")
     private Integer day;
 
-    @Column(name = "memberPet")
-    private Boolean pet;
-
     @Column(name = "memberFeed")
     private Boolean feed;
 

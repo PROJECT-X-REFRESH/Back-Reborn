@@ -30,9 +30,6 @@ public class ChatMessage extends BaseEntity {
     @Column(name = "cmRead", nullable = false)
     private Boolean read;
 
-    @Column(name = "cmTime", nullable = false)
-    private LocalDateTime time;
-
     @Column(name = "cmSignture", length = 255, nullable = false)
     private String signature;
 

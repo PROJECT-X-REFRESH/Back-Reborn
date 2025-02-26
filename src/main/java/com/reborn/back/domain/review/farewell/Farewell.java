@@ -5,6 +5,9 @@ import com.reborn.back.domain.pet.Pet;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "Farewell")
 @Getter
@@ -23,7 +26,7 @@ public class Farewell extends BaseEntity {
     private Integer step;
 
     // FK: pId → Pet(pId)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pId", nullable = false)
     private Pet pet;
 
