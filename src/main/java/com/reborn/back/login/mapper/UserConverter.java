@@ -1,7 +1,6 @@
 package com.reborn.back.login.mapper;
 
 import com.reborn.back.domain.user.User;
-import com.reborn.back.domain.user.UserInfo;
 import com.reborn.back.login.auth.dto.JwtDto;
 import com.reborn.back.login.dto.UserRequestDto;
 import com.reborn.back.login.dto.UserResponseDto;
@@ -33,9 +32,9 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDto.MainInfoResDto mainDto(UserInfo userInfo) {
+    public static UserResponseDto.MainInfoResDto mainDto(User user) {
         return UserResponseDto.MainInfoResDto.builder()
-                .profileImage(userInfo.getImg())
+                .profileImage(user.getImg())
                 .build();
     }
 }

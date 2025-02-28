@@ -2,7 +2,7 @@ package com.reborn.back.login.auth.utils;
 
 import com.reborn.back.global.utils.Redis.RedisUtil;
 import com.reborn.back.login.auth.dto.JwtDto;
-import com.reborn.back.login.auth.jwt.CustomUserDetails;
+import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.auth.jwt.JwtTokenUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.ServletException;
@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 
 // OAuth2 로그인 성공 핸들러
@@ -44,18 +45,23 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         try {
             // OAuth2UserServiceImpl -> 사용자 정보 추출
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+            String id = oAuth2User.getAttribute("id");
             String email = oAuth2User.getAttribute("email");
-            String nickname = oAuth2User.getAttribute("nickname");
             String provider = oAuth2User.getAttribute("provider");
-            String username = String.format("{%s}%s", provider, email.split("@")[0]);
+            String username = String.format("{%s}%s", provider,oAuth2User.getAttribute("name"));
+            String providerAccessToken = oAuth2User.getAttribute("oauth2AccessToken");
+            LocalDateTime providerExpiresAt = oAuth2User.getAttribute("oauth2ExpiresAt");
 
             // 새로운 사용자를 데이터베이스에 등록
-            if (!userDetailsManager.userExists(username)) {
+            if (!userDetailsManager.userExists(id)) {
                 log.info("신규 사용자 생성: {}", username);
                 CustomUserDetails newUser = CustomUserDetails.builder()
+                        .id(id)
                         .username(username)
                         .email(email)
                         .provider(provider)
+                        .accessToken(providerAccessToken)
+                        .expireDate(providerExpiresAt)
                         .build();
                 userDetailsManager.createUser(newUser);
             }

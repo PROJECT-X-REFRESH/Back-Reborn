@@ -9,6 +9,9 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +28,21 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         // 사용자 데이터 처리
         Map<String, Object> attributes = handleProviderAttributes(registrationId, oAuth2User);
+        // token, ttl 처리
+        String accessToken = userRequest.getAccessToken().getTokenValue();
+        String refreshToken = null;
+        Map<String, Object> additionalParams = userRequest.getAdditionalParameters();
+        if (additionalParams.containsKey("refresh_token")) {
+            refreshToken = (String) additionalParams.get("refresh_token");
+        }
+        Instant expiresAtInstant = userRequest.getAccessToken().getExpiresAt();
+        LocalDateTime expiresAt = null;
+        if (expiresAtInstant != null) {
+            expiresAt = LocalDateTime.ofInstant(expiresAtInstant, ZoneId.systemDefault());
+        }
+        attributes.put("oauth2AccessToken", accessToken);
+        attributes.put("oauth2RefreshToken", refreshToken);
+        attributes.put("oauth2ExpiresAt", expiresAt);
         // OAuth2User 객체 생성
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("USER")), // 기본 권한 설정
@@ -43,7 +61,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
                 Map<String, Object> responseMap = oAuth2User.getAttribute("response");
                 attributes.put("id", responseMap.get("id"));
                 attributes.put("email", responseMap.get("email"));
-                attributes.put("nickname", responseMap.get("nickname"));
+                attributes.put("name", responseMap.get("name"));
                 nameAttribute = "email";
                 break;
             }
@@ -51,7 +69,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
                 attributes.put("provider", "google");
                 attributes.put("id", oAuth2User.getAttribute("sub"));
                 attributes.put("email", oAuth2User.getAttribute("email"));
-                attributes.put("nickname", oAuth2User.getAttribute("name"));
+                attributes.put("name", oAuth2User.getAttribute("name"));
                 nameAttribute = "email";
                 break;
             }
@@ -59,9 +77,11 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
                 attributes.put("provider", "kakao");
                 Map<String, Object> kakaoAccount = oAuth2User.getAttribute("kakao_account");
                 Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
-                attributes.put("id", oAuth2User.getAttribute("id"));
+                Long kakaoId = oAuth2User.getAttribute("id");
+                String kakaoIdStr = String.valueOf(kakaoId);
+                attributes.put("id", kakaoIdStr);
                 attributes.put("email", kakaoAccount.get("email"));
-                attributes.put("nickname", profile.get("nickname"));
+                attributes.put("name", profile.get("nickname"));
                 nameAttribute = "id";
                 break;
             }

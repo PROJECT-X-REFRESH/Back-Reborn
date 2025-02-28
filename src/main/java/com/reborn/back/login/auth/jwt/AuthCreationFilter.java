@@ -1,5 +1,6 @@
 package com.reborn.back.login.auth.jwt;
 
+import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
