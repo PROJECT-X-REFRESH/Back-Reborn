@@ -35,6 +35,12 @@ public class Board extends BaseEntity {
     @Column(name = "bAttachImg", length = 255)
     private String attachImg;
 
+    @Column(name = "bLikeCount", nullable = false)
+    private Integer likeCount;
+
+    @Column(name = "bCommentCount", nullable = false)
+    private Integer commentCount;
+
     // FK: uid → User(uid)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid", nullable = false)
@@ -48,4 +54,8 @@ public class Board extends BaseEntity {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardBookmark> boardBookmarkList = new ArrayList<>();
+
+    public void updateLikeCount(Integer likeCount) { this.likeCount = likeCount; }
+
+    public void updateCommentCount(Integer commentCount) { this.commentCount = commentCount; }
 }
