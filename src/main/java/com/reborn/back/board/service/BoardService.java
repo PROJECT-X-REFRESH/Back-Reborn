@@ -58,7 +58,7 @@ public class BoardService {
     // 게시물 생성
     @Transactional
     public Board createBoard(BoardReqDto boardReqDto, String dirName, MultipartFile file, User user) throws IOException {
-        Board board = BoardConverter.saveBoard(boardReqDto, user); // 게시판 내용 저장
+        Board board = BoardConverter.saveBoard(boardReqDto, user); // 게시물 내용 저장
 
         board.setAttachImg(uploadFileToS3(dirName, file));
 

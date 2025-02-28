@@ -38,7 +38,7 @@ public class BoardController {
     private final BoardLikeRepository boardLikeRepository;
     private final BoardBookmarkRepository boardBookmarkRepository;
 
-    @Operation(summary = "게시판 만들기", description = "게시판을 생성하는 api.")
+    @Operation(summary = "게시물 만들기", description = "게시물을 생성하는 api.")
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Integer> createBoard(
             @RequestPart(value = "board", required = false) MultipartFile file,
@@ -52,16 +52,16 @@ public class BoardController {
 
     @Operation(summary = "게시물 조회", description = "특정 게시물을 조회하는 api.")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2001", description = "게시판 상세 조회가 완료되었습니다.")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2001", description = "게시물 상세 조회가 완료되었습니다.")
     })
     @GetMapping("/{boardId}")
     public ApiResponse<Board> getBoard(@PathVariable Integer boardId) {
         return ApiResponse.onSuccess(SuccessCode.BOARD_DETAIL_VIEW_SUCCESS, boardService.findById(boardId));
     }
 
-    @Operation(summary = "게시판 수정", description = "게시판 내용을 수정하는 api.") // 작성자만 수정 가능
+    @Operation(summary = "게시물 수정", description = "게시물 내용을 수정하는 api.") // 작성자만 수정 가능
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2002", description = "게시판 수정이 완료되었습니다.")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2002", description = "게시물 수정이 완료되었습니다.")
     })
     @PutMapping("/{boardId}")
     public ApiResponse<Board> updateBoard(
@@ -74,9 +74,9 @@ public class BoardController {
     }
 
 
-    @Operation(summary = "게시판 삭제", description = "게시판을 삭제하는 api.") // 작성자만 삭제 사능
+    @Operation(summary = "게시물 삭제", description = "게시물을 삭제하는 api.") // 작성자만 삭제 사능
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2003", description = "게시판 삭제가 완료되었습니다.")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2003", description = "게시물 삭제가 완료되었습니다.")
     })
     @DeleteMapping("/{boardId}")
     public ApiResponse<Boolean> deleteBoard(
@@ -91,15 +91,15 @@ public class BoardController {
     //--------------------------------------------------------------------------------------------------------
     // 1. scrollPosition: 스크롤이 이동한 위치를 나타내는 매개변수
     // 2. fetchSize: 한 번에 가져올 데이터의 개수를 나타내는 매개변수
-    @Operation(summary = "전체 게시판 목록 정보 조회 메서드", description = "type, way에 따라 게시판 목록을 조회하는 메서드입니다.")
+    @Operation(summary = "전체 게시물 목록 정보 조회 메서드", description = "type, way에 따라 게시물 목록을 조회하는 메서드입니다.")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2004", description = "게시판 목록 조회가 완료되었습니다.")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2004", description = "게시물 목록 조회가 완료되었습니다.")
     })
     @Parameters({
-            @Parameter(name = "type", description = "조회하고 싶은 게시물 타입, EMOTION: 감정, ACTIVITY: 봉사, CHAT: 잡담, ALL: 전체"),
-            @Parameter(name = "way", description = "정렬 방식,  like: 좋아요순, time: 최신순"),
-            @Parameter(name = "scrollPosition", description = "데이터 가져올 시작 위치. 0부터 시작. scrollPosition * fetchSize가 첫 데이터 주소"),
-            @Parameter(name = "fetchSize", description = "가져올 데이터 크기(게시물 개수)")
+            @Parameter(name = "type", description = "조회할 게시글 종류. TALK: 담소 나눔, SHARE: 물건 나눔, VOLUNTEER: 봉사 나눔, ALL: 전체 조회"),
+            @Parameter(name = "way", description = "정렬 기준. like: 좋아요 많은 순, time: 최신 글 순"),
+            @Parameter(name = "scrollPosition", description = "가져올 데이터의 시작 위치 (0부터 시작). scrollPosition * fetchSize 값이 첫 번째 데이터 위치가 됨"),
+            @Parameter(name = "fetchSize", description = "한 번에 불러올 게시글 개수")
     })
     @GetMapping("/list")
     public ApiResponse<BoardListResDto> getListBoards(
@@ -114,15 +114,15 @@ public class BoardController {
         return ApiResponse.onSuccess(SuccessCode.BOARD_LIST_VIEW_SUCCESS, BoardConverter.boardListResDto(boards));
     }
 
-    @Operation(summary = "북마크 한 전체 게시판 목록 정보 조회 메서드", description = "북마크 한 게시판 중 type, way에 따라 목록을 조회하는 메서드입니다.")
+    @Operation(summary = "북마크 한 전체 게시물 목록 정보 조회 메서드", description = "북마크 한 게시물 중 type, way에 따라 목록을 조회하는 메서드입니다.")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2005", description = "게시판 목록 조회가 완료되었습니다.")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2005", description = "게시물 목록 조회가 완료되었습니다.")
     })
     @Parameters({
-            @Parameter(name = "type", description = "조회하고 싶은 게시물 타입, EMOTION: 감정, ACTIVITY: 봉사, CHAT: 잡담, ALL: 전체"),
-            @Parameter(name = "way", description = "정렬 방식,  like: 좋아요순, time: 최신순"),
-            @Parameter(name = "scrollPosition", description = "데이터 가져올 시작 위치. 0부터 시작. scrollPosition * fetchSize가 첫 데이터 주소"),
-            @Parameter(name = "fetchSize", description = "가져올 데이터 크기(게시물 개수)")
+            @Parameter(name = "type", description = "조회할 게시글 종류. TALK: 담소 나눔, SHARE: 물건 나눔, VOLUNTEER: 봉사 나눔, ALL: 전체 조회"),
+            @Parameter(name = "way", description = "정렬 기준. like: 좋아요 많은 순, time: 최신 글 순"),
+            @Parameter(name = "scrollPosition", description = "가져올 데이터의 시작 위치 (0부터 시작). scrollPosition * fetchSize 값이 첫 번째 데이터 위치가 됨"),
+            @Parameter(name = "fetchSize", description = "한 번에 불러올 게시글 개수")
     })
     @GetMapping("/list/bookmark")
     public ApiResponse<BoardListResDto> getBookmarkBoards(

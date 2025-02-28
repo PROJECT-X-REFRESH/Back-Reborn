@@ -27,7 +27,7 @@ public class BoardBookmarkController {
 
     @Operation(summary = "게시물 북마크 토글", description = "게시물의 북마크를 설정 또는 취소하는 api.")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOOKMARK_200", description = "게시판 북마크 설정/취소 성공")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOOKMARK_200", description = "게시물 북마크 설정/취소 성공")
     })
     @PostMapping("/toggle")
     public ApiResponse<Boolean> toggleBookmark(
