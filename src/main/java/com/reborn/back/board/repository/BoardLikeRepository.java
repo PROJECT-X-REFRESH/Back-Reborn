@@ -3,7 +3,6 @@ package com.reborn.back.board.repository;
 import com.reborn.back.domain.board.Board;
 import com.reborn.back.domain.board.BoardLike;
 import com.reborn.back.domain.user.User;
-import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
