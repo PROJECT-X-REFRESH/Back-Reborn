@@ -21,17 +21,17 @@ public enum SuccessCode implements BaseCode { // 성공
     USER_PROFILE_IMAGE_BROWSE(HttpStatus.OK, "USER_2006", "프로필 사진 열람이 완료되었습니다."),
 
     FILE_DELETE_SUCCESS(HttpStatus.OK, "FILE_2001", "파일 삭제가 완료되었습니다."),
-
     FCM_SEND_SUCCESS(HttpStatus.OK, "FCM_2001", "알림 전송이 완료되었습니다."),
 
     RECONNECT_CREATED(HttpStatus.CREATED, "RECONNECT_2011", "나의 반려동물과 만나기 생성이 완료되었습니다."),
     RECONNECT_TO_BE_CREATED(HttpStatus.CREATED, "RECONNECT_2012", "반려동물이 없습니다."),
     RECONNECT_GOODBYE(HttpStatus.CREATED, "RECONNECT_2013", "작별하러 가기가 완료되었습니다."),
 
-    PET_LIST_VIEW_SUCCESS(HttpStatus.OK, "PET_2001", "반려동물 정보 목록 조회가 완료되었습니다."),
-    PET_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "PET_2002", "반려동물 정보 조회가 완료되었습니다."),
-    PET_DELETED(HttpStatus.OK, "PET_2003", "반려동물 삭제가 완료되었습니다."),
-    PET_NAME_VIEW_SUCCESS(HttpStatus.OK, "PET_2004", "반려동물 이름 조회가 완료되었습니다."),
+    PET_CREATE_SUCCESS(HttpStatus.OK, "PET_2001", "반려동물의 프로필이 생성되었습니다."),
+    PET_LIST_VIEW_SUCCESS(HttpStatus.OK, "PET_2002", "반려동물 정보 목록 조회가 완료되었습니다."),
+    PET_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "PET_2003", "반려동물 정보 조회가 완료되었습니다."),
+    PET_DELETED(HttpStatus.OK, "PET_2004", "반려동물 수정이 완료되었습니다."),
+    PET_UPDATED(HttpStatus.OK, "PET_2005", "반려동물 삭제가 완료되었습니다."),
 
     REVIEW_RECONNECT_VIEW_SUCCESS(HttpStatus.OK, "REVIEW_2001", "나의 반려동물과 만나기 조회가 완료되었습니다."),
     REVIEW_REMIND_VIEW_SUCCESS(HttpStatus.OK, "REVIEW_2002", "충분한 대화 나누기 내용 조회가 완료되었습니다."),
@@ -74,46 +74,37 @@ public enum SuccessCode implements BaseCode { // 성공
     REVEAL_LIST_VIEW_SUCCESS(HttpStatus.OK, "REVEAL_2001", "나의 감정 들여다보기 목록 조회가 완료되었습니다."),
     REVEAL_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REVEAL_2002", "나의 감정 들여다보기 조회가 완료되었습니다."),
     REVEAL_WRITE_COMPLETED(HttpStatus.OK, "REVEAL_2003", "일기 작성이 완료되었습니다."),
-    REVEAL_PAT_COMPLETED(HttpStatus.OK, "REVEAL_2004", "쓰다듬기가 완료되었습니다."),
     REVEAL_FEED_COMPLETED(HttpStatus.OK, "REVEAL_2005", "밥주기가 완료되었습니다."),
     REVEAL_WALK_COMPLETED(HttpStatus.OK, "REVEAL_2006", "산책하기가 완료되었습니다."),
     REVEAL_SNACK_COMPLETED(HttpStatus.OK, "REVEAL_2007", "간식주기가 완료되었습니다."),
-    REVEAL_INTRO_COMPLETED(HttpStatus.OK, "REVEAL_2008", "쓰다듬기로 넘어가기가 완료되었습니다."),
     REVEAL_PLAY_COMPLETED(HttpStatus.OK, "REVEAL_2009", "놀아주기가 완료되었습니다."),
 
     REMIND_CREATED(HttpStatus.CREATED, "REMIND_2011", "충분한 대화 나누기 생성이 완료되었습니다."),
     REMIND_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REMIND_2002", "충분한 대화 나누기 조회가 완료되었습니다."),
     REMIND_WRITE_COMPLETED(HttpStatus.OK, "REMIND_2003", "답변 작성이 완료되었습니다."),
-    REMIND_PAT_COMPLETED(HttpStatus.OK, "REMIND_2004", "쓰다듬기가 완료되었습니다."),
     REMIND_FEED_COMPLETED(HttpStatus.OK, "REMIND_2005", "밥주기가 완료되었습니다."),
     REMIND_WALK_COMPLETED(HttpStatus.OK, "REMIND_2006", "산책하기가 완료되었습니다."),
     REMIND_SNACK_COMPLETED(HttpStatus.OK, "REMIND_2007", "간식주기가 완료되었습니다."),
-    REMIND_INTRO_COMPLETED(HttpStatus.OK, "REMIND_2008", "쓰다듬기로 넘어가기가 완료되었습니다."),
     REMIND_PLAY_COMPLETED(HttpStatus.OK, "REMIND_2009", "놀아주기가 완료되었습니다."),
 
     REMEMBER_CREATED(HttpStatus.CREATED, "REMEMBER_2011", "건강한 작별 준비하기 생성이 완료되었습니다."),
     REMEMBER_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REMEMBER_2002", "건강한 작별 준비하기 조회가 완료되었습니다."),
     REMEMBER_WRITE_COMPLETED(HttpStatus.OK, "REMEMBER_2003", "그림일기 작성이 완료되었습니다."),
-    REMEMBER_PAT_COMPLETED(HttpStatus.OK, "REMEMBER_2004", "쓰다듬기가 완료되었습니다."),
     REMEMBER_FEED_COMPLETED(HttpStatus.OK, "REMEMBER_2005", "밥주기가 완료되었습니다."),
     REMEMBER_WALK_COMPLETED(HttpStatus.OK, "REMEMBER_2006", "산책하기가 완료되었습니다."),
     REMEMBER_SNACK_COMPLETED(HttpStatus.OK, "REMEMBER_2007", "간식주기가 완료되었습니다."),
     REMEMBER_CLEAN_COMPLETED(HttpStatus.OK, "REMEMBER_2008", "정리가 완료되었습니다."),
-    REMEMBER_INTRO_COMPLETED(HttpStatus.OK, "REMEMBER_2009", "쓰다듬기로 넘어가기가 완료되었습니다."),
     REMEMBER_PLAY_COMPLETED(HttpStatus.OK, "REMEMBER_2010", "놀아주기가 완료되었습니다."),
 
     REBORN_CREATED(HttpStatus.CREATED, "REBORN_2011", "건강한 작별하기 생성이 완료되었습니다."),
     REBORN_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REBORN_2002", "건강한 작별하기 조회가 완료되었습니다."),
     REBORN_WRITE_COMPLETED(HttpStatus.OK, "REBORN_2003", "작별인사 작성이 완료되었습니다."),
-    REBORN_PAT_COMPLETED(HttpStatus.OK, "REBORN_2004", "쓰다듬기가 완료되었습니다."),
     REBORN_FEED_COMPLETED(HttpStatus.OK, "REBORN_2005", "밥주기가 완료되었습니다."),
     REBORN_WASH_COMPLETED(HttpStatus.OK, "REBORN_2006", "씻겨주기가 완료되었습니다."),
     REBORN_CLOTHE_COMPLETED(HttpStatus.OK, "REBORN_2007", "옷 입혀주기가 완료되었습니다."),
     REBORN_FINISH_COMPLETED(HttpStatus.OK, "REBORN_2008", "15일 콘텐츠가 완료되었습니다."),
     REBORN_SET_REBORN_COMPLETED(HttpStatus.OK, "REBORN_2009", "리본 선택이 완료되었습니다."),
-    REBORN_INTRO_COMPLETED(HttpStatus.OK, "REBORN_2010", "쓰다듬기로 넘어가기가 완료되었습니다."),
-    REBORN_OUTRO_COMPLETED(HttpStatus.OK, "REBORN_2011", "아웃트로로 넘어가기가 완료되었습니다."),
-    ;
+    REBORN_OUTRO_COMPLETED(HttpStatus.OK, "REBORN_2011", "아웃트로로 넘어가기가 완료되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
