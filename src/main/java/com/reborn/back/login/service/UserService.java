@@ -1,9 +1,11 @@
 package com.reborn.back.login.service;
 
+import com.reborn.back.aiPost.service.AiPostService;
 import com.reborn.back.board.repository.BoardBookmarkRepository;
 import com.reborn.back.board.repository.BoardLikeRepository;
 import com.reborn.back.board.repository.BoardRepository;
 import com.reborn.back.comment.repository.CommentRepository;
+import com.reborn.back.domain.aiPost.AiPost;
 import com.reborn.back.domain.board.Board;
 import com.reborn.back.domain.board.BoardBookmark;
 import com.reborn.back.domain.board.BoardLike;
@@ -18,9 +20,12 @@ import com.reborn.back.login.auth.dto.JwtDto;
 import com.reborn.back.login.auth.jwt.JwtTokenUtils;
 import com.reborn.back.login.auth.service.JpaUserDetailsManager;
 import com.reborn.back.login.dto.UserRequestDto;
+import com.reborn.back.login.dto.UserResponseDto;
 import com.reborn.back.login.mapper.UserConverter;
 import com.reborn.back.login.repository.UserRepository;
 import com.reborn.back.pet.repository.PetRepository;
+import com.reborn.back.review.recollection.service.RecordService;
+import com.reborn.back.review.recollection.service.RemindService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -53,6 +58,9 @@ public class UserService {
     private final JpaUserDetailsManager manager;
     private final AmazonS3Manager amazonS3Manager;
     private final JwtTokenUtils jwtTokenUtils;
+    private final RecordService recordService;
+    private final RemindService remindService;
+    private final AiPostService aiPostService;
 
     // 로그인
 
@@ -277,4 +285,18 @@ public class UserService {
         userRepository.save(user);
     }
 
+
+    public UserResponseDto.MainInfoResDto getMainInfo(String username) {
+        User user = findUserByUserName(username);
+        List<UserResponseDto.mainInfoPet> petList = user.getPetList().stream().map(pet ->
+                UserResponseDto.mainInfoPet.builder()
+                        .pet(pet)
+                        .petCondition(pet.getFarewell() != null)
+                        .todayRemind(remindService.checkTodayRemind(pet))
+                        .todayRecord(recordService.checkTodayRecord(pet))
+                        .build()
+        ).toList();
+        List<AiPost> recentPosts = aiPostService.getRecentAiPosts();
+        return UserConverter.mainDto(user, petList, recentPosts);
+    }
 }
