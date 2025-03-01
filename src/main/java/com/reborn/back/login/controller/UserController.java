@@ -1,13 +1,11 @@
 package com.reborn.back.login.controller;
 
 import com.reborn.back.domain.user.User;
-import com.reborn.back.domain.user.UserInfo;
 import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.global.utils.S3.AmazonS3Manager;
 import com.reborn.back.login.auth.dto.JwtDto;
-import com.reborn.back.login.auth.jwt.CustomUserDetails;
-import com.reborn.back.login.dto.UserRequestDto;
+import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.dto.UserResponseDto;
 import com.reborn.back.login.mapper.UserConverter;
 import com.reborn.back.login.service.UserService;
@@ -131,7 +129,7 @@ public class UserController {
     public ApiResponse<UserResponseDto.MainInfoResDto> mainInfo(
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        UserInfo user = userService.findUserInfoByUserName(customUserDetails.getUsername());
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
 
         return ApiResponse.onSuccess(SuccessCode.MAIN_INFO_SUCCESS, UserConverter.mainDto(user));
     }

@@ -20,13 +20,16 @@ public class FirebaseConfig {
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        InputStream serviceAccount = new ClassPathResource(firebaseConfigPath).getInputStream();
+        if (FirebaseApp.getApps().isEmpty()) {
+            InputStream serviceAccount = new ClassPathResource(firebaseConfigPath).getInputStream();
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .build();
 
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .build();
-
-        return FirebaseApp.initializeApp(options);
+            return FirebaseApp.initializeApp(options);
+        } else {
+            return FirebaseApp.getInstance(); // 이미 존재하는 FirebaseApp 반환
+        }
     }
 
     @Bean

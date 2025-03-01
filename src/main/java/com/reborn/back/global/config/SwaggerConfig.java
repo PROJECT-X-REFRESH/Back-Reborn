@@ -39,11 +39,15 @@ public class SwaggerConfig {
                 .url("http://reborn.site")
                 .description("Reborn HTTP Server");
 
+        Server localServer = new Server()
+                .url("http://localhost:8080")
+                .description("Reborn HTTP Server");
+
         return new OpenAPI()
                 .info(apiInfo)
                 .addSecurityItem(securityRequirement)
                 .components(components)
-                .servers(List.of(httpsServer, httpServer));
+                .servers(List.of(httpsServer, httpServer,localServer));
     }
 
     @Bean

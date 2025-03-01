@@ -28,8 +28,12 @@ public class Rebirth extends BaseEntity {
     private Boolean ribbon;
 
     @Lob
-    @Column(name = "birthPost", columnDefinition = "longtext")
-    private String post;
+    @Column(name = "birthMyPost", columnDefinition = "longtext")
+    private String myPost;
+
+    @Lob
+    @Column(name = "birthPetPost", columnDefinition = "longtext")
+    private String petPost;
 
     // FK: fId → Farewell(fId)
     @OneToOne(fetch = FetchType.LAZY)
