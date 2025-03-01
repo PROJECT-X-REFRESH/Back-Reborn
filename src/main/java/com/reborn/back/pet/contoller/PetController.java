@@ -12,13 +12,16 @@ import com.reborn.back.pet.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
+@Slf4j
 @Tag(name = "반려동물", description = "반려동물 관련 api")
 @RestController
 @RequestMapping("/pet")
@@ -28,20 +31,20 @@ public class PetController {
     private final PetService petService;
     @Operation(summary = "펫 프로필 만들기", description = "펫 프로필을 생성하는 api.")
     @PostMapping(value = "/profile/create")
-    public ApiResponse<Integer> createPetProfile(
-            @RequestPart("data") PetRequestDto petReqDto,
+    public ApiResponse<List<PetResponseDto>> createPetProfile(
+            @RequestBody PetRequestDto petReqDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) throws IOException {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        Pet pet = petService.createPetProfile(petReqDto, user);
-        return ApiResponse.onSuccess(SuccessCode.PET_CREATE_SUCCESS, pet.getId());
+        List<PetResponseDto> petList = petService.createPetProfile(petReqDto, user);
+        return ApiResponse.onSuccess(SuccessCode.PET_CREATE_SUCCESS, petList);
     }
 
     @Operation(summary = "반려동물 목록 조회", description = "사용자의 반려동물 목록을 스크롤 기반으로 조회합니다.")
-    @GetMapping("/list")
+    @GetMapping("/list/{scrollPosition}")
     public ApiResponse<List<PetResponseDto>> getPetList(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestParam(name = "scrollPosition", defaultValue = "0") int scrollPosition,
+            @PathVariable int scrollPosition,
             @RequestParam(name = "fetchSize", defaultValue = "10") int fetchSize
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());

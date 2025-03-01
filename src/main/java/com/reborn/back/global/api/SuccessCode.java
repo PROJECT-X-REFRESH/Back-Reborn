@@ -29,9 +29,8 @@ public enum SuccessCode implements BaseCode { // 성공
 
     PET_CREATE_SUCCESS(HttpStatus.OK, "PET_2001", "반려동물의 프로필이 생성되었습니다."),
     PET_LIST_VIEW_SUCCESS(HttpStatus.OK, "PET_2002", "반려동물 정보 목록 조회가 완료되었습니다."),
-    PET_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "PET_2003", "반려동물 정보 조회가 완료되었습니다."),
-    PET_DELETED(HttpStatus.OK, "PET_2004", "반려동물 수정이 완료되었습니다."),
-    PET_UPDATED(HttpStatus.OK, "PET_2005", "반려동물 삭제가 완료되었습니다."),
+    PET_DELETED(HttpStatus.OK, "PET_2004", "반려동물 삭제가 완료되었습니다."),
+    PET_UPDATED(HttpStatus.OK, "PET_2005", "반려동물 수정이 완료되었습니다."),
 
     REVIEW_RECONNECT_VIEW_SUCCESS(HttpStatus.OK, "REVIEW_2001", "나의 반려동물과 만나기 조회가 완료되었습니다."),
     REVIEW_REMIND_VIEW_SUCCESS(HttpStatus.OK, "REVIEW_2002", "충분한 대화 나누기 내용 조회가 완료되었습니다."),

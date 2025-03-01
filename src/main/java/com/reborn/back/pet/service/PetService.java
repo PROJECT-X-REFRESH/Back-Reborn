@@ -25,7 +25,7 @@ public class PetService {
 
     private final PetRepository petRepository;
     @Transactional
-    public Pet createPetProfile(PetRequestDto petReqDto, User user) {
+    public List<PetResponseDto> createPetProfile(PetRequestDto petReqDto, User user) {
         Pet.PetBuilder petBuilder = Pet.builder()
                 .name(petReqDto.getName())
                 .petCase(petReqDto.getPetCase())
@@ -44,7 +44,8 @@ public class PetService {
             pet.setFarewell(farewell);
         }
         petRepository.save(pet);
-        return petRepository.save(pet);
+        List<PetResponseDto> petList =getPetList(user,0, 10);
+        return petList;
     }
 
     public List<PetResponseDto> getPetList(User user, int scrollPosition, int fetchSize) {
