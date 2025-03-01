@@ -69,7 +69,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // 공통 에러 응답
     private ResponseEntity<Object> handleExceptionInternal(Exception e, ReasonDTO reason,
                                                            HttpHeaders headers, HttpServletRequest request) {
-        ApiResponse<Object> body = ApiResponse.onFailure(reason, null);
+        ApiResponse<Void> body = ApiResponse.onFailure(reason);
         WebRequest webRequest = new ServletWebRequest(request);
         return super.handleExceptionInternal(e, body, headers, reason.getHttpStatus(), webRequest);
     }
@@ -90,7 +90,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleExceptionInternalConstraint(Exception e, ErrorCode errorCode,
                                                                      HttpHeaders headers, WebRequest request) {
-        ApiResponse<Object> body = ApiResponse.onFailure(errorCode, null);
+        ApiResponse<Void> body = ApiResponse.onFailure(errorCode);
         return super.handleExceptionInternal(e, body, headers, errorCode.getHttpStatus(), request);
     }
 }
