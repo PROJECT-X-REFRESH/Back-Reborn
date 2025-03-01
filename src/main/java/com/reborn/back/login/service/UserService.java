@@ -10,7 +10,6 @@ import com.reborn.back.domain.board.BoardLike;
 import com.reborn.back.domain.comment.Comment;
 import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.user.User;
-import com.reborn.back.domain.user.UserInfo;
 import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.global.utils.Redis.RedisUtil;
@@ -20,7 +19,6 @@ import com.reborn.back.login.auth.jwt.JwtTokenUtils;
 import com.reborn.back.login.auth.service.JpaUserDetailsManager;
 import com.reborn.back.login.dto.UserRequestDto;
 import com.reborn.back.login.mapper.UserConverter;
-import com.reborn.back.login.repository.UserInfoRepository;
 import com.reborn.back.login.repository.UserRepository;
 import com.reborn.back.pet.repository.PetRepository;
 import io.jsonwebtoken.Claims;
@@ -46,7 +44,6 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final UserInfoRepository userInfoRepository;
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final PetRepository petRepository;
@@ -236,7 +233,6 @@ public class UserService {
     @Transactional
     public void createProfileImage(String dirName, MultipartFile file, User user) throws IOException {
         String uploadFileUrl = null;
-        UserInfo userInfo=userInfoRepository.findByUser(user);
         if (file != null) {
             String contentType = file.getContentType();
             if (ObjectUtils.isEmpty(contentType)) {
@@ -249,9 +245,9 @@ public class UserService {
             }
 
             // 이전 프로필 이미지가 존재하는지 확인
-            if (!isEmpty(userInfo.getImg())) {
+            if (!isEmpty(user.getImg())) {
                 // 기존 프로필 이미지를 S3에서 삭제
-                String previousFilePath = userInfo.getImg();
+                String previousFilePath = user.getImg();
                 amazonS3Manager.deleteFile(previousFilePath); // S3에서 삭제
             }
 
@@ -261,15 +257,14 @@ public class UserService {
             String fileName = dirName + amazonS3Manager.generateFileName(file);
             uploadFileUrl = amazonS3Manager.putS3(uploadFile, fileName);
 
-            userInfo.setImg(uploadFileUrl);
+            user.setImg(uploadFileUrl);
             userRepository.save(user);
         }
     }
 
     @Transactional
     public String showProfileImage(User user) {
-        UserInfo userInfo=userInfoRepository.findByUser(user);
-        return userInfo.getImg();
+        return user.getImg();
     }
 
     public User getCurrentUser() {

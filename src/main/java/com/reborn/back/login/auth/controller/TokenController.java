@@ -37,35 +37,26 @@ public class TokenController {
             @RequestBody UserRequestDto userReqDto
     ) {
         // 1. 받은 email로 회원 여부 확인
-        Boolean isMember = userService.checkMemberByEmail(userReqDto.getEmail());
-
-        // 2. JWT 토큰 변수 초기화
-        String accessToken = "";
-        String refreshToken = "";
-
-        // 3. 회원 상태 여부를 저장 (신규 회원 여부)
-        String signIn = "wasUser";
-
+        boolean isMember = userService.checkMemberByEmail(userReqDto.getEmail());
+        User user;
+        String signIn;
         if (isMember) { // 기존 회원 처리
             // 회원 정보 조회
-            User user = userService.findByEmail(userReqDto.getEmail());
-            // JWT 생성
-            JwtDto jwt = userService.jwtMakeSave(userReqDto.getUsername());
-            accessToken = jwt.getAccessToken();
-            refreshToken = jwt.getRefreshToken();
+            user = userService.findByEmail(userReqDto.getEmail());
+            // 3. 회원 상태 여부를 저장 (신규 회원 여부)
+            signIn = "wasUser";
             // FCM 토큰 저장
             userService.saveFcmToken(user, userReqDto.getDeviceToken());
         } else { // 신규 회원 처리
             // 회원가입 처리
-            User user = userService.createUser(userReqDto);
-            // JWT 생성
-            JwtDto jwt = userService.jwtMakeSave(userReqDto.getUsername());
-            accessToken = jwt.getAccessToken();
-            refreshToken = jwt.getRefreshToken();
+            user = userService.createUser(userReqDto);
             // 신규 회원 상태 업데이트
             signIn = "newUser";
         }
-
+        // JWT 생성
+        JwtDto jwt = userService.jwtMakeSave(userReqDto.getUsername());
+        String accessToken = jwt.getAccessToken();
+        String refreshToken = jwt.getRefreshToken();
         // 4. 응답 데이터 반환
         return ApiResponse.onSuccess(SuccessCode.USER_LOGIN_SUCCESS, UserConverter.jwtDto(accessToken, refreshToken, signIn));
     }

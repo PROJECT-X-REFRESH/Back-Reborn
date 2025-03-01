@@ -29,9 +29,6 @@ public class OAuth extends BaseEntity {
     @Column(name = "expireDate")
     private LocalDateTime expireDate;
 
-    @Column(name = "refreshToken", length = 255)
-    private String refreshToken;
-
     @Column(name = "provider", length = 20)
     private String provider;
 

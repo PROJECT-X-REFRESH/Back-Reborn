@@ -5,7 +5,7 @@ import com.reborn.back.domain.user.OAuth;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
-import com.reborn.back.login.auth.jwt.CustomUserDetails;
+import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.repository.OAuthRepository;
 import com.reborn.back.login.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -55,8 +55,10 @@ public class JpaUserDetailsManager implements UserDetailsManager {
             CustomUserDetails details = (CustomUserDetails) user;
             OAuth newSocialAccount = new OAuth();
             newSocialAccount.setProvider(details.getProvider());
-            newSocialAccount.setProviderUserId(details.getUsername());
+            newSocialAccount.setProviderUserId(details.getId());
             newSocialAccount.setUser(newUser);
+            newSocialAccount.setAccessToken(details.getAccessToken());
+            newSocialAccount.setExpireDate(details.getExpireDate());
             oAuthRepository.save(newSocialAccount);
             log.info("사용자 생성: {}", user.getUsername());
         } catch (ClassCastException e) {
@@ -67,9 +69,9 @@ public class JpaUserDetailsManager implements UserDetailsManager {
 
     @Override
     // 사용자 이름으로 존재 여부 체크
-    public boolean userExists(String username) {
-        log.info("사용자 존재 여부: {}", username);
-        return userRepository.existsByName(username);
+    public boolean userExists(String id) {
+        log.info("사용자 존재 여부: {}", id);
+        return oAuthRepository.existsByProviderUserId(id);
     }
 
     // 사용자 정보 업데이트

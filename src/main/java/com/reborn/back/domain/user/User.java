@@ -25,7 +25,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class User extends BaseEntity {
-
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -47,8 +46,8 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private OAuth auth;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private UserInfo info;
+    @Column(name = "uiImg", length = 255)
+    private String img;
 
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatRoom> toChatList = new ArrayList<>();

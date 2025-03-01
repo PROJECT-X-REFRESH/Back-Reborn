@@ -2,7 +2,7 @@ package com.reborn.back.login.auth.utils;
 
 import com.reborn.back.global.utils.Redis.RedisUtil;
 import com.reborn.back.login.auth.dto.JwtDto;
-import com.reborn.back.login.auth.jwt.CustomUserDetails;
+import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.auth.jwt.JwtTokenUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.ServletException;
@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 
 // OAuth2 로그인 성공 핸들러
@@ -44,18 +45,23 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         try {
             // OAuth2UserServiceImpl -> 사용자 정보 추출
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+            String id = oAuth2User.getAttribute("id");
             String email = oAuth2User.getAttribute("email");
-            String nickname = oAuth2User.getAttribute("nickname");
             String provider = oAuth2User.getAttribute("provider");
-            String username = String.format("{%s}%s", provider, email.split("@")[0]);
+            String username = String.format("{%s}%s", provider,oAuth2User.getAttribute("name"));
+            String providerAccessToken = oAuth2User.getAttribute("oauth2AccessToken");
+            LocalDateTime providerExpiresAt = oAuth2User.getAttribute("oauth2ExpiresAt");
 
             // 새로운 사용자를 데이터베이스에 등록
-            if (!userDetailsManager.userExists(username)) {
+            if (!userDetailsManager.userExists(id)) {
                 log.info("신규 사용자 생성: {}", username);
                 CustomUserDetails newUser = CustomUserDetails.builder()
+                        .id(id)
                         .username(username)
                         .email(email)
                         .provider(provider)
+                        .accessToken(providerAccessToken)
+                        .expireDate(providerExpiresAt)
                         .build();
                 userDetailsManager.createUser(newUser);
             }
@@ -88,21 +94,19 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     // Refresh Token 저장 로직
     private void saveRefreshToken(JwtDto jwt, String username) {
         Claims refreshTokenClaims = tokenUtils.parseClaims(jwt.getRefreshToken());
-        // 발급 시간과 만료 시간의 차이를 초 단위로 계산
         long validPeriod = refreshTokenClaims.getExpiration().toInstant().getEpochSecond()
                 - refreshTokenClaims.getIssuedAt().toInstant().getEpochSecond();
-
-        // 기존에 Redis에 저장된 Refresh Token이 있으면 삭제
+        // 기존 저장된 Refresh Token 조회
         String existingToken = redisUtil.getData(username);
-        if (existingToken != null) {
-            redisUtil.deleteData(username);
+        // 기존 값 로그 출력
+        log.info("현재 저장된 Refresh Token (기존): {}", existingToken);
+        // 기존 값이 다르면 새로 저장 (변경 확인 목적)
+        if (existingToken != null && !existingToken.equals(jwt.getRefreshToken())) {
+            log.info("🔄 Refresh Token 변경됨! 기존: {}, 새로운: {}", existingToken, jwt.getRefreshToken());
         }
-
-        // 새 Refresh Token을 Redis에 저장 (TTL 설정)
-        // 두 번째 파라미터: 저장할 값 (Refresh Token)
-        // 세 번째 파라미터: 만료까지 남은 시간(초 단위)
+        // Redis에 새 토큰 저장
         redisUtil.setDataExpire(username, jwt.getRefreshToken(), validPeriod);
-
-        log.info("RefreshToken 저장 완료: {}", username);
+        // 저장 후 다시 확인
+        log.info("✅ 저장된 Refresh Token (새로운): {}", redisUtil.getData(username));
     }
 }

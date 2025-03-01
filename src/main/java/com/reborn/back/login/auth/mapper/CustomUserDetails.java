@@ -1,4 +1,4 @@
-package com.reborn.back.login.auth.jwt;
+package com.reborn.back.login.auth.mapper;
 
 import com.reborn.back.domain.user.OAuth;
 import com.reborn.back.domain.user.User;
@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -23,13 +24,18 @@ public class CustomUserDetails implements UserDetails {
     private String username;
     private String email;
     private String provider;
+    private String accessToken;
+    private LocalDateTime expireDate;
+
 
     public static CustomUserDetails fromEntity(User entity, OAuth oauth) {
         return CustomUserDetails.builder()
-                .id(entity.getUid())
+                .id(oauth.getProviderUserId())
                 .username(entity.getName())
                 .email(entity.getEmail())
                 .provider(oauth.getProvider())
+                .accessToken(oauth.getAccessToken())
+                .expireDate(oauth.getExpireDate())
                 .build();
     }
 
