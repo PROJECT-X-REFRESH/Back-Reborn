@@ -152,4 +152,4 @@ spring:
     name: RE-Born-Back
 
 oauth2:
-  redirect-url: http://reborn.site:8080/token/local
+  redirect-url: http://localhost:8080/token/local

@@ -36,8 +36,8 @@ public class UserController {
     })
     @DeleteMapping("/logout")
     public ApiResponse<Integer> logout(HttpServletRequest request) {
+        // acess token 강제 만료
         userService.logout(request);
-        // acess token 강제 만료 시키는 로직(블랙리스트 방식) 작성 필요
         return ApiResponse.onSuccess(SuccessCode.USER_LOGOUT_SUCCESS, 1);
     }
 
@@ -67,7 +67,7 @@ public class UserController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_2004", description = "프로필 사진 첨부가 완료되었습니다.")
     })
-    @PostMapping(value = "/profile-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/img/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Boolean> createProfileImage(
             @RequestPart(value = "profile") MultipartFile file,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
@@ -83,7 +83,7 @@ public class UserController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "FILE_2001", description = "사진 삭제가 완료되었습니다.")
     })
-    @DeleteMapping(value = "/delete-image")
+    @DeleteMapping(value = "/img/delete")
     public ApiResponse<Boolean> deleteImage(
             @RequestParam("filePath") String filePath,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
@@ -92,20 +92,6 @@ public class UserController {
         amazonS3Manager.deleteFile(filePath);
 
         return ApiResponse.onSuccess(SuccessCode.FILE_DELETE_SUCCESS, true);
-    }
-
-    @Operation(summary = "프로필 사진 열람", description = "프로필 사진을 url로 열람하는 메서드입니다.")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_2006", description = "프로필 사진 열람이 완료되었습니다.")
-    })
-    @GetMapping(value = "/show-profile-image")
-    public ApiResponse<String> showProfileImage(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ) {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
-        String imageUrl = userService.showProfileImage(user);
-
-        return ApiResponse.onSuccess(SuccessCode.USER_PROFILE_IMAGE_BROWSE, imageUrl);
     }
 
     @Operation(summary = "내 정보 열람", description = "내 정보(since, email) 열람하는 메서드입니다.")
@@ -129,9 +115,7 @@ public class UserController {
     public ApiResponse<UserResponseDto.MainInfoResDto> mainInfo(
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
-
-        return ApiResponse.onSuccess(SuccessCode.MAIN_INFO_SUCCESS, UserConverter.mainDto(user));
+        return ApiResponse.onSuccess(SuccessCode.MAIN_INFO_SUCCESS, userService.getMainInfo(customUserDetails.getUsername()));
     }
 
 }
