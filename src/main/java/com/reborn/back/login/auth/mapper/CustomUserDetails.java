@@ -21,6 +21,7 @@ import java.util.Collections;
 @Getter
 public class CustomUserDetails implements UserDetails {
     private String id;
+    private String providerId;
     private String username;
     private String email;
     private String provider;
@@ -30,7 +31,8 @@ public class CustomUserDetails implements UserDetails {
 
     public static CustomUserDetails fromEntity(User entity, OAuth oauth) {
         return CustomUserDetails.builder()
-                .id(oauth.getProviderUserId())
+                .id(entity.getUid())
+                .providerId(oauth.getProviderUserId())
                 .username(entity.getName())
                 .email(entity.getEmail())
                 .provider(oauth.getProvider())

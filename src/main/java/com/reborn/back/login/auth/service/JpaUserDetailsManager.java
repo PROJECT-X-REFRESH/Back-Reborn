@@ -55,7 +55,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
             CustomUserDetails details = (CustomUserDetails) user;
             OAuth newSocialAccount = new OAuth();
             newSocialAccount.setProvider(details.getProvider());
-            newSocialAccount.setProviderUserId(details.getId());
+            newSocialAccount.setProviderUserId(details.getProviderId());
             newSocialAccount.setUser(newUser);
             newSocialAccount.setAccessToken(details.getAccessToken());
             newSocialAccount.setExpireDate(details.getExpireDate());
@@ -71,11 +71,11 @@ public class JpaUserDetailsManager implements UserDetailsManager {
     // 사용자 이름으로 존재 여부 체크
     public boolean userExists(String id) {
         log.info("사용자 존재 여부: {}", id);
-        return oAuthRepository.existsByProviderUserId(id);
+        return userRepository.existsByName(id);
     }
 
     // 사용자 정보 업데이트
-    // 구현 해야됨
+    // 지원하지 않음
     @Override
     public void updateUser(UserDetails user) {
         log.error("Update user functionality is not supported yet for user: {}", user.getUsername());
@@ -83,7 +83,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
     }
 
     // 사용자 정보 삭제
-    // 구현 해야함
+    // 지원하지 않음
     @Override
     public void deleteUser(String username) {
         log.error("Delete user functionality is not supported yet for username: {}", username);
@@ -91,7 +91,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
     }
 
     // 사용자 비번 변경
-    // 구현 해야 함
+    // 지원하지 않음
     @Override
     public void changePassword(String oldPassword, String newPassword) {
         log.error("Change password functionality is not supported yet.");

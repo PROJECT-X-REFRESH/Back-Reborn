@@ -45,7 +45,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         try {
             // OAuth2UserServiceImpl -> 사용자 정보 추출
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-            String id = oAuth2User.getAttribute("id");
+            String providerId = oAuth2User.getAttribute("id");
             String email = oAuth2User.getAttribute("email");
             String provider = oAuth2User.getAttribute("provider");
             String username = String.format("{%s}%s", provider,oAuth2User.getAttribute("name"));
@@ -53,10 +53,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             LocalDateTime providerExpiresAt = oAuth2User.getAttribute("oauth2ExpiresAt");
 
             // 새로운 사용자를 데이터베이스에 등록
-            if (!userDetailsManager.userExists(id)) {
+            if (!userDetailsManager.userExists(username)) {
                 log.info("신규 사용자 생성: {}", username);
                 CustomUserDetails newUser = CustomUserDetails.builder()
-                        .id(id)
+                        .providerId(providerId)
                         .username(username)
                         .email(email)
                         .provider(provider)

@@ -34,6 +34,6 @@ public class OAuth extends BaseEntity {
 
     // FK: uid → User(uid)
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uid", nullable = false)
+    @JoinColumn(name = "id", nullable = false)
     private User user;
 }
