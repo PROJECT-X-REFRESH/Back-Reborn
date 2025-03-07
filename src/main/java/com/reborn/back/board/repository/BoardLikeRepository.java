@@ -25,7 +25,7 @@ public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
     → 중복 삽입을 방지하고, 이미 존재하는 경우 업데이트
      */
     @Modifying
-    @Query(value = "INSERT INTO board_like (user_id, board_id) VALUES (:userId, :boardId) " +
-            "ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)", nativeQuery = true)
+    @Query(value = "INSERT INTO board_like (uid, b_id) VALUES (:userId, :boardId) " +
+            "ON DUPLICATE KEY UPDATE bl_id = LAST_INSERT_ID(bl_id)", nativeQuery = true)
     void insertOrUpdateLike(@Param("userId") String userId, @Param("boardId") Integer boardId);
 }
