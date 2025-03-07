@@ -157,6 +157,9 @@ public class BoardService {
             throw new GeneralException(ErrorCode.BAD_REQUEST);
         }
 
+        String cacheKey = "board_view:" + bId;
+        redisUtil.deleteData(cacheKey);
+
         boardLikeRepository.deleteAll(board.getBoardLikeList());
         boardRepository.delete(board);
     }
