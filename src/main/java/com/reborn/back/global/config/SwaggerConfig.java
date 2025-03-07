@@ -47,7 +47,7 @@ public class SwaggerConfig {
                 .info(apiInfo)
                 .addSecurityItem(securityRequirement)
                 .components(components)
-                .servers(List.of(httpsServer, httpServer,localServer));
+                .servers(List.of(localServer, httpServer,httpsServer));
     }
 
     @Bean

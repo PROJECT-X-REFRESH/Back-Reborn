@@ -6,7 +6,6 @@ import com.reborn.back.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,17 +34,18 @@ public class Board extends BaseEntity {
     @Column(name = "bAttachImg", length = 255)
     private String attachImg;
 
+    @Column(name = "bCommentCount", nullable = false)
+    private Integer commentCount;
+
+    @Column(name = "bviewCount", nullable = false)
+    private Integer viewCount;
+
     // FK: uid → User(uid)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BoardView> boardViewList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardLike> boardLikeList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BoardBookmark> boardBookmarkList = new ArrayList<>();
 }

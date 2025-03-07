@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "boardLike")
+@Table(name = "boardLike", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"uid", "bId"})
+})
 @Getter
 @Setter
 @NoArgsConstructor
