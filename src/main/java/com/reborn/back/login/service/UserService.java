@@ -73,11 +73,6 @@ public class UserService {
                 .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND_BY_USERNAME));
     }
 
-    public UserInfo findUserInfoByUserName(String userName) {
-        User user= findUserByUserName(userName);
-        return userInfoRepository.findByUser(user);
-    }
-
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND_BY_EMAIL));
     }
