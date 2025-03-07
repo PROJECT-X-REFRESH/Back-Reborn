@@ -1,13 +1,11 @@
 package com.reborn.back.login.service;
 
 import com.reborn.back.aiPost.service.AiPostService;
-import com.reborn.back.board.repository.BoardBookmarkRepository;
 import com.reborn.back.board.repository.BoardLikeRepository;
 import com.reborn.back.board.repository.BoardRepository;
 import com.reborn.back.comment.repository.CommentRepository;
 import com.reborn.back.domain.aiPost.AiPost;
 import com.reborn.back.domain.board.Board;
-import com.reborn.back.domain.board.BoardBookmark;
 import com.reborn.back.domain.board.BoardLike;
 import com.reborn.back.domain.comment.Comment;
 import com.reborn.back.domain.pet.Pet;
@@ -52,7 +50,6 @@ public class UserService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final PetRepository petRepository;
-    private final BoardBookmarkRepository boardBookmarkRepository;
     private final BoardLikeRepository boardLikeRepository;
     private final RedisUtil redisUtil;
     private final JpaUserDetailsManager manager;
@@ -217,9 +214,6 @@ public class UserService {
         // 연관된 댓글들 삭제
         List<Comment> comments = user.getCommentList();
         commentRepository.deleteAll(comments);
-
-        List<BoardBookmark> boardBookmarks = user.getBoardBookmarkList();
-        boardBookmarkRepository.deleteAll(boardBookmarks);
 
         List<BoardLike> boardLikes = user.getBoardLikeList();
         boardLikeRepository.deleteAll(boardLikes);

@@ -4,9 +4,7 @@ import com.reborn.back.domain.aiPost.AiPostBookmark;
 import com.reborn.back.domain.aiPost.AiPostLike;
 import com.reborn.back.domain.aiPost.AiPostView;
 import com.reborn.back.domain.board.Board;
-import com.reborn.back.domain.board.BoardBookmark;
 import com.reborn.back.domain.board.BoardLike;
-import com.reborn.back.domain.board.BoardView;
 import com.reborn.back.domain.chat.ChatRoom;
 import com.reborn.back.domain.comment.Comment;
 import com.reborn.back.domain.entity.BaseEntity;
@@ -59,13 +57,7 @@ public class User extends BaseEntity {
     private List<Board> boardList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BoardView> boardViewList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardLike> boardLikeList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BoardBookmark> boardBookmarkList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AiPostView> aiPostViewList = new ArrayList<>();

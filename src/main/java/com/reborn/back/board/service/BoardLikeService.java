@@ -32,7 +32,6 @@ public class BoardLikeService {
             boardLikeRepository.insertOrUpdateLike(user.getUid(), board.getId()); // 좋아요 추가 (중복 삽입 방지)
         }
 
-        updateLikeCount(board); // 좋아요 개수 업데이트
         return board;
     }
 
@@ -50,11 +49,5 @@ public class BoardLikeService {
                 .orElseThrow(() -> new GeneralException(ErrorCode.BOARD_NOT_FOUND));
 
         return boardLikeRepository.countByBoard(board);
-    }
-
-    // 좋아요 수 업데이트
-    private void updateLikeCount(Board board) {
-        Integer likeCount = boardLikeRepository.countByBoard(board);
-        board.updateLikeCount(likeCount);
     }
 }
