@@ -4,6 +4,8 @@ import com.reborn.back.domain.entity.BaseEntity;
 import com.reborn.back.domain.entity.Emotion;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "reVeal")
@@ -47,5 +49,6 @@ public class Reveal extends BaseEntity {
     // FK: fId → Farewell(fId)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Farewell farewell;
 }

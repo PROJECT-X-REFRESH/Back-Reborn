@@ -4,6 +4,8 @@ import com.reborn.back.domain.entity.BaseEntity;
 import com.reborn.back.domain.pet.Pet;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class Farewell extends BaseEntity {
     // FK: pId → Pet(pId)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Pet pet;
 
     @OneToOne(mappedBy = "farewell", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -4,6 +4,8 @@ import com.reborn.back.domain.entity.BaseEntity;
 import com.reborn.back.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -48,11 +50,13 @@ public class ChatRoom extends BaseEntity {
     // FK: crTo → User(uid)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crTo", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User toUser;
 
     // FK: crFrom → User(uid)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crFrom", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User fromUser;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)

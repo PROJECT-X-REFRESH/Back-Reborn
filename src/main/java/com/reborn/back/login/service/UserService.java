@@ -149,6 +149,7 @@ public class UserService {
     public JwtDto reissue(HttpServletRequest request) {
         // 1. Request에서 Refresh Token 추출
         String refreshTokenValue = request.getHeader("Authorization").split(" ")[1];
+        log.info("reissue - Authorization 헤더에서 추출한 refreshTokenValue={}", refreshTokenValue);
         // 2. Refresh Token에서 username 추출
         //    (refreshTokenClaims.getSubject()가 username이라고 가정)
         String username;
@@ -157,14 +158,18 @@ public class UserService {
             username = refreshTokenClaims.getSubject();
         } catch (Exception e) {
             // 파싱 에러 → 잘못된 토큰
+            log.error("reissue - parseClaims 실패, refreshTokenValue={}", refreshTokenValue, e);
             throw GeneralException.of(ErrorCode.WRONG_REFRESH_TOKEN);
         }
         log.info("refresh token에서 추출한 username: {}", username);
 
         // 3. Redis에서 해당 username 키로 저장된 Refresh Token 가져오기
         String existingRefreshToken = redisUtil.getData("username"+username);
+        log.info("reissue - Redis에서 가져온 existingRefreshToken={}", existingRefreshToken);
         // 토큰이 없거나, Redis에 저장된 값과 다르면 잘못된 토큰
         if (existingRefreshToken == null || !existingRefreshToken.equals(refreshTokenValue)) {
+            log.error("reissue -토큰 불일치! existingRefreshToken={}, refreshTokenValue={}",
+                    existingRefreshToken, refreshTokenValue);
             throw GeneralException.of(ErrorCode.WRONG_REFRESH_TOKEN);
         }
 

@@ -5,6 +5,8 @@ import com.reborn.back.domain.entity.OrganizeType;
 import com.reborn.back.domain.entity.PetType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -52,5 +54,6 @@ public class Remember extends BaseEntity {
     // FK: fId → Farewell(fId)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Farewell farewell;
 }

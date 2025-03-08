@@ -9,8 +9,10 @@ import com.reborn.back.domain.review.recollection.Record;
 import com.reborn.back.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +39,10 @@ public class Pet extends BaseEntity {
     private PetType petCase;
 
     @Column(name = "pBirth")
-    private LocalDateTime birth;
+    private LocalDate birth;
 
     @Column(name = "pDeath")
-    private LocalDateTime death;
+    private LocalDate death;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "pColor")
@@ -49,14 +51,17 @@ public class Pet extends BaseEntity {
     // FK: uid → User(uid)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @OneToOne(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private Farewell farewell;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Record> record = new ArrayList<>();
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Remind> remind = new ArrayList<>();
 }

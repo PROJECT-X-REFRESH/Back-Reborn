@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class PetService {
 
     private final PetRepository petRepository;
+    //반려동물 등록
     @Transactional
     public List<PetResponseDto> createPetProfile(PetRequestDto petReqDto, User user) {
         Pet.PetBuilder petBuilder = Pet.builder()
@@ -44,15 +45,14 @@ public class PetService {
             pet.setFarewell(farewell);
         }
         petRepository.save(pet);
-        List<PetResponseDto> petList =getPetList(user,0, 10);
-        return petList;
+        return getPetList(user,0, 10);
     }
 
+    // 반려동물 목록 조회
     public List<PetResponseDto> getPetList(User user, int scrollPosition, int fetchSize) {
         PageRequest pageRequest = PageRequest.of(scrollPosition, fetchSize);
         Slice<Pet> petSlice = petRepository.findByUser(user, pageRequest);
 
-        // Pet 엔티티를 PetResponseDto로 변환
         return petSlice.getContent().stream()
                 .map(pet -> PetResponseDto.builder()
                         .name(pet.getName())
@@ -64,9 +64,7 @@ public class PetService {
                 .toList();
     }
 
-        /**
-         * 반려동물 프로필 수정
-         */
+    // 반려동물 프로필 수정
     public Pet updatePetProfile(Integer petId, PetRequestDto petRequestDto, String username) {
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
@@ -84,9 +82,7 @@ public class PetService {
         return petRepository.save(pet);
     }
 
-    /**
-     * 반려동물 삭제
-     */
+    // 반려동물 삭제
     public void deletePet(Integer petId, String username) {
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
