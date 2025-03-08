@@ -31,7 +31,7 @@ public class CommentService {
         Comment comment = CommentConverter.saveComment(commentDto, board, user);
 
         commentRepository.save(comment);
-        boardRepository.incrementCommentCount(boardId);
+        boardRepository.incrementCommentCount(boardId); // 댓글 수 +1
 
         return comment.getId();
     }
@@ -45,11 +45,10 @@ public class CommentService {
             throw new GeneralException(ErrorCode.COMMENT_DELETE_NOT_ALLOWED);
         }
 
-        comment.setIsDeleted(true);
-        commentRepository.save(comment);
 
-        boardRepository.decrementCommentCount(comment.getBoard().getId());  // ✅ 댓글 수 -1
+        commentRepository.delete(comment);
 
+        boardRepository.decrementCommentCount(comment.getBoard().getId());  // 댓글 수 -1
 
         return true;
     }
@@ -57,6 +56,6 @@ public class CommentService {
     public List<Comment> findAllByBoardId(Integer boardId) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.BOARD_NOT_FOUND));
-        return commentRepository.findAllByBoardAndIsDeletedFalseOrderByIdDesc(board);
+        return commentRepository.findAllByBoardOrderByIdDesc(board);
     }
 }

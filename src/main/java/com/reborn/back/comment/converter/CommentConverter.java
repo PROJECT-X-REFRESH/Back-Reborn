@@ -18,7 +18,6 @@ public class CommentConverter {
                 .user(user)
                 .board(board)
                 .contents(comment.getContents())
-                .isDeleted(false)
                 .build();
     }
 
