@@ -6,10 +6,6 @@ import com.reborn.back.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "comment")
 @Getter
@@ -27,9 +23,6 @@ public class Comment extends BaseEntity {
     @Lob
     @Column(name = "cContents", columnDefinition = "longtext", nullable = false)
     private String contents;
-
-    @Column(name = "cIsDeleted", nullable = false)
-    private Boolean isDeleted;
 
     // FK: bId → Board(bId)
     @ManyToOne(fetch = FetchType.LAZY)
