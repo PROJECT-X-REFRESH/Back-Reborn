@@ -60,7 +60,8 @@ public class BoardController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        Board board = boardService.findById(boardId);
+
+        Board board = boardService.findByIdWithSync(boardId);
 
         boardService.increaseViewCount(boardId, user.getUid());
 

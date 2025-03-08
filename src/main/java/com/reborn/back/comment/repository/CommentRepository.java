@@ -15,6 +15,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Optional<Comment> findById(Integer cId);
 
     // 삭제되지 않은 특정 게시글의 댓글을 내림차순 정렬하여 조회
-    List<Comment> findAllByBoardAndIsDeletedFalseOrderByIdDesc(Board board);
+    List<Comment> findAllByBoardOrderByIdDesc(Board board);
+
+    // 특정 게시물의 실제 댓글 개수 조회
+    Integer countByBoard(Board board);
 }
 

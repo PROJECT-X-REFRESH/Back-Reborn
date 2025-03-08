@@ -4,6 +4,7 @@ import com.reborn.back.board.converter.BoardConverter;
 import com.reborn.back.board.dto.BoardRequestDto.BoardReqDto;
 import com.reborn.back.board.repository.BoardLikeRepository;
 import com.reborn.back.board.repository.BoardRepository;
+import com.reborn.back.comment.repository.CommentRepository;
 import com.reborn.back.domain.board.Board;
 import com.reborn.back.domain.entity.BoardType;
 import com.reborn.back.domain.user.User;
@@ -31,6 +32,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final BoardLikeRepository boardLikeRepository;
+    private final CommentRepository commentRepository;
     private final AmazonS3Manager amazonS3Manager;
     private final RedisUtil redisUtil;
 
@@ -144,10 +146,6 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
-    /*
-    todo
-      Redis Cache 글 삭제시 같이 삭제
-     */
     // 게시물 삭제
     @Transactional
     public void deleteBoard(Integer bId, User user) {
@@ -184,5 +182,21 @@ public class BoardService {
         Slice<Board> boardSlice = boardRepository.findByBoardLikeList_User_UidOrderByCreatedAtDesc(user.getUid(), pageRequest);
 
         return boardSlice.getContent();
+    }
+
+    // DB에 저장된 commentCount와 실제 Comment 개수를 비교(필요 시 업데이트)
+    @Transactional
+    public Board findByIdWithSync(Integer boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.BOARD_NOT_FOUND));
+
+        Integer actualCommentCount = commentRepository.countByBoard(board);
+
+        if (board.getCommentCount() != actualCommentCount) {
+            board.setCommentCount(actualCommentCount);
+            boardRepository.save(board);
+        }
+
+        return board;
     }
 }
