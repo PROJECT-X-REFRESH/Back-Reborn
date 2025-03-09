@@ -3,6 +3,8 @@ package com.reborn.back.domain.user;
 import com.reborn.back.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -35,5 +37,6 @@ public class OAuth extends BaseEntity {
     // FK: uid → User(uid)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 }

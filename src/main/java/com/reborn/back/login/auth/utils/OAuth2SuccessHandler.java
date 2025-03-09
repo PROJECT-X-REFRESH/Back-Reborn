@@ -97,7 +97,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         long validPeriod = refreshTokenClaims.getExpiration().toInstant().getEpochSecond()
                 - refreshTokenClaims.getIssuedAt().toInstant().getEpochSecond();
         // 기존 저장된 Refresh Token 조회
-        String existingToken = redisUtil.getData(username);
+        String existingToken = redisUtil.getData("username"+username);
         // 기존 값 로그 출력
         log.info("현재 저장된 Refresh Token (기존): {}", existingToken);
         // 기존 값이 다르면 새로 저장 (변경 확인 목적)
@@ -105,8 +105,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             log.info("🔄 Refresh Token 변경됨! 기존: {}, 새로운: {}", existingToken, jwt.getRefreshToken());
         }
         // Redis에 새 토큰 저장
-        redisUtil.setDataExpire(username, jwt.getRefreshToken(), validPeriod);
+        redisUtil.setDataExpire("username"+username, jwt.getRefreshToken(), validPeriod);
         // 저장 후 다시 확인
-        log.info("✅ 저장된 Refresh Token (새로운): {}", redisUtil.getData(username));
+        log.info("✅ 저장된 Refresh Token (새로운): {}", redisUtil.getData("username"+username));
     }
 }

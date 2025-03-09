@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class PetRequestDto {
     private String name;
     private PetType petCase;
-    private LocalDateTime birth;
-    private LocalDateTime death;
+    private LocalDate birth;
+    private LocalDate death;
     private PetColor color;
 }

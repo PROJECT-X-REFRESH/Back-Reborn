@@ -3,6 +3,8 @@ package com.reborn.back.domain.chat;
 import com.reborn.back.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -36,5 +38,6 @@ public class ChatMessage extends BaseEntity {
     // FK: cmRoomId → ChatRoom(crId)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cmRoomId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ChatRoom chatRoom;
 }

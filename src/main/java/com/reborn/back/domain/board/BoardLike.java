@@ -4,6 +4,8 @@ import com.reborn.back.domain.entity.BaseEntity;
 import com.reborn.back.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "boardLike", uniqueConstraints = {
@@ -24,10 +26,12 @@ public class BoardLike extends BaseEntity {
     // FK: bId → Board(bId)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 
     // FK: uid → User(uid)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 }

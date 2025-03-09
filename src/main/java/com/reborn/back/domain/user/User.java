@@ -2,7 +2,6 @@ package com.reborn.back.domain.user;
 
 import com.reborn.back.domain.aiPost.AiPostBookmark;
 import com.reborn.back.domain.aiPost.AiPostLike;
-import com.reborn.back.domain.aiPost.AiPostView;
 import com.reborn.back.domain.board.Board;
 import com.reborn.back.domain.board.BoardLike;
 import com.reborn.back.domain.chat.ChatRoom;
@@ -47,30 +46,35 @@ public class User extends BaseEntity {
     @Column(name = "uiImg", length = 255)
     private String img;
 
+    @Builder.Default
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatRoom> toChatList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatRoom> fromChatList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boardList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardLike> boardLikeList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AiPostView> aiPostViewList = new ArrayList<>();
-
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AiPostLike> aiPostLikeList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AiPostBookmark> aiPostBookmarkList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pet> petList = new ArrayList<>();
 }

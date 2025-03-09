@@ -30,9 +30,6 @@ public class AiPost extends BaseEntity {
     private String attachImg;
 
     @OneToMany(mappedBy = "aiPost", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AiPostView> aiPostViewList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "aiPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AiPostLike> aiPostLikeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "aiPost", cascade = CascadeType.ALL, orphanRemoval = true)

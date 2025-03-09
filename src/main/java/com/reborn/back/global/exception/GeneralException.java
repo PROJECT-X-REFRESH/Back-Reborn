@@ -21,4 +21,8 @@ public class GeneralException extends RuntimeException {
     public ReasonDTO getReason() {
         return this.code.getReason();
     }
+
+    public String getErrorCode() {
+        return this.code.getReason().getCode();
+    }
 }
