@@ -62,6 +62,22 @@ public enum SuccessCode implements BaseCode { // 성공
     COMMENT_DELETED(HttpStatus.OK, "COMMENT_2001", "댓글 삭제가 완료되었습니다."),
     COMMENT_LIST_VIEW_SUCCESS(HttpStatus.OK, "BOARD_2002", "댓글 리스트 조회가 완료되었습니다."),
 
+    RECOLLECTION_WEEK_VIEW_SUCCESS(HttpStatus.OK, "RECOLLECTION_2011", "이번주 추억쌓기 조회가 완료되었습니다."),
+
+    RECORD_CREATED(HttpStatus.CREATED, "RECORD_2011", "기록 생성이 완료되었습니다."),
+    RECORD_LIST_VIEW_SUCCESS(HttpStatus.OK, "RECORD_2001", "기록 목록 조회가 완료되었습니다."),
+    RECORD_UPDATED(HttpStatus.OK, "RECORD_2003", "기록 수정이 완료되었습니다."),
+    RECORD_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REDIARY_2002", "기록 조회가 완료되었습니다."),
+    RECORD_TODAY_VIEW_SUCCESS(HttpStatus.OK, "REDIARY_2004", "오늘의 기록 작성 여부가 조회 완료되었습니다."),
+    RECORD_DELETED(HttpStatus.OK, "RECORD_2005", "기록 삭제가 완료되었습니다."),
+
+    REMIND_CREATED(HttpStatus.CREATED, "REMIND_2011", "감정 일기 생성이 완료되었습니다."),
+    REMIND_LIST_VIEW_SUCCESS(HttpStatus.OK, "REMIND_2001", "감정 일기 목록 조회가 완료되었습니다."),
+    REMIND_UPDATED(HttpStatus.OK, "REMIND_2003", "감정 일기 업데이트가가 완료되었습니다." ),
+    REMIND_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REMIND_2004", "감정 일기 조회가 완료되었습니다."),
+    REMIND_TODAY_VIEW_SUCCESS(HttpStatus.OK, "REMIND_2004", "오늘의 감정 일기 작성 여부가 조회 완료되었습니다."),
+    REMIND_DELETED(HttpStatus.OK, "REMIND_2005", "감정 일기 삭제가 완료되었습니다."),
+
     REDIARY_CREATED(HttpStatus.CREATED, "REDIARY_2011", "감정 일기 생성이 완료되었습니다."),
     REDIARY_LIST_VIEW_SUCCESS(HttpStatus.OK, "REDIARY_2001", "감정 일기 목록 조회가 완료되었습니다."),
     REDIARY_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REDIARY_2002", "감정 일기 조회가 완료되었습니다."),
@@ -77,14 +93,6 @@ public enum SuccessCode implements BaseCode { // 성공
     REVEAL_WALK_COMPLETED(HttpStatus.OK, "REVEAL_2006", "산책하기가 완료되었습니다."),
     REVEAL_SNACK_COMPLETED(HttpStatus.OK, "REVEAL_2007", "간식주기가 완료되었습니다."),
     REVEAL_PLAY_COMPLETED(HttpStatus.OK, "REVEAL_2009", "놀아주기가 완료되었습니다."),
-
-    REMIND_CREATED(HttpStatus.CREATED, "REMIND_2011", "충분한 대화 나누기 생성이 완료되었습니다."),
-    REMIND_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REMIND_2002", "충분한 대화 나누기 조회가 완료되었습니다."),
-    REMIND_WRITE_COMPLETED(HttpStatus.OK, "REMIND_2003", "답변 작성이 완료되었습니다."),
-    REMIND_FEED_COMPLETED(HttpStatus.OK, "REMIND_2005", "밥주기가 완료되었습니다."),
-    REMIND_WALK_COMPLETED(HttpStatus.OK, "REMIND_2006", "산책하기가 완료되었습니다."),
-    REMIND_SNACK_COMPLETED(HttpStatus.OK, "REMIND_2007", "간식주기가 완료되었습니다."),
-    REMIND_PLAY_COMPLETED(HttpStatus.OK, "REMIND_2009", "놀아주기가 완료되었습니다."),
 
     REMEMBER_CREATED(HttpStatus.CREATED, "REMEMBER_2011", "건강한 작별 준비하기 생성이 완료되었습니다."),
     REMEMBER_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REMEMBER_2002", "건강한 작별 준비하기 조회가 완료되었습니다."),

@@ -524,8 +524,8 @@ class UserServiceTest {
         given(userRepository.findByName("testUser")).willReturn(Optional.of(mockUser));
 
         // Mock RecordService & RemindService checks
-        given(remindService.checkTodayRemind(pet)).willReturn(true);
-        given(recordService.checkTodayRecord(pet)).willReturn(false);
+        given(remindService.checkTodayRemind(mockUser.getName(), pet)).willReturn(true);
+        given(recordService.checkTodayRecord(mockUser.getName(), pet)).willReturn(false);
 
         AiPost aiPost = mock(AiPost.class);
         given(aiPostService.getRecentAiPosts()).willReturn(List.of(aiPost));
