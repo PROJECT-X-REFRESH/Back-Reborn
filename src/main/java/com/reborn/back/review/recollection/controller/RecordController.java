@@ -34,7 +34,7 @@ public class RecordController {
     private final RecordService recordService;
 
     @Operation(summary = "record 생성", description = "record 생성하는 API")
-    @PostMapping(value = "{petId}/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "{petId}/create")
     public ApiResponse<Integer> createRecord(
             @PathVariable Integer petId,
             @RequestBody RecordDto recordDto,

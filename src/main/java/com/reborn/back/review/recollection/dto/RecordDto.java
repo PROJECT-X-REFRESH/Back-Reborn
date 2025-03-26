@@ -19,6 +19,5 @@ public class RecordDto {
     private String title;
     private String content;
     private Emotion emotion;
-    private Pet pet;
     private LocalDateTime createdAt;
 }

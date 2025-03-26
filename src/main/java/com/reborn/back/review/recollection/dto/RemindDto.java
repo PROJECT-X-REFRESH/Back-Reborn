@@ -16,6 +16,5 @@ public class RemindDto {
     private Integer id;
     private String title;
     private String content;
-    private Pet pet;
     private LocalDateTime createdAt;
 }

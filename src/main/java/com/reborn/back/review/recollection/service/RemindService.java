@@ -37,7 +37,7 @@ public class RemindService {
         String key = "remind"+user.getName()+petId;
         String existing = redisUtil.getData(key);
         if (existing != null) {
-            redisUtil.deleteData(key);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Remind is exist.");
         }
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay();
@@ -51,13 +51,18 @@ public class RemindService {
 
     public RemindDto updateRemind(Integer remindId, RemindDto remindDto, User user) {
         Remind remind = findById(remindId);
+        String key = "remind" + user.getName() + remind.getPet().getId();
+        String existing = redisUtil.getData(key);
+        if (existing == null) {  // 널이면 update 자체를 막아야 함
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Remind is exist.");
+        }
         Remind updatedRemind = RemindConverter.updateRemind(remind, remindDto);
         Remind savedRemind = remindRepository.save(updatedRemind);
         return RemindConverter.toDto(savedRemind);
     }
 
     public Remind findById(Integer remindId) {
-        return (Remind) remindRepository.findById(remindId)
+        return remindRepository.findById(remindId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Remind not found"));
 

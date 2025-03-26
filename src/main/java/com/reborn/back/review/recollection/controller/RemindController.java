@@ -32,7 +32,7 @@ public class RemindController {
     private final RemindService remindService;
 
     @Operation(summary = "remind 생성", description = "remind 생성하는 API")
-    @PostMapping(value = "/{petId}/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{petId}/create")
     public ApiResponse<Integer> createRemind(
             @PathVariable Integer petId,
             @RequestBody RemindDto remindDto,

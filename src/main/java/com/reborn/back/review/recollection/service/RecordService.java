@@ -45,28 +45,33 @@ public class RecordService {
     public Integer createRecord(Integer petId, RecordDto recordDto, User user) {
         String key = "record" + user.getName() + petId;
         String existing = redisUtil.getData(key);
-        if (existing != null) {
-            redisUtil.deleteData(key);
+        if (existing != null) {  // 널이 아니면 create 자체를 막아야 함
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Record is exist.");
         }
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay();
         long secondsUntilMidnight = Duration.between(now, midnight).getSeconds();
         redisUtil.setDataExpire(key, "", secondsUntilMidnight);
         Pet pet=petRepository.findById(petId).get();
-        Record record = RecordConverter.toRecord(recordDto, pet, user);
+        Record record = RecordConverter.toRecord(recordDto, pet);
         Record savedRecord = recordRepository.save(record);
         return savedRecord.getId();
     }
 
     public RecordDto updateRecord(Integer recordId, RecordDto recordDto, User user) {
         Record record = findById(recordId);
+        String key = "record" + user.getName() + record.getPet().getId();
+        String existing = redisUtil.getData(key);
+        if (existing == null) {  // 널이면 update 자체를 막아야 함
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Record is exist.");
+        }
         Record updatedRecord = RecordConverter.updateRecord(record, recordDto);
         Record savedRecord = recordRepository.save(updatedRecord);
         return RecordConverter.toDto(savedRecord);
     }
 
     public Record findById(Integer recordId) {
-        return (Record) recordRepository.findById(recordId)
+        return recordRepository.findById(recordId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Record not found"));
     }

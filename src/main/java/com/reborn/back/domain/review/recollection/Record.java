@@ -44,8 +44,4 @@ public class Record extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pId", nullable = false)
     private Pet pet;
-
-    public Record(Pet pet, User user, String title, String content) {
-        super();
-    }
 }

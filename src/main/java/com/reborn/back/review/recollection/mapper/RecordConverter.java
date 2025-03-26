@@ -23,13 +23,14 @@ public class RecordConverter {
     }
 
 
-    public static Record toRecord(RecordDto recordDto, Pet pet, User user) {
-        return new Record(pet, user, recordDto.getTitle(), recordDto.getContent());
+    public static Record toRecord(RecordDto recordDto, Pet pet) {
+        return new Record(null, recordDto.getTitle(), recordDto.getContent(), recordDto.getEmotion(), pet);
     }
 
     public static Record updateRecord(Record record, RecordDto recordDto) {
         record.setTitle(recordDto.getTitle());
         record.setContent(recordDto.getContent());
+        record.setEmotion(recordDto.getEmotion());
         return record;
     }
 
@@ -38,6 +39,7 @@ public class RecordConverter {
                 .id(record.getId())
                 .title(record.getTitle())
                 .content(record.getContent())
+                .emotion(record.getEmotion())
                 .createdAt(record.getCreatedAt())
                 .build();
     }
