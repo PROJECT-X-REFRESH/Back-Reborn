@@ -21,9 +21,6 @@ public class Reveal extends BaseEntity {
     @Column(name = "vealMind")
     private Integer id;
 
-    @Column(name = "vealPet")
-    private Boolean pet;
-
     @Column(name = "vealFeed")
     private Boolean feed;
 
@@ -41,7 +38,6 @@ public class Reveal extends BaseEntity {
     @AttributeOverrides({
             @AttributeOverride(name = "pos", column = @Column(name = "vealPos")),
             @AttributeOverride(name = "neg", column = @Column(name = "vealNeg")),
-            @AttributeOverride(name = "neu", column = @Column(name = "vealNeu")),
             @AttributeOverride(name = "state", column = @Column(name = "vealState")),
     })
     private Emotion emotion;
