@@ -42,14 +42,18 @@ public enum ErrorCode implements BaseCode { // 실패
 
     REDIARY_NOT_FOUND(HttpStatus.NOT_FOUND, "REDIARY_4041", "존재하지 않는 감정 일기입니다."),
 
+    FAREWELL_NOT_FOUND(HttpStatus.NOT_FOUND, "FAREWELL_4041", "존재하지 않는 작별하기 입니다."),
+    INVALID_ACTIVITY_TYPE(HttpStatus.NOT_FOUND, "ACTIVITY_4041", "유효하지 않은 컨텐츠 타입입니다."),
+
     REVEAL_NOT_FOUND(HttpStatus.NOT_FOUND, "REVEAL_4041", "존재하지 않는 나의 감정 들여다보기입니다."),
 
     REMIND_NOT_FOUND(HttpStatus.NOT_FOUND, "REMIND_4041", "존재하지 않는 충분한 대화 나누기입니다."),
 
-    REMEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "REMEMBER_4041", "존재하지 않는 건강한 작별 준비하기입니다."),
+    REMEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "REMEMBER_4041", "존재하지 않는 반려동물과 추억 정리하기입니다."),
     INVALID_FILE_CONTENT_TYPE_REMEMBER(HttpStatus.BAD_REQUEST, "REMEMBER_4003", "잘못된 파일 유형입니다."),
+    FILE_CONVERT_FAIL_REMEMBER(HttpStatus.INTERNAL_SERVER_ERROR, "RM003", "파일 변환에 실패했습니다."),
 
-    REBORN_NOT_FOUND(HttpStatus.NOT_FOUND, "REBORN_4041", "존재하지 않는 건강한 작별하기입니다.");
+    REBIRTH_NOT_FOUND(HttpStatus.NOT_FOUND, "REBORN_4041", "존재하지 않는 건강한 작별하기입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
