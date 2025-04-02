@@ -51,6 +51,7 @@ public enum SuccessCode implements BaseCode { // 성공
     BOARD_POPULAR_LIST_VIEW_SUCCESS(HttpStatus.OK, "BOARD_2006", "인기 게시글 목록 조회가 완료되었습니다."),
     BOARD_LIKE_CHECK_SUCCESS(HttpStatus.OK, "BOARD_2005", "사용자가 좋아요 누름여부 확인 완료되었습니다."),
     BOARD_BOOKMARK_CHECK_SUCCESS(HttpStatus.OK, "BOARD_2006", "사용자가 북마크 누름여부 확인 완료되었습니다."),
+    BOARD_LIST_VIEW_SUCCESS(HttpStatus.OK, "BOARD_2007", "게시물 목록 조회가 완료되었습니다."),
 
     BOARD_LIKE_SUCCESS(HttpStatus.OK, "LIKE_2001", "게시판 좋아요가 완료되었습니다."),
     BOARD_UNLIKE_SUCCESS(HttpStatus.OK, "LIKE_2002", "게시판 좋아요 취소가 완료되었습니다."),

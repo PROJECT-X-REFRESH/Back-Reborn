@@ -88,7 +88,7 @@ public class BoardController {
     //--------------------------------------------------------------------------------------------------------
     @Operation(summary = "전체 게시물 목록 조회", description = "카테고리별 최신 게시물 목록을 조회하는 API")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2004", description = "게시물 목록 조회가 완료되었습니다.")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2007", description = "게시물 목록 조회가 완료되었습니다.")
     })
     @Parameters({
             @Parameter(name = "type", description = "조회할 게시글 종류. TALK, SHARE, VOLUNTEER, ALL"),
