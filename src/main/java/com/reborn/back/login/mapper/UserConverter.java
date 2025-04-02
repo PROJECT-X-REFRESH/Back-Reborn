@@ -1,11 +1,15 @@
 package com.reborn.back.login.mapper;
 
 import com.reborn.back.domain.aiPost.AiPost;
+import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.login.auth.dto.JwtDto;
 import com.reborn.back.login.dto.UserRequestDto;
 import com.reborn.back.login.dto.UserResponseDto;
 import java.util.List;
+
+import com.reborn.back.review.recollection.service.RecordService;
+import com.reborn.back.review.recollection.service.RemindService;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -34,12 +38,53 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDto.MainInfoResDto mainDto(User user, List<UserResponseDto.mainInfoPet> petList, List<AiPost> recentPosts) {
+    public static List<UserResponseDto.mainInfoPet> toMainInfoPetList(
+            List<Pet> pets,
+            String username,
+            RemindService remindService,
+            RecordService recordService
+    ) {
+        return pets.stream()
+                .map(pet -> toMainInfoPet(pet, username, remindService, recordService))
+                .toList();
+    }
+
+    private static UserResponseDto.mainInfoPet toMainInfoPet(
+            Pet pet,
+            String username,
+            RemindService remindService,
+            RecordService recordService
+    ) {
+        // Farewell이 없으면 살아있다(true), 있으면 죽었다(false)
+        boolean isAlive = (pet.getFarewell() == null);
+
+        // fStep: 살아있으면 0, 죽었으면 farewell.step
+        Integer fStep = isAlive ? 0 : pet.getFarewell().getStep();
+
+        // 살아있으면 remind/record 체크, 죽었으면 null 처리
+        Boolean todayRemind = null;
+        Boolean todayRecord = null;
+        if (isAlive) {
+            todayRemind = remindService.checkTodayRemind(username, pet);
+            todayRecord = recordService.checkTodayRecord(username, pet);
+        }
+
+        return UserResponseDto.mainInfoPet.builder()
+                .pet(pet)
+                .petCondition(isAlive)  // true or false
+                .todayRemind(Boolean.TRUE.equals(todayRemind))
+                .todayRecord(Boolean.TRUE.equals(todayRecord))
+                .fStep(fStep)
+                .build();
+    }
+    public static UserResponseDto.MainInfoResDto mainDto(User user,
+                                                         List<UserResponseDto.mainInfoPet> petList,
+                                                         List<AiPost> recentPosts) {
         return UserResponseDto.MainInfoResDto.builder()
                 .name(user.getName().substring(user.getName().indexOf("}") + 1))
                 .profileImage(user.getImg())
-                .petList(petList) // 서비스에서 처리된 petList 사용
-                .post(recentPosts) // 서비스에서 처리된 최신 포스트 사용
+                .petList(petList)
+                .post(recentPosts)
                 .build();
     }
 }

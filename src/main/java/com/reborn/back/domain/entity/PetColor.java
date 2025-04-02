@@ -5,5 +5,7 @@ public enum PetColor {
     BROWN,
     YELLOWDARK,
     GRAY,
-    WHITE
+    WHITE,
+    HALFGRAY,
+    CHEESE,
 }

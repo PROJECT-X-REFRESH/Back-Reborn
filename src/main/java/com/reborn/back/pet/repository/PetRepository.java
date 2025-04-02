@@ -16,6 +16,5 @@ import java.util.Optional;
 @Repository
 public interface PetRepository extends JpaRepository<Pet, Long>, JpaSpecificationExecutor<Pet> {
     Slice<Pet> findByUser(User user, Pageable pageable);
-
     Optional<Pet> findById(Integer petId);
 }
