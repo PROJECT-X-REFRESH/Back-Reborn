@@ -1,6 +1,7 @@
 package com.reborn.back.domain.review.farewell;
 
 import com.reborn.back.domain.entity.BaseEntity;
+import com.reborn.back.domain.entity.OrganizeType;
 import com.reborn.back.domain.pet.Pet;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,7 +9,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Farewell")
@@ -44,4 +47,10 @@ public class Farewell extends BaseEntity {
 
     @OneToMany(mappedBy = "farewell", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reveal> revealList = new ArrayList<>();
+
+    @ElementCollection(targetClass = OrganizeType.class)
+    @CollectionTable(name = "farewell_thing", joinColumns = @JoinColumn(name = "farewell_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "thing")
+    private Set<OrganizeType> clearedThings = new HashSet<>();
 }

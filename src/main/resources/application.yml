@@ -109,6 +109,14 @@ jwt:
   accessExpirationTime: ${JWT_EXPIRATION}
   refreshExpirationTime: ${JWT_REFRESH_EXPIRATION}
 
+# Google Place
+google:
+  places:
+    api:
+      key: ${GOOGLE_PLACES_API_KEY}
+      base-url: ${GOOGLE_PLACES_BASE_URL}
+      end-point: ${GOOGLE_PLACES_END_POINT}
+
 ---
 # Local
 spring:

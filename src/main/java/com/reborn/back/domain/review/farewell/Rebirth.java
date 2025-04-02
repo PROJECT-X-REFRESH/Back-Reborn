@@ -27,11 +27,7 @@ public class Rebirth extends BaseEntity {
     private Boolean dress;
 
     @Column(name = "birthRibbon")
-    private Boolean ribbon;
-
-    @Lob
-    @Column(name = "birthMyPost", columnDefinition = "longtext")
-    private String myPost;
+    private String ribbon;
 
     @Lob
     @Column(name = "birthPetPost", columnDefinition = "longtext")

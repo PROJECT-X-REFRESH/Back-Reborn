@@ -36,6 +36,9 @@ public class BoardController {
     private final BoardService boardService;
 
     @Operation(summary = "게시물 생성", description = "게시물을 생성하는 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2011", description = "게시물 생성이 완료되었습니다.")
+    })
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Integer> createBoard(
             @RequestPart(value = "board", required = false) MultipartFile file,
@@ -85,7 +88,7 @@ public class BoardController {
     //--------------------------------------------------------------------------------------------------------
     @Operation(summary = "전체 게시물 목록 조회", description = "카테고리별 최신 게시물 목록을 조회하는 API")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2004", description = "게시물 목록 조회가 완료되었습니다.")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2007", description = "게시물 목록 조회가 완료되었습니다.")
     })
     @Parameters({
             @Parameter(name = "type", description = "조회할 게시글 종류. TALK, SHARE, VOLUNTEER, ALL"),
@@ -96,7 +99,7 @@ public class BoardController {
     public ApiResponse<BoardListResDto> getListBoards(
             @RequestParam(name = "type") String type,
             @RequestParam(name = "scrollPosition", defaultValue = "0") int scrollPosition,
-            @RequestParam(name = "fetchSize", defaultValue = "1000") int fetchSize
+            @RequestParam(name = "fetchSize", defaultValue = "50") int fetchSize
     ) {
         BoardType boardType = BoardType.valueOf(type);
         List<Board> boards = boardService.getBoardList(boardType, scrollPosition, fetchSize);
@@ -104,6 +107,9 @@ public class BoardController {
     }
 
     @Operation(summary = "사용자가 좋아요한 게시물 목록 조회", description = "사용자가 좋아요한 게시물을 최신순으로 조회하는 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2005", description = "좋아요한 게시물 목록 조회가 완료되었습니다.")
+    })
     @Parameters({
             @Parameter(name = "scrollPosition", description = "가져올 데이터의 시작 위치 (0부터 시작)"),
             @Parameter(name = "fetchSize", description = "한 번에 불러올 게시글 개수")
@@ -112,18 +118,21 @@ public class BoardController {
     public ApiResponse<BoardListResDto> getLikedBoards(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(name = "scrollPosition", defaultValue = "0") int scrollPosition,
-            @RequestParam(name = "fetchSize", defaultValue = "1000") int fetchSize
+            @RequestParam(name = "fetchSize", defaultValue = "50") int fetchSize
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
         List<Board> likedBoards = boardService.getLikedBoardList(user, scrollPosition, fetchSize);
-        return ApiResponse.onSuccess(SuccessCode.BOARD_LIST_VIEW_SUCCESS, BoardConverter.boardListResDto(likedBoards));
+        return ApiResponse.onSuccess(SuccessCode.BOARD_LIKED_LIST_VIEW_SUCCESS, BoardConverter.boardListResDto(likedBoards));
     }
 
     @Operation(summary = "인기 게시글 조회", description = "인기 게시글 목록을 조회하는 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2006", description = "인기 게시글 목록 조회가 완료되었습니다.")
+    })
     @GetMapping("/popular")
     public ApiResponse<BoardListResDto> getPopularBoards() {
         List<Board> boards = boardService.getPopularBoards();
-        return ApiResponse.onSuccess(SuccessCode.BOARD_LIST_VIEW_SUCCESS, BoardConverter.boardListResDto(boards));
+        return ApiResponse.onSuccess(SuccessCode.BOARD_POPULAR_LIST_VIEW_SUCCESS, BoardConverter.boardListResDto(boards));
     }
 
     @Operation(summary = "게시물 수정", description = "게시물 내용을 수정하는 API") // 작성자만 수정 가능

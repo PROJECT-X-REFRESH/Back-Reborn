@@ -60,6 +60,10 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     implementation 'org.hibernate.orm:hibernate-core:6.2.7.Final'
 
+    // To use Google Map API
+    implementation 'com.google.api-client:google-api-client:1.33.2'
+    implementation 'com.google.maps:google-maps-services:0.18.1'
+
     // Firebase FCM and HTTP Client
     implementation 'com.google.firebase:firebase-admin:9.2.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
