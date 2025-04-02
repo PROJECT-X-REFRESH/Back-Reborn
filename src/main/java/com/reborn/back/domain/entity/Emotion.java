@@ -22,9 +22,6 @@ public class Emotion {
     @Column(name = "Neg")
     private Float neg;
 
-    @Column(name = "Neu")
-    private Float neu;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "State")
     private EmotionState state;

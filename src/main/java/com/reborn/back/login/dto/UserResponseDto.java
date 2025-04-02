@@ -54,5 +54,6 @@ public class UserResponseDto {
         private boolean petCondition;
         private boolean todayRemind;
         private boolean todayRecord;
+        private Integer fStep;
     }
 }

@@ -3,6 +3,7 @@ package com.reborn.back.domain.review.recollection;
 import com.reborn.back.domain.entity.BaseEntity;
 import com.reborn.back.domain.entity.Emotion;
 import com.reborn.back.domain.pet.Pet;
+import com.reborn.back.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,7 +36,6 @@ public class Record extends BaseEntity {
     @AttributeOverrides({
             @AttributeOverride(name = "pos", column = @Column(name = "cordPos")),
             @AttributeOverride(name = "neg", column = @Column(name = "cordNeg")),
-            @AttributeOverride(name = "neu", column = @Column(name = "cordNeu")),
             @AttributeOverride(name = "state", column = @Column(name = "cordState")),
     })
     private Emotion emotion;

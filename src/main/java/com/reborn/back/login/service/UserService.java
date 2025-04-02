@@ -282,14 +282,8 @@ public class UserService {
 
     public UserResponseDto.MainInfoResDto getMainInfo(String username) {
         User user = findUserByUserName(username);
-        List<UserResponseDto.mainInfoPet> petList = user.getPetList().stream().map(pet ->
-                UserResponseDto.mainInfoPet.builder()
-                        .pet(pet)
-                        .petCondition(pet.getFarewell() != null)
-                        .todayRemind(remindService.checkTodayRemind(pet))
-                        .todayRecord(recordService.checkTodayRecord(pet))
-                        .build()
-        ).toList();
+        List<UserResponseDto.mainInfoPet> petList =
+                UserConverter.toMainInfoPetList(user.getPetList(), username, remindService, recordService);
         List<AiPost> recentPosts = aiPostService.getRecentAiPosts();
         return UserConverter.mainDto(user, petList, recentPosts);
     }

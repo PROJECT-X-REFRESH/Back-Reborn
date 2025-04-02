@@ -149,7 +149,7 @@ spring:
 ---
 spring:
   application:
-    name: RE-Born-Backx`
+    name: RE-Born-Back
 
 oauth2:
   redirect-url: http://localhost:8080/token/local
