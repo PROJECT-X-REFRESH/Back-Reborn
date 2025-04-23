@@ -3,6 +3,7 @@ package com.reborn.back.login.auth.controller;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
+import com.reborn.back.global.utils.Redis.RedisUtil;
 import com.reborn.back.login.auth.dto.JwtDto;
 import com.reborn.back.login.dto.UserRequestDto;
 import com.reborn.back.login.mapper.UserConverter;
@@ -24,8 +25,33 @@ import java.util.Map;
 public class TokenController {
 
     private final UserService userService;
+    private final RedisUtil redisUtil;
 
-    // 프론트엔드로 토큰 반환
+    @Operation(summary = "authCode로 토큰 반환", description = "딥링크를 통해 받은 임시 code로 JWT를 반환하는 메서드입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_2011", description = "회원가입 & 로그인 성공"),
+    })
+    @PostMapping("/return")
+    public ApiResponse<JwtDto> exchangeTokenByCode(@RequestBody Map<String, String> request) {
+        String authCode = request.get("code");
+        String data = redisUtil.getData("randomCode" + authCode);
+        if (data == null) {
+            throw new IllegalArgumentException("잘못되었거나 만료된 인증 코드입니다.");
+        }
+        redisUtil.deleteData("randomCode" + authCode);
+
+// 🔍 데이터 형식: "username:signIn"
+        String[] parts = data.split(":");
+        String username = parts[0];
+        String signIn = parts.length > 1 ? parts[1] : "wasUser"; // fallback
+        // 사용자 정보 조회
+        JwtDto jwt = userService.jwtMakeSave(username);
+        return ApiResponse.onSuccess(SuccessCode.USER_LOGIN_SUCCESS,
+                UserConverter.jwtDto(jwt.getAccessToken(), jwt.getRefreshToken(), signIn));
+    }
+
+
+    // 프론트엔드가 준 정보 저장
     // 클라이언트->유저 정보->회원 가입 or JWT 생성 -> return
     // 로그인이 시작되는 부분이라고 볼 수 있음
     @Operation(summary = "토큰 반환", description = "프론트에게 유저 정보 받아 토큰 반환하는 메서드입니다.")
@@ -61,22 +87,28 @@ public class TokenController {
         return ApiResponse.onSuccess(SuccessCode.USER_LOGIN_SUCCESS, UserConverter.jwtDto(accessToken, refreshToken, signIn));
     }
 
-    // 로컬
-    @Operation(summary = "토큰 반환", description = "로컬에서 로그인했을때 토큰 반환하는 메서드입니다.")
+    @Operation(summary = "임시 code로 토큰 반환 (GET)", description = "딥링크 테스트용: 쿼리 스트링 code로 JWT를 반환합니다.")
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "토큰 반환 Success"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_2011", description = "회원가입 & 로그인 성공"),
     })
     @GetMapping("/local")
-    public ResponseEntity<Map<String, String>> tokenPage(
-            @RequestParam(name = "access-token") String accessToken,
-            @RequestParam(name = "refresh-token") String refreshToken
-    ) {
-        // 결과 데이터를 Map에 담아 반환
-        Map<String, String> responseData = new HashMap<>();
-        responseData.put("accessToken", accessToken);
-        responseData.put("refreshToken", refreshToken);
+    public ResponseEntity<Map<String, String>> getTokenFromCode(@RequestParam("code") String authCode) {
+        String username = redisUtil.getData("randomCode" + authCode);
+        if (username == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "잘못되었거나 만료된 인증 코드입니다."));
+        }
 
-        // JSON 형태로 응답
+        //redisUtil.deleteData("randomCode" + authCode);
+
+        //JwtDto jwt = userService.jwtMakeSave(username);
+        //String signIn = "wasUser";
+
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("code",authCode);
+        //responseData.put("accessToken", jwt.getAccessToken());
+        //responseData.put("refreshToken", jwt.getRefreshToken());
+        //responseData.put("signIn", signIn);
+
         return ResponseEntity.ok(responseData);
     }
 }

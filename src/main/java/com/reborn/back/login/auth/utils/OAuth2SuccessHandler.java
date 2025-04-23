@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 // OAuth2 로그인 성공 핸들러
@@ -51,9 +52,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             String username = String.format("{%s}%s", provider,oAuth2User.getAttribute("name"));
             String providerAccessToken = oAuth2User.getAttribute("oauth2AccessToken");
             LocalDateTime providerExpiresAt = oAuth2User.getAttribute("oauth2ExpiresAt");
+            boolean isNewUser = false;
 
-            // 새로운 사용자를 데이터베이스에 등록
             if (!userDetailsManager.userExists(username)) {
+                isNewUser = true; // 신규 유저
                 log.info("신규 사용자 생성: {}", username);
                 CustomUserDetails newUser = CustomUserDetails.builder()
                         .providerId(providerId)
@@ -65,24 +67,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                         .build();
                 userDetailsManager.createUser(newUser);
             }
+            String redisValue = username + ":" + (isNewUser ? "newUser" : "wasUser");
+            String authCode = UUID.randomUUID().toString();
+            redisUtil.setDataExpire("randomCode" + authCode, redisValue, 300);
 
-            // JWT 생성
-            UserDetails userDetails = userDetailsManager.loadUserByUsername(username);
-            JwtDto jwt = tokenUtils.generateToken(userDetails);
-            log.info("AccessToken: {}", jwt.getAccessToken());
-            log.info("RefreshToken: {}", jwt.getRefreshToken());
-
-            // Refresh Token 저장
-            saveRefreshToken(jwt, username);
-
-            // 리다이렉트 URL 생성
-            String redirectUrl = String.format(
-                    "%s?access-token=%s&refresh-token=%s",
-                    baseRedirectUrl,
-                    jwt.getAccessToken(),
-                    jwt.getRefreshToken()
-            );
-            // 클라이언트 리다이렉트
+            // 앱으로 리디렉트할 딥링크
+            String redirectUrl = String.format("%s?code=%s", baseRedirectUrl, authCode);
             getRedirectStrategy().sendRedirect(request, response, redirectUrl);
 
         } catch (Exception e) {
@@ -91,22 +81,4 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         }
     }
 
-    // Refresh Token 저장 로직
-    private void saveRefreshToken(JwtDto jwt, String username) {
-        Claims refreshTokenClaims = tokenUtils.parseClaims(jwt.getRefreshToken());
-        long validPeriod = refreshTokenClaims.getExpiration().toInstant().getEpochSecond()
-                - refreshTokenClaims.getIssuedAt().toInstant().getEpochSecond();
-        // 기존 저장된 Refresh Token 조회
-        String existingToken = redisUtil.getData("username"+username);
-        // 기존 값 로그 출력
-        log.info("현재 저장된 Refresh Token (기존): {}", existingToken);
-        // 기존 값이 다르면 새로 저장 (변경 확인 목적)
-        if (existingToken != null && !existingToken.equals(jwt.getRefreshToken())) {
-            log.info("🔄 Refresh Token 변경됨! 기존: {}, 새로운: {}", existingToken, jwt.getRefreshToken());
-        }
-        // Redis에 새 토큰 저장
-        redisUtil.setDataExpire("username"+username, jwt.getRefreshToken(), validPeriod);
-        // 저장 후 다시 확인
-        log.info("✅ 저장된 Refresh Token (새로운): {}", redisUtil.getData("username"+username));
-    }
 }
