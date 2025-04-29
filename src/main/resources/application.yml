@@ -2,7 +2,7 @@ spring:
   config:
     import: optional:file:.env[.properties]
   profiles:
-    active: local # local, develop, release
+    active: local
 
   # OAuth2
   security:
