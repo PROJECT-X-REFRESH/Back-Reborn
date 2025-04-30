@@ -19,6 +19,12 @@ jobs:
         run: |
           printf '%s' "${{ secrets.ENV_FILE }}" > .env
           chmod 600 .env
+          
+      - name: Decode FIREBASE_JSON and save to file
+        run: |
+          mkdir -p src/main/resources/firebase
+          echo "${{ secrets.FIREBASE_JSON }}" | base64 -d > src/main/resources/firebase/serviceAccountKey.json
+          chmod 600 src/main/resources/firebase/serviceAccountKey.json
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4.0.0
