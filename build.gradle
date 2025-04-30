@@ -92,7 +92,7 @@ tasks.named('test') {
     useJUnitPlatform() // JUnit 5를 사용하여 테스트 실행
 }
 
-// GitHub Actions
-jar {
-    enabled = false // GitHub Actions 환경에서 JAR 빌드를 비활성화
+// 일반 jar 생성 비활성화 (bootJar만 생성)
+tasks.named('jar') {
+    enabled = false
 }
