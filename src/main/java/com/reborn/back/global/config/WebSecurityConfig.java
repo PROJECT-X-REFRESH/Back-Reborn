@@ -40,7 +40,8 @@ public class WebSecurityConfig {
                                 "/oauth2/authorization/google",
                                 "/login/oauth2/code/**",
                                 "/token/**",
-                                "/oauth/**"
+                                "/oauth/**",
+                                "/token/return"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
