@@ -53,6 +53,7 @@ jobs:
 
       - name: Generate deployment package
         run: |
+          chmod +x .platform/hooks/predeploy/01-create-swap.sh
           mkdir -p deploy
           cp build/libs/*.jar deploy/application.jar
           cp Procfile deploy/Procfile
