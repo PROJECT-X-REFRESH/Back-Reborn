@@ -4,6 +4,7 @@ import com.reborn.back.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,5 +24,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 5. 사용자의 아이디로 사용자 정보를 회수하는 기능
     Optional<User> findByUid(String uId);
 
-
+    // 6. petList가 비어있지 않은 유저만 조회
+    List<User> findAllByPetListIsNotEmpty();
 }
