@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -81,5 +83,11 @@ public class CommentService {
         } catch (Exception e) {
             log.error("FCM 푸시 전송 실패: {}", e.getMessage(), e);
         }
+    }
+
+    public List<Comment> findAllByBoardId(Integer boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.BOARD_NOT_FOUND));
+        return commentRepository.findAllByBoardOrderByIdDesc(board);
     }
 }
