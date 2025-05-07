@@ -36,7 +36,7 @@ public class SwaggerConfig {
                 .description("Reborn HTTPS Server");
 
         Server httpServer = new Server()
-                .url("http://reborn.site")
+                .url("http://api.x-reborn.com")
                 .description("Reborn HTTP Server");
 
         Server localServer = new Server()
