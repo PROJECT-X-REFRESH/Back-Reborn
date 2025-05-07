@@ -1,5 +1,6 @@
 package com.reborn.back.review.farewell.dto;
 
+import com.reborn.back.domain.entity.RebirthStep;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,14 +15,11 @@ public class RebirthResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class DetailRebirthDto {
-        @Schema(description = "씻기기 상태")
-        private Boolean wash;
-
-        @Schema(description = "옷 입히기 상태")
-        private Boolean dress;
-
-        @Schema(description = "리본 선택")
-        private String ribbon;
+        @Schema(
+                description = "wash, dress, ribbon, post, outro= 중 하나",
+                example = "dress"
+        )
+        private RebirthStep nextStep;
     }
 
     @Schema(description = "ReviewRebirthDto")
