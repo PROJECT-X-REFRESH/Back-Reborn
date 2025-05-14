@@ -104,7 +104,7 @@ public class TokenController {
         //String signIn = "wasUser";
 
         Map<String, String> responseData = new HashMap<>();
-        responseData.put("code",authCode);
+        responseData.put("code", authCode);
         //responseData.put("accessToken", jwt.getAccessToken());
         //responseData.put("refreshToken", jwt.getRefreshToken());
         //responseData.put("signIn", signIn);

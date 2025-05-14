@@ -1,6 +1,6 @@
 package com.reborn.back.review.recollection.dto;
 
-import com.reborn.back.domain.pet.Pet;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,13 +8,24 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class RemindDto {
-    private Integer id;
-    private String title;
-    private String content;
-    private LocalDateTime createdAt;
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @Schema(description = "RemindResDto")
+    public static class RemindResDto {
+        private Integer id;
+        private String title;
+        private String content;
+        private LocalDateTime createdAt;
+    }
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @Schema(description = "RemindReqDto")
+    public static class RemindReqDto {
+        private String title;
+        private String content;
+    }
 }

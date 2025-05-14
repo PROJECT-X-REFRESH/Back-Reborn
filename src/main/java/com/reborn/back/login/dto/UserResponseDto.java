@@ -2,14 +2,13 @@ package com.reborn.back.login.dto;
 
 import com.reborn.back.domain.aiPost.AiPost;
 import com.reborn.back.domain.pet.Pet;
-import com.reborn.back.domain.review.farewell.Farewell;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @NoArgsConstructor
@@ -50,10 +49,24 @@ public class UserResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class mainInfoPet {
-        private Pet pet;
+        private PetInfoDto pet;
         private boolean petCondition;
         private boolean todayRemind;
         private boolean todayRecord;
         private Integer fStep;
+    }
+
+    @Schema(description = "PetInfoDto")
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PetInfoDto {
+        private Integer id;
+        private String name;
+        private String petCase;
+        private LocalDate birth;
+        private LocalDate death;
+        private String color;
     }
 }

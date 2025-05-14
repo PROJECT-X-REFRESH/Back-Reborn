@@ -17,14 +17,16 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GooglePlacesService {
 
-    @Value("${google.places.api.key}") private String apiKey;
-    @Value("${google.places.api.base-url}") private String baseUrl;
-    @Value("${google.places.api.end-point}") private String endPoint;
-
     // WebClient 인스턴스를 직접 생성합니다.
     private final WebClient webClient = WebClient.builder()
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .build();
+    @Value("${google.places.api.key}")
+    private String apiKey;
+    @Value("${google.places.api.base-url}")
+    private String baseUrl;
+    @Value("${google.places.api.end-point}")
+    private String endPoint;
 
     public Mono<List<GooglePlacesResponse.PlaceDto>> getNearbyCounselingCenters(double lat, double lng) {
 
@@ -43,7 +45,7 @@ public class GooglePlacesService {
         );
 
         return webClient.post()
-                .uri(baseUrl+endPoint)
+                .uri(baseUrl + endPoint)
                 .header("X-Goog-Api-Key", apiKey)
                 .header("X-Goog-FieldMask", "places.displayName,places.formattedAddress,places.location,places.nationalPhoneNumber")
                 .bodyValue(body)

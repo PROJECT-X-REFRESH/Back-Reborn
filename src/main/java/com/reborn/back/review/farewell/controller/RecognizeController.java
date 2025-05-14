@@ -27,7 +27,7 @@ public class RecognizeController {
     private final UserService userService;
 
     @Operation(summary = "나의 상태 알아보기 생성", description = "나의 상태 알아보기를 생성하는 API")
-    @ApiResponses(value =  {
+    @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "RECOGNIZE_2011", description = "나의 상태 알아보기 생성이 완료되었습니다.")
     })
     @PostMapping("/create")

@@ -13,7 +13,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AiPostService {
     private final AiPostRepository aiPostRepository;
-    public List<AiPost> getRecentAiPosts(){
+
+    public List<AiPost> getRecentAiPosts() {
         return aiPostRepository.findTopPost();
     }
 }

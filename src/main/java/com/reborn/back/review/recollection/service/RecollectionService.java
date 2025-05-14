@@ -24,13 +24,14 @@ public class RecollectionService {
     private final RecordRepository recordRepository;
     private final RemindRepository remindRepository;
     private final PetRepository petRepository;
+
     public List<RecollectionDto> getThisWeekList(User user, Integer petId) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startOfWeek = now
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
                 .toLocalDate()
                 .atStartOfDay();
-        Pet pet=petRepository.findById(petId).get();
+        Pet pet = petRepository.findById(petId).get();
         List<RecollectionDto> weeklyList = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             LocalDate currentDate = startOfWeek.toLocalDate().plusDays(i);

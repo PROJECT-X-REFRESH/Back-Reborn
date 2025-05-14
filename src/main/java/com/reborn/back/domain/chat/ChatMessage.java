@@ -6,8 +6,6 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "chatMessage")
 @Getter

@@ -6,11 +6,11 @@ import com.reborn.back.domain.user.User;
 import com.reborn.back.login.auth.dto.JwtDto;
 import com.reborn.back.login.dto.UserRequestDto;
 import com.reborn.back.login.dto.UserResponseDto;
-import java.util.List;
-
 import com.reborn.back.review.recollection.service.RecordService;
 import com.reborn.back.review.recollection.service.RemindService;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @NoArgsConstructor
 public class UserConverter {
@@ -70,13 +70,25 @@ public class UserConverter {
         }
 
         return UserResponseDto.mainInfoPet.builder()
-                .pet(pet)
+                .pet(toPetInfo(pet))
                 .petCondition(isAlive)  // true or false
                 .todayRemind(Boolean.TRUE.equals(todayRemind))
                 .todayRecord(Boolean.TRUE.equals(todayRecord))
                 .fStep(fStep)
                 .build();
     }
+
+    private static UserResponseDto.PetInfoDto toPetInfo(Pet pet) {
+        return UserResponseDto.PetInfoDto.builder()
+                .id(pet.getId())
+                .name(pet.getName())
+                .petCase(pet.getPetCase().name())   // enum → 문자열
+                .birth(pet.getBirth())
+                .death(pet.getDeath())
+                .color(pet.getColor().name())
+                .build();
+    }
+
     public static UserResponseDto.MainInfoResDto mainDto(User user,
                                                          List<UserResponseDto.mainInfoPet> petList,
                                                          List<AiPost> recentPosts) {

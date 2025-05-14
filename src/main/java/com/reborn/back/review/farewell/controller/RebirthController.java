@@ -27,7 +27,7 @@ public class RebirthController {
 
     // 반려동물과 건강한 작별하기
     @Operation(summary = "Rebirth 생성", description = "fstep에 따라 Rebirth을 생성하는 API")
-    @ApiResponses(value =  {
+    @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "Rebirth_2011", description = "반려동물과 건강한 작별하기 생성이 완료되었습니다.")
     })
     @PostMapping
@@ -58,7 +58,7 @@ public class RebirthController {
     }
 
     @Operation(summary = "반려동물 편지 저장", description = "반려동물 편지 저장하는 메서드입니다.")
-    @ApiResponses(value =  {
+    @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REBIRTH_2003", description = "편지 저장이 완료되었습니다.")
     })
     @PostMapping("/write")
@@ -66,7 +66,7 @@ public class RebirthController {
             @PathVariable Integer farewellId,
             @RequestBody RebirthReqDto rebirthRequestDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ){
+    ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
 
         rebirthService.writeRebirth(farewellId, rebirthRequestDto);
@@ -82,7 +82,7 @@ public class RebirthController {
     public ApiResponse<DetailRebirthDto> getDetailRebirth(
             @PathVariable Integer farewellId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ){
+    ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
 
         DetailRebirthDto detail = rebirthService.getDetailRebirth(farewellId);

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,6 +23,7 @@ import java.util.stream.Collectors;
 public class PetService {
 
     private final PetRepository petRepository;
+
     //반려동물 등록
     @Transactional
     public List<PetResponseDto> createPetProfile(PetRequestDto petReqDto, User user) {
@@ -45,7 +45,7 @@ public class PetService {
             pet.setFarewell(farewell);
         }
         petRepository.save(pet);
-        return getPetList(user,0, 10);
+        return getPetList(user, 0, 10);
     }
 
     // 반려동물 목록 조회

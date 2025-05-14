@@ -19,7 +19,7 @@ jobs:
         run: |
           printf '%s' "${{ secrets.ENV_FILE }}" > .env
           chmod 600 .env
-          
+
       - name: Decode FIREBASE_JSON and save to file
         run: |
           mkdir -p src/main/resources/firebase

@@ -31,7 +31,7 @@ public class RememberController {
 
     //반려동물과 추억 정리하기
     @Operation(summary = "Remember 생성", description = "fstep에 따라 Remember을 생성하는 API")
-    @ApiResponses(value =  {
+    @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REMEMBER_2011", description = "반려동물과 추억 정리하기 생성이 완료되었습니다.")
     })
     @PostMapping
@@ -46,7 +46,7 @@ public class RememberController {
     }
 
     @Operation(summary = "컨텐츠 상태 변경", description = "Remember 컨텐츠(feed, snack, walk)의 상태를 변경하는 API")
-    @ApiResponses(value =  {
+    @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REMEMBER_2003", description = "컨텐츠가 완료되었습니다.")
     })
     @PatchMapping("/{activityType}")
@@ -80,7 +80,7 @@ public class RememberController {
     }
 
     @Operation(summary = "물품 정리", description = "물품을 정리하는 API입니다(SNACK, TOY, BATH, LIVING)")
-    @ApiResponses(value =  {
+    @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REMEMBER_2005", description = "정리 품목이 정상적으로 등록되었습니다.")
     })
     @PatchMapping("/remember/clean/{cleanType}")
@@ -100,7 +100,7 @@ public class RememberController {
     public ApiResponse<DetailRememberDto> getDetailRemember(
             @PathVariable Integer farewellId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ){
+    ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
 
         DetailRememberDto detail = rememberService.getDetailRemember(farewellId);

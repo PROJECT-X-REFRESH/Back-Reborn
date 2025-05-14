@@ -2,7 +2,6 @@ package com.reborn.back.review.recollection.repository;
 
 import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.review.recollection.Remind;
-import com.reborn.back.domain.user.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
