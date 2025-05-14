@@ -8,38 +8,30 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @NoArgsConstructor
-
 public class RecordConverter {
-    public static List<RecordDto> recordListDto(List<Record> records) {
-        return records.stream()
-                .map(record -> RecordDto.builder()
-                        .id(record.getId())
-                        .title(record.getTitle())
-                        .content(record.getContent())
-                        .createdAt(record.getCreatedAt())
-                        .build())
-                .toList();
-    }
 
-
-    public static Record toRecord(RecordDto recordDto, Pet pet) {
-        return new Record(null, recordDto.getTitle(), recordDto.getContent(), recordDto.getEmotion(), pet);
-    }
-
-    public static Record updateRecord(Record record, RecordDto recordDto) {
-        record.setTitle(recordDto.getTitle());
-        record.setContent(recordDto.getContent());
-        record.setEmotion(recordDto.getEmotion());
-        return record;
-    }
-
-    public static RecordDto toDto(Record record) {
-        return RecordDto.builder()
-                .id(record.getId())
-                .title(record.getTitle())
-                .content(record.getContent())
-                .emotion(record.getEmotion())
-                .createdAt(record.getCreatedAt())
+    public static RecordDto.RecordResDto toResDto(Record r) {
+        return RecordDto.RecordResDto.builder()
+                .id(r.getId())
+                .title(r.getTitle())
+                .content(r.getContent())
+                .emotion(r.getEmotion())
+                .createdAt(r.getCreatedAt())
                 .build();
+    }
+
+    public static List<RecordDto.RecordResDto> recordListDto(List<Record> list) {
+        return list.stream().map(RecordConverter::toResDto).toList();
+    }
+
+    public static Record toRecord(RecordDto.RecordReqDto dto, Pet pet) {
+        return new Record(null, dto.getTitle(), dto.getContent(), dto.getEmotion(), pet);
+    }
+
+    public static Record updateRecord(Record entity, RecordDto.RecordReqDto dto) {
+        entity.setTitle(dto.getTitle());
+        entity.setContent(dto.getContent());
+        entity.setEmotion(dto.getEmotion());
+        return entity;
     }
 }

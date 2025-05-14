@@ -34,12 +34,12 @@ public class RecordController {
     @PostMapping(value = "{petId}/create")
     public ApiResponse<Integer> createRecord(
             @PathVariable Integer petId,
-            @RequestBody RecordDto recordDto,
+            @RequestBody RecordDto.RecordReqDto dto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) throws IOException {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
-        Integer recordId = recordService.createRecord(petId, recordDto, user);
-        return ApiResponse.onSuccess(SuccessCode.RECORD_CREATED, recordId);
+        User u = userService.findUserByUserName(customUserDetails.getUsername());
+        return ApiResponse.onSuccess(SuccessCode.RECORD_CREATED,
+                recordService.createRecord(petId, dto, u));
     }
 
     @Operation(summary = "record 수정", description = "record 내용을 수정하는 API") // 작성자만 수정 가능
@@ -47,13 +47,14 @@ public class RecordController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2002", description = "게시물 수정이 완료되었습니다.")
     })
     @PutMapping("/{recordId}")
-    public ApiResponse<RecordDto> updateRemind(
+    public ApiResponse<RecordDto.RecordResDto> updateRecord(
             @PathVariable Integer recordId,
-            @RequestBody RecordDto recordDto,
+            @RequestBody RecordDto.RecordReqDto dto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
-        return ApiResponse.onSuccess(SuccessCode.RECORD_UPDATED, recordService.updateRecord(recordId, recordDto, user));
+        User u = userService.findUserByUserName(customUserDetails.getUsername());
+        return ApiResponse.onSuccess(SuccessCode.RECORD_UPDATED,
+                recordService.updateRecord(recordId, dto, u));
     }
 
     @Operation(summary = "record 목록 조회", description = "record 목록을 조회하는 API")
@@ -65,15 +66,15 @@ public class RecordController {
             @Parameter(name = "fetchSize", description = "한 번에 불러올 게시글 개수")
     })
     @PostMapping("/list/{petId}/{scrollPosition}/{fetchSize}")
-    public ApiResponse<List<RecordDto>> getListRecords(
+    public ApiResponse<List<RecordDto.RecordResDto>> getListRecords(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Integer petId,
-            @RequestParam(name = "scrollPosition", defaultValue = "0") int scrollPosition,
-            @RequestParam(name = "fetchSize", defaultValue = "50") int fetchSize
+            @PathVariable int scrollPosition,
+            @PathVariable int fetchSize
     ) {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
-        List<Record> records = recordService.getRecordList(petId, scrollPosition, fetchSize);
-        return ApiResponse.onSuccess(SuccessCode.RECORD_LIST_VIEW_SUCCESS, RecordConverter.recordListDto(records));
+        userService.findUserByUserName(customUserDetails.getUsername());
+        return ApiResponse.onSuccess(SuccessCode.RECORD_LIST_VIEW_SUCCESS,
+                recordService.getRecordList(petId, scrollPosition, fetchSize));
     }
 
     @Operation(summary = "record 상세 조회", description = "특정 record 조회하는 API")
@@ -81,13 +82,13 @@ public class RecordController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "RECORD_2001", description = "게시물 상세 조회가 완료되었습니다.")
     })
     @GetMapping("/{recordId}")
-    public ApiResponse<RecordDto> getRecord(
+    public ApiResponse<RecordDto.RecordResDto> getRecord(
             @PathVariable Integer recordId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
-        Record record = recordService.findById(recordId);
-        return ApiResponse.onSuccess(SuccessCode.RECORD_DETAIL_VIEW_SUCCESS, RecordConverter.toDto(record));
+        userService.findUserByUserName(customUserDetails.getUsername());
+        return ApiResponse.onSuccess(SuccessCode.RECORD_DETAIL_VIEW_SUCCESS,
+                recordService.getRecord(recordId));
     }
 
     @Operation(summary = "record 삭제", description = "기록을 삭제하는 API (오늘만 가능)")
@@ -104,5 +105,4 @@ public class RecordController {
         recordService.deleteRecord(recordId, user, petId);
         return ApiResponse.onSuccess(SuccessCode.RECORD_DELETED, true);
     }
-
 }

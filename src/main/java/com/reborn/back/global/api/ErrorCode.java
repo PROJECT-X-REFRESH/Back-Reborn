@@ -17,6 +17,7 @@ public enum ErrorCode implements BaseCode { // 실패
     MISMATCH_IMAGE_FILE(HttpStatus.FORBIDDEN, "FILE_4031", "첨부할 사진은 png, jpeg 유형만 가능합니다."),
 
     PET_NOT_FOUND(HttpStatus.NOT_FOUND, "PET_4041", "존재하지 않는 반려동물입니다."),
+    PET_ALREADY_DEAD(HttpStatus.BAD_REQUEST, "PET_4002", "죽은 반려동물입니다."),
 
     WRONG_REFRESH_TOKEN(HttpStatus.NOT_FOUND, "JWT_4041", "일치하는 refresh token이 없습니다."),
     IP_NOT_MATCHED(HttpStatus.FORBIDDEN, "JWT_4031", "refresh token의 IP주소가 일치하지 않습니다."),
@@ -40,6 +41,10 @@ public enum ErrorCode implements BaseCode { // 실패
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT_4041", "존재하지 않는 댓글입니다."),
     COMMENT_DELETE_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "COMMENT_4001", "댓글 삭제할 권한이 없습니다."),
 
+    RECORD_ALREADY_EXISTS_TODAY(HttpStatus.CONFLICT, "RECORD_4041", "오늘은 이미 기록을 작성했습니다."),
+    RECORD_NOT_FOUND(HttpStatus.CONFLICT, "RECORD_4041", "존재하지않는 기록입니다."),
+    RECORD_NOT_WRITE_TODAY(HttpStatus.FORBIDDEN, "REMIND_4041", "오늘 작성한 것이 아닙니다."),
+
     REDIARY_NOT_FOUND(HttpStatus.NOT_FOUND, "REDIARY_4041", "존재하지 않는 감정 일기입니다."),
 
     FAREWELL_NOT_FOUND(HttpStatus.NOT_FOUND, "FAREWELL_4041", "존재하지 않는 작별하기 입니다."),
@@ -47,7 +52,9 @@ public enum ErrorCode implements BaseCode { // 실패
 
     REVEAL_NOT_FOUND(HttpStatus.NOT_FOUND, "REVEAL_4041", "존재하지 않는 나의 감정 들여다보기입니다."),
 
+    REMIND_ALREADY_EXISTS_TODAY(HttpStatus.CONFLICT, "REMIND_4041", "오늘은 이미 기록을 작성했습니다."),
     REMIND_NOT_FOUND(HttpStatus.NOT_FOUND, "REMIND_4041", "존재하지 않는 충분한 대화 나누기입니다."),
+    REMIND_NOT_WRITE_TODAY(HttpStatus.FORBIDDEN, "REMIND_4041", "오늘 작성한 것이 아닙니다."),
 
     REMEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "REMEMBER_4041", "존재하지 않는 반려동물과 추억 정리하기입니다."),
     INVALID_FILE_CONTENT_TYPE_REMEMBER(HttpStatus.BAD_REQUEST, "REMEMBER_4003", "잘못된 파일 유형입니다."),

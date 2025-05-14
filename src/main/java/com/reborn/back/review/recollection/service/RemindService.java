@@ -3,6 +3,8 @@ package com.reborn.back.review.recollection.service;
 import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.review.recollection.Remind;
 import com.reborn.back.domain.user.User;
+import com.reborn.back.global.api.ErrorCode;
+import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.global.utils.Redis.RedisUtil;
 import com.reborn.back.pet.repository.PetRepository;
 import com.reborn.back.review.recollection.dto.RemindDto;
@@ -34,55 +36,59 @@ public class RemindService {
         return existing != null;
     }
 
-    public Integer createRemind(Integer petId, RemindDto remindDto, User user) {
-        String key = "remind" + user.getName() + petId;
-        String existing = redisUtil.getData(key);
-        if (existing != null) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Remind is exist.");
+    public Integer createRemind(Integer petId, RemindDto.RemindReqDto dto, User user) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
+        if (pet.getFarewell() != null || pet.getDeath() != null) {
+            throw new GeneralException(ErrorCode.PET_ALREADY_DEAD);
         }
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay();
-        long secondsUntilMidnight = Duration.between(now, midnight).getSeconds();
-        redisUtil.setDataExpire(key, "", secondsUntilMidnight);
-        Pet pet = petRepository.findById(petId).get();
-        Remind remind = RemindConverter.toRemind(remindDto, pet);
-        Remind savedRemind = remindRepository.save(remind);
-        return savedRemind.getId();
+        String key = "remind" + user.getName() + petId;
+        if (redisUtil.getData(key) != null)
+            throw new GeneralException(ErrorCode.REMIND_ALREADY_EXISTS_TODAY);
+
+        long ttl = Duration.between(LocalDateTime.now(),
+                        LocalDateTime.now().toLocalDate().plusDays(1).atStartOfDay())
+                .getSeconds();
+        redisUtil.setDataExpire(key, "", ttl);
+        Remind entity = RemindConverter.toRemind(dto, pet);
+        return remindRepository.save(entity).getId();
     }
 
-    public RemindDto updateRemind(Integer remindId, RemindDto remindDto, User user) {
+    public RemindDto.RemindResDto updateRemind(Integer remindId, RemindDto.RemindReqDto dto, User user) {
+
         Remind remind = findById(remindId);
         String key = "remind" + user.getName() + remind.getPet().getId();
-        String existing = redisUtil.getData(key);
-        if (existing == null) {  // 널이면 update 자체를 막아야 함
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Remind is exist.");
-        }
-        Remind updatedRemind = RemindConverter.updateRemind(remind, remindDto);
-        Remind savedRemind = remindRepository.save(updatedRemind);
-        return RemindConverter.toDto(savedRemind);
+        if (redisUtil.getData(key) == null)
+            throw new  GeneralException(ErrorCode.REMIND_NOT_WRITE_TODAY);
+
+        Remind updated = RemindConverter.updateRemind(remind, dto);
+        return RemindConverter.toResDto(remindRepository.save(updated));
     }
 
-    public Remind findById(Integer remindId) {
-        return remindRepository.findById(remindId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Remind not found"));
+    public RemindDto.RemindResDto getRemind(Integer id) {
+        return RemindConverter.toResDto(findById(id));
+    }
 
+    public List<RemindDto.RemindResDto> getRemindList(Integer petId, int scrollPosition, int fetchSize) {
+
+        Pageable page = PageRequest.of(scrollPosition, fetchSize, Sort.by("createdAt").descending());
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() ->  new GeneralException(ErrorCode.REMIND_NOT_FOUND));
+
+        return RemindConverter.remindListDto(remindRepository.findByPet(pet, page));
+    }
+
+    public Remind findById(Integer id) {
+        return remindRepository.findById(id)
+                .orElseThrow(() -> new GeneralException(ErrorCode.REMIND_NOT_FOUND));
     }
 
     public void deleteRemind(Integer remindId, User user, Integer petId) {
-        String existing = redisUtil.getData("remind" + user.getName() + petId);
+        String key = "remind" + user.getName() + petId;
+        if (redisUtil.getData(key) == null)
+            throw new GeneralException(ErrorCode.REMIND_NOT_WRITE_TODAY);
 
-        if (existing != null) {
-            redisUtil.deleteData("remind" + user.getName() + petId);
-        } else {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "오늘 안 함");
-        }
-    }
-
-    public List<Remind> getRemindList(Integer petId, int scrollPosition, int fetchSize) {
-        Pageable pageable = PageRequest.of(scrollPosition, fetchSize, Sort.by("createdAt").descending());
-        Pet pet = petRepository.findById(petId).get();
-        List<Remind> reminds = remindRepository.findByPet(pet, pageable);
-        return reminds;
+        redisUtil.deleteData(key);
+        remindRepository.deleteById(remindId);
     }
 }
