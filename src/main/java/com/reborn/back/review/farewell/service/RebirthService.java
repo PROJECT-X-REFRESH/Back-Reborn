@@ -5,7 +5,7 @@ import com.reborn.back.domain.review.farewell.Rebirth;
 import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.review.farewell.converter.RebirthConverter;
-import com.reborn.back.review.farewell.dto.RebirthRequestDto;
+import com.reborn.back.review.farewell.dto.RebirthRequestDto.RebirthReqDto;
 import com.reborn.back.review.farewell.dto.RebirthResponseDto.DetailRebirthDto;
 import com.reborn.back.review.farewell.repository.FarewellRepository;
 import com.reborn.back.review.farewell.repository.RebirthRepository;
@@ -29,8 +29,6 @@ public class RebirthService {
         Rebirth rebirth = RebirthConverter.saveRebirth(farewell);
         rebirthRepository.save(rebirth);
 
-        farewell.setStep(farewell.getStep() + 1);
-
         return rebirth;
     }
 
@@ -50,11 +48,15 @@ public class RebirthService {
             case "dress":
                 rebirth.setDress(true);
                 break;
-            case "Yribbon":
+            case "yribbon":
                 rebirth.setRibbon("YELLOW");
                 break;
-            case "Bribbon":
+            case "bribbon":
                 rebirth.setRibbon("BLACK");
+                break;
+            case "outro":
+                rebirth.setOutro(true);
+                farewell.setStep(farewell.getStep() + 1);
                 break;
             default:
                 throw new GeneralException(ErrorCode.INVALID_ACTIVITY_TYPE);
@@ -64,14 +66,14 @@ public class RebirthService {
     }
 
     @Transactional
-    public Rebirth writeRebirth(Integer farewellId, RebirthRequestDto rebirthRequestDto) {
+    public Rebirth writeRebirth(Integer farewellId, RebirthReqDto rebirthRequestDto) {
         Farewell farewell = farewellRepository.findById(farewellId)
                 .orElseThrow(() -> GeneralException.of(ErrorCode.FAREWELL_NOT_FOUND));
 
         Rebirth rebirth = rebirthRepository.findTopByFarewellOrderByCreatedAtDesc(farewell)
                 .orElseThrow(() -> GeneralException.of(ErrorCode.REBIRTH_NOT_FOUND));
 
-        rebirth.setPetPost(rebirth.getPetPost());
+        rebirth.setPetPost(rebirthRequestDto.getPetPost());
 
         return rebirth;
     }
@@ -85,6 +87,4 @@ public class RebirthService {
 
         return RebirthConverter.toDto(rebirth);
     }
-
-
 }

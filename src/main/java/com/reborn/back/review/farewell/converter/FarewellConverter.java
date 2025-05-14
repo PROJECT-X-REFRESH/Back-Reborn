@@ -3,7 +3,7 @@ package com.reborn.back.review.farewell.converter;
 import com.reborn.back.domain.review.farewell.Farewell;
 import com.reborn.back.review.farewell.dto.FarewellResponseDto;
 import com.reborn.back.review.farewell.dto.RebirthResponseDto.ReviewRebirthDto;
-import com.reborn.back.review.farewell.dto.RecognizeResponseDto.RecongizeResDto;
+import com.reborn.back.review.farewell.dto.RecognizeResponseDto.RecognizeResDto;
 import com.reborn.back.review.farewell.dto.RememberResponseDto.SimpleRememberDto;
 import com.reborn.back.review.farewell.dto.RevealResponseDto.SimpleRevealDto;
 
@@ -24,7 +24,7 @@ public class FarewellConverter {
 
         return FarewellResponseDto.builder()
                 .recognize(farewell.getRecognize() != null ?
-                        RecongizeResDto.builder()
+                        RecognizeResDto.builder()
                                 .id(farewell.getRecognize().getId())
                                 .score(farewell.getRecognize().getScore())
                                 .build()
