@@ -1,18 +1,13 @@
 package com.reborn.back.review.recollection.service;
 
-import com.reborn.back.domain.board.Board;
 import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.review.recollection.Record;
-import com.reborn.back.domain.review.recollection.Remind;
 import com.reborn.back.domain.user.User;
-import com.reborn.back.global.api.ErrorCode;
-import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.global.utils.Redis.RedisUtil;
 import com.reborn.back.pet.repository.PetRepository;
 import com.reborn.back.review.recollection.dto.RecordDto;
 import com.reborn.back.review.recollection.mapper.RecordConverter;
 import com.reborn.back.review.recollection.repository.RecordRepository;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -23,11 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -38,7 +30,7 @@ public class RecordService {
     private final PetRepository petRepository;
 
     public boolean checkTodayRecord(String username, Pet pet) {
-        String existing = redisUtil.getData("record"+username+pet.getId());
+        String existing = redisUtil.getData("record" + username + pet.getId());
         return existing != null;
     }
 
@@ -52,7 +44,7 @@ public class RecordService {
         LocalDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay();
         long secondsUntilMidnight = Duration.between(now, midnight).getSeconds();
         redisUtil.setDataExpire(key, "", secondsUntilMidnight);
-        Pet pet=petRepository.findById(petId).get();
+        Pet pet = petRepository.findById(petId).get();
         Record record = RecordConverter.toRecord(recordDto, pet);
         Record savedRecord = recordRepository.save(record);
         return savedRecord.getId();
@@ -91,7 +83,7 @@ public class RecordService {
 
     public List<Record> getRecordList(Integer petId, int scrollPosition, int fetchSize) {
         Pageable pageable = PageRequest.of(scrollPosition, fetchSize, Sort.by("createdAt").descending());
-        Pet pet=petRepository.findById(petId).get();
+        Pet pet = petRepository.findById(petId).get();
         List<Record> records = recordRepository.findByPet(pet, pageable);
         return records;
     }

@@ -107,9 +107,11 @@ public class UserController {
         return ApiResponse.onSuccess(SuccessCode.USER_INFO_SUCCESS, UserConverter.infoDto(user));
     }
 
-    @Operation(summary = "메인 화면의 닉네임, 사진", description = "메인 화면에 띄울 정보들을 보이는 메서드입니다.")
+    @Operation(summary = "메인 화면 데이터", description = "메인 화면에 띄울 정보들을 보이는 메서드입니다.")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_2010", description = "닉네임, 사진 전달이 완료되었습니다.")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "USER_2010",
+                    description = "닉네임, 프로필 사진, 반려동물정보가 전달이 완료되었습니다.")
     })
     @GetMapping(value = "/main")
     public ApiResponse<UserResponseDto.MainInfoResDto> mainInfo(

@@ -1,9 +1,9 @@
 package com.reborn.back.review.farewell.dto;
 
+import com.reborn.back.review.farewell.dto.RebirthResponseDto.ReviewRebirthDto;
 import com.reborn.back.review.farewell.dto.RecognizeResponseDto.RecongizeResDto;
 import com.reborn.back.review.farewell.dto.RememberResponseDto.SimpleRememberDto;
 import com.reborn.back.review.farewell.dto.RevealResponseDto.SimpleRevealDto;
-import com.reborn.back.review.farewell.dto.RebirthResponseDto.ReviewRebirthDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

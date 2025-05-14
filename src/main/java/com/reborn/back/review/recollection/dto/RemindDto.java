@@ -1,6 +1,5 @@
 package com.reborn.back.review.recollection.dto;
 
-import com.reborn.back.domain.pet.Pet;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

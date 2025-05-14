@@ -1,6 +1,5 @@
 package com.reborn.back.review.recollection.controller;
 
-import com.reborn.back.board.converter.BoardConverter;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
@@ -13,7 +12,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

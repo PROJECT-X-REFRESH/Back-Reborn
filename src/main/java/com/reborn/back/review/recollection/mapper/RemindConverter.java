@@ -2,7 +2,6 @@ package com.reborn.back.review.recollection.mapper;
 
 import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.review.recollection.Remind;
-import com.reborn.back.domain.user.User;
 import com.reborn.back.review.recollection.dto.RemindDto;
 import lombok.NoArgsConstructor;
 

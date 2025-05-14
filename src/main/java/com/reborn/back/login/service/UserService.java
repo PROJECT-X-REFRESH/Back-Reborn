@@ -107,13 +107,13 @@ public class UserService {
                 - refreshTokenClaims.getIssuedAt().toInstant().getEpochSecond();
 
         // Redis에 저장된 해당 사용자의 리프레시 토큰 업데이트
-        String existingRefreshToken = redisUtil.getData("username"+username);
+        String existingRefreshToken = redisUtil.getData("username" + username);
         if (existingRefreshToken != null) {
-            redisUtil.deleteData("username"+username);
+            redisUtil.deleteData("username" + username);
         }
 
         // 만료시간을 지정해 setDataExpire를 호출하면, 해당 기간이 지나면 자동으로 key-value가 삭제됩니다.
-        redisUtil.setDataExpire("username"+username, jwt.getRefreshToken(), validPeriod);
+        redisUtil.setDataExpire("username" + username, jwt.getRefreshToken(), validPeriod);
 
         // JSON 형태로 응답
         return jwt;
@@ -135,11 +135,11 @@ public class UserService {
         log.info("access token에서 추출한 username : {}", username);
 
         // 3. Redis에서 해당 username 키를 조회
-        String existingRefreshToken = redisUtil.getData("username"+username);
+        String existingRefreshToken = redisUtil.getData("username" + username);
 
         // 4. 토큰이 존재하면 삭제, 없으면 예외 발생
         if (existingRefreshToken != null) {
-            redisUtil.deleteData("username"+username);
+            redisUtil.deleteData("username" + username);
             log.info("Redis에서 리프레시 토큰 삭제 완료");
         } else {
             throw GeneralException.of(ErrorCode.WRONG_REFRESH_TOKEN);
@@ -164,7 +164,7 @@ public class UserService {
         log.info("refresh token에서 추출한 username: {}", username);
 
         // 3. Redis에서 해당 username 키로 저장된 Refresh Token 가져오기
-        String existingRefreshToken = redisUtil.getData("username"+username);
+        String existingRefreshToken = redisUtil.getData("username" + username);
         log.info("reissue - Redis에서 가져온 existingRefreshToken={}", existingRefreshToken);
         // 토큰이 없거나, Redis에 저장된 값과 다르면 잘못된 토큰
         if (existingRefreshToken == null || !existingRefreshToken.equals(refreshTokenValue)) {
@@ -183,7 +183,7 @@ public class UserService {
         log.info("reissue: refresh token 재발급 완료");
 
         // 6. Redis에 저장된 기존 Refresh Token 삭제 후, 새 Refresh Token 저장
-        redisUtil.deleteData("username"+username); // 기존 토큰 삭제
+        redisUtil.deleteData("username" + username); // 기존 토큰 삭제
 
         // 유효 기간(초 단위) 계산
         Claims newRefreshTokenClaims = jwtTokenUtils.parseClaims(jwt.getRefreshToken());
@@ -191,10 +191,10 @@ public class UserService {
                 - newRefreshTokenClaims.getIssuedAt().toInstant().getEpochSecond();
 
         // 새 Refresh Token을 username 키로 Redis에 저장
-        redisUtil.setDataExpire("username"+username, jwt.getRefreshToken(), validPeriod);
+        redisUtil.setDataExpire("username" + username, jwt.getRefreshToken(), validPeriod);
         log.info("새로운 Refresh Token 저장 (username: {}, 만료까지 {}초)", username, validPeriod);
 
-        String storedToken = redisUtil.getData("username"+username);
+        String storedToken = redisUtil.getData("username" + username);
         if (!jwt.getRefreshToken().equals(storedToken)) {
             throw GeneralException.of(ErrorCode.WRONG_REFRESH_TOKEN);
         }
@@ -222,9 +222,9 @@ public class UserService {
         List<Board> boards = user.getBoardList();
         boardRepository.deleteAll(boards);
 
-        String existingRefreshToken = redisUtil.getData("username"+username);
+        String existingRefreshToken = redisUtil.getData("username" + username);
         if (existingRefreshToken != null) {
-            redisUtil.deleteData("username"+username);
+            redisUtil.deleteData("username" + username);
             log.info("Redis에서 리프레시 토큰 삭제 완료");
         }
 

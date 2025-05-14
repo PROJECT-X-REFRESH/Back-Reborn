@@ -1,6 +1,5 @@
 package com.reborn.back.review.recollection.controller;
 
-import com.reborn.back.review.recollection.mapper.RemindConverter;
 import com.reborn.back.domain.review.recollection.Remind;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ApiResponse;
@@ -8,6 +7,7 @@ import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
 import com.reborn.back.review.recollection.dto.RemindDto;
+import com.reborn.back.review.recollection.mapper.RemindConverter;
 import com.reborn.back.review.recollection.service.RemindService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +38,7 @@ public class RemindController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) throws IOException {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        Integer remind=remindService.createRemind(petId, remindDto, user);
+        Integer remind = remindService.createRemind(petId, remindDto, user);
         return ApiResponse.onSuccess(SuccessCode.REMIND_CREATED, remind);
     }
 

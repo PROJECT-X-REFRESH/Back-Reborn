@@ -1,10 +1,7 @@
 package com.reborn.back.login.auth.utils;
 
 import com.reborn.back.global.utils.Redis.RedisUtil;
-import com.reborn.back.login.auth.dto.JwtDto;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
-import com.reborn.back.login.auth.jwt.JwtTokenUtils;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -29,10 +25,9 @@ import java.util.UUID;
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final RedisUtil redisUtil;
-    private final JwtTokenUtils tokenUtils;
     private final UserDetailsManager userDetailsManager;
 
-    @Value("${oauth2.redirect-url}")
+    @Value("${spring.oauth2.redirect-url}")
     private String baseRedirectUrl;
 
     @Override

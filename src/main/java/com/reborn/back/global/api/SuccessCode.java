@@ -75,7 +75,7 @@ public enum SuccessCode implements BaseCode { // 성공
 
     REMIND_CREATED(HttpStatus.CREATED, "REMIND_2011", "감정 일기 생성이 완료되었습니다."),
     REMIND_LIST_VIEW_SUCCESS(HttpStatus.OK, "REMIND_2001", "감정 일기 목록 조회가 완료되었습니다."),
-    REMIND_UPDATED(HttpStatus.OK, "REMIND_2003", "감정 일기 업데이트가가 완료되었습니다." ),
+    REMIND_UPDATED(HttpStatus.OK, "REMIND_2003", "감정 일기 업데이트가가 완료되었습니다."),
     REMIND_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REMIND_2004", "감정 일기 조회가 완료되었습니다."),
     REMIND_TODAY_VIEW_SUCCESS(HttpStatus.OK, "REMIND_2004", "오늘의 감정 일기 작성 여부가 조회 완료되었습니다."),
     REMIND_DELETED(HttpStatus.OK, "REMIND_2005", "감정 일기 삭제가 완료되었습니다."),

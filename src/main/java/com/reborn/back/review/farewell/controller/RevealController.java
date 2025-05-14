@@ -27,7 +27,7 @@ public class RevealController {
 
     //나의 감정 드러내기
     @Operation(summary = "Reveal 생성", description = "fstep에 따라 Reveal을 생성하는 API")
-    @ApiResponses(value =  {
+    @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REVEAL_2011", description = "나의 감정 드러내기 생성이 완료되었습니다.")
     })
     @PostMapping
@@ -42,7 +42,7 @@ public class RevealController {
     }
 
     @Operation(summary = "컨텐츠 상태 변경", description = "Reveal 컨텐츠(feed, snack, walk)의 상태를 변경하는 API")
-    @ApiResponses(value =  {
+    @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REVEAL_2003", description = "컨텐츠가 완료되었습니다.")
     })
     @PatchMapping("/{activityType}")
@@ -58,7 +58,7 @@ public class RevealController {
     }
 
     @Operation(summary = "일기 작성", description = "일기를 작성하는 API(SUNNY, CLOUDY, RAINY)")
-    @ApiResponses(value =  {
+    @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REVEAL_2003", description = "일기 작성이 완료되었습니다.")
     })
     @PostMapping("/write")
@@ -66,7 +66,7 @@ public class RevealController {
             @PathVariable Integer farewellId,
             @RequestBody RevealReqDto revealReqDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ){
+    ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
 
         revealService.writeReveal(farewellId, revealReqDto);
@@ -82,7 +82,7 @@ public class RevealController {
     public ApiResponse<DetailRevealDto> getDetailReveal(
             @PathVariable Integer farewellId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ){
+    ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
 
         DetailRevealDto detail = revealService.getDetailReveal(farewellId);

@@ -13,13 +13,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Tag(name = "반려동물", description = "반려동물 관련 api")
@@ -29,6 +27,7 @@ import java.util.Objects;
 public class PetController {
     private final UserService userService;
     private final PetService petService;
+
     @Operation(summary = "펫 프로필 만들기", description = "펫 프로필을 생성하는 api.")
     @PostMapping(value = "/profile/create")
     public ApiResponse<List<PetResponseDto>> createPetProfile(

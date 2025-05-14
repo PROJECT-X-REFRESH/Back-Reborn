@@ -98,7 +98,7 @@ public class BoardService {
 
     // 특정 게시물 조회
     @Transactional
-    public Board findById(Integer bId){
+    public Board findById(Integer bId) {
         return boardRepository.findById(bId)
                 .orElseThrow(() -> GeneralException.of(ErrorCode.BOARD_NOT_FOUND));
     }

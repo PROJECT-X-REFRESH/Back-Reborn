@@ -2,8 +2,8 @@ package com.reborn.back.board.controller;
 
 import com.reborn.back.board.converter.BoardConverter;
 import com.reborn.back.board.dto.BoardRequestDto.BoardReqDto;
-import com.reborn.back.board.dto.BoardResponseDto.BoardResDto;
 import com.reborn.back.board.dto.BoardResponseDto.BoardListResDto;
+import com.reborn.back.board.dto.BoardResponseDto.BoardResDto;
 import com.reborn.back.board.service.BoardService;
 import com.reborn.back.domain.board.Board;
 import com.reborn.back.domain.entity.BoardType;
