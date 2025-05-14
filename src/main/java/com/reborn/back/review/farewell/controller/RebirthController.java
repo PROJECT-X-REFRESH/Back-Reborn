@@ -6,7 +6,7 @@ import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
-import com.reborn.back.review.farewell.dto.RebirthRequestDto;
+import com.reborn.back.review.farewell.dto.RebirthRequestDto.RebirthReqDto;
 import com.reborn.back.review.farewell.dto.RebirthResponseDto.DetailRebirthDto;
 import com.reborn.back.review.farewell.service.RebirthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,8 +41,8 @@ public class RebirthController {
         return ApiResponse.onSuccess(SuccessCode.REBIRTH_CREATED, rebirth.getId());
     }
 
-    @Operation(summary = "컨텐츠 상태 변경", description = "Rebirth 컨텐츠(wash, dress, ribbon{string})의 상태를 변경하는 API")
-    @ApiResponses(value = {
+    @Operation(summary = "컨텐츠 상태 변경", description = "Rebirth 컨텐츠(wash, dress, ribbon{string}, outro, complete)의 상태를 변경하는 API")
+    @ApiResponses(value =  {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REBIRTH_2003", description = "컨텐츠가 완료되었습니다.")
     })
     @PatchMapping("/{activityType}")
@@ -64,7 +64,7 @@ public class RebirthController {
     @PostMapping("/write")
     public ApiResponse<Boolean> write(
             @PathVariable Integer farewellId,
-            @RequestBody RebirthRequestDto rebirthRequestDto,
+            @RequestBody RebirthReqDto rebirthRequestDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());

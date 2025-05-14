@@ -1,7 +1,6 @@
 package com.reborn.back.review.farewell.dto;
 
-import com.reborn.back.review.farewell.dto.RebirthResponseDto.ReviewRebirthDto;
-import com.reborn.back.review.farewell.dto.RecognizeResponseDto.RecongizeResDto;
+import com.reborn.back.review.farewell.dto.RecognizeResponseDto.RecognizeResDto;
 import com.reborn.back.review.farewell.dto.RememberResponseDto.SimpleRememberDto;
 import com.reborn.back.review.farewell.dto.RevealResponseDto.SimpleRevealDto;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,7 +19,7 @@ import java.util.List;
 public class FarewellResponseDto {
 
     @Schema(description = "자가진단 결과")
-    private RecongizeResDto recognize;
+    private RecognizeResDto recognize;
 
     @Schema(description = "감정 드러내기 ID 리스트")
     private List<SimpleRevealDto> revealList;

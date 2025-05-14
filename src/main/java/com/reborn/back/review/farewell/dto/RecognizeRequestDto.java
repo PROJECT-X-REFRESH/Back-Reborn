@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class RecognizeRequestDto {
-    // Front에 전달받을 Recognize 내용
+
+    // 프론트에게 전달받을 정보
     @Schema(description = "RecognizeReqDto")
     @Getter
     @Builder
