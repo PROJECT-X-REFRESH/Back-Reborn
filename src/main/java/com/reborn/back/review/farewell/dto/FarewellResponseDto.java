@@ -28,5 +28,5 @@ public class FarewellResponseDto {
     private List<SimpleRememberDto> rememberList;
 
     @Schema(description = "Rebirth 편지")
-    private ReviewRebirthDto rebirth;
+    private RebirthResponseDto.ReviewRebirthDto rebirth;
 }
