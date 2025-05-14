@@ -64,10 +64,7 @@ public class WebSecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
                 "http://reborn.site",
-                "https://reborn.site",
-                "http://api.x-reborn.com",
-                "https://api.x-reborn.com",
-                "http://localhost:8080"
+                "https://reborn.site"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);

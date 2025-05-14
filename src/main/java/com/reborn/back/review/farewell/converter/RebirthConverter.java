@@ -1,6 +1,5 @@
 package com.reborn.back.review.farewell.converter;
 
-import com.reborn.back.domain.entity.RebirthStep;
 import com.reborn.back.domain.review.farewell.Farewell;
 import com.reborn.back.domain.review.farewell.Rebirth;
 import com.reborn.back.review.farewell.dto.RebirthResponseDto.DetailRebirthDto;
@@ -17,17 +16,11 @@ public class RebirthConverter {
                 .build();
     }
 
-    public static DetailRebirthDto toDto(Rebirth r) {
+    public static DetailRebirthDto toDto(Rebirth rebirth) {
         return DetailRebirthDto.builder()
-                .nextStep(calcNextStep(r))
+                .wash(rebirth.getWash())
+                .dress(rebirth.getDress())
+                .ribbon(rebirth.getRibbon())
                 .build();
-    }
-
-    private static RebirthStep calcNextStep(Rebirth r) {
-        if (!Boolean.TRUE.equals(r.getWash()))  return RebirthStep.WASH;
-        if (!Boolean.TRUE.equals(r.getDress())) return RebirthStep.DRESS;
-        if (r.getRibbon() == null)              return RebirthStep.RIBBON;
-        if (r.getPetPost() == null)             return RebirthStep.POST;
-        return RebirthStep.OUTRO;
     }
 }
