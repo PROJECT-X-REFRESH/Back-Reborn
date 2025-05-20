@@ -94,4 +94,16 @@ public class PetService {
         petRepository.delete(pet);
     }
 
+
+    @Transactional(readOnly = true)
+    public PetResponseDto getPetById(Integer petId, String username) {
+
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
+
+        if (!pet.getUser().getName().equals(username)) {
+            throw new GeneralException(ErrorCode.BAD_REQUEST);
+        }
+        return PetResponseDto.fromEntity(pet);
+    }
 }
