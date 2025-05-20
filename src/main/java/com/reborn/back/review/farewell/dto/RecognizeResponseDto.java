@@ -14,7 +14,7 @@ public class RecognizeResponseDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class RecongizeResDto {
+    public static class RecognizeResDto {
         @Schema(description = "나의 상태 알아보기 id")
         private Integer id;
 

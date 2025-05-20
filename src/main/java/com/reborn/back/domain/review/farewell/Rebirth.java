@@ -33,6 +33,9 @@ public class Rebirth extends BaseEntity {
     @Column(name = "birthPetPost", columnDefinition = "longtext")
     private String petPost;
 
+    @Column(name = "birthOutro")
+    private Boolean outro;
+
     // FK: fId → Farewell(fId)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fId", nullable = false)
