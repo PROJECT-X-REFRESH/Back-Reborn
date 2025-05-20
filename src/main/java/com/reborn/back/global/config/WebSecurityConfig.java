@@ -41,7 +41,8 @@ public class WebSecurityConfig {
                                 "/login/oauth2/code/**",
                                 "/token/**",
                                 "/oauth/**",
-                                "/token/return"
+                                "/token/return",
+                               "/users/me"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
