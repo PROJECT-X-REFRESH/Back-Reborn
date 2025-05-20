@@ -27,12 +27,6 @@ public class ChatMessage extends BaseEntity {
     @Column(name = "cmIsFrom", nullable = false)
     private Boolean isFrom;
 
-    @Column(name = "cmRead", nullable = false)
-    private Boolean read;
-
-    @Column(name = "cmSignture", length = 255, nullable = false)
-    private String signature;
-
     // FK: cmRoomId → ChatRoom(crId)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cmRoomId", nullable = false)

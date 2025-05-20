@@ -129,7 +129,14 @@ public enum SuccessCode implements BaseCode { // 성공
     REBORN_CLOTHE_COMPLETED(HttpStatus.OK, "REBORN_2007", "옷 입혀주기가 완료되었습니다."),
     REBORN_FINISH_COMPLETED(HttpStatus.OK, "REBORN_2008", "15일 콘텐츠가 완료되었습니다."),
     REBORN_SET_REBORN_COMPLETED(HttpStatus.OK, "REBORN_2009", "리본 선택이 완료되었습니다."),
-    REBORN_OUTRO_COMPLETED(HttpStatus.OK, "REBORN_2011", "아웃트로로 넘어가기가 완료되었습니다.");
+    REBORN_OUTRO_COMPLETED(HttpStatus.OK, "REBORN_2011", "아웃트로로 넘어가기가 완료되었습니다."),
+
+    CHAT_LIST_VIEW_SUCESS(HttpStatus.OK, "CHAT_2001", "채팅방 목록 조회 성공."),
+    CHAT_DETAIL_VIEW_SUCESS(HttpStatus.OK, "CHAT_2002", "채팅방 세부 조회 성공."),
+    CHAT_ROOM_CREATE(HttpStatus.OK, "CHAT_2003", "채팅방 생성 완료."),
+    CHAT_MESSAGE_SEND(HttpStatus.OK, "CHAT_2004", "메세지 전송 성공."),
+    CHAT_DELETED(HttpStatus.OK, "CHAT_2005", "채팅방 나가기 성공.")
+    ;
 
     private final HttpStatus httpStatus;
     private final String code;
