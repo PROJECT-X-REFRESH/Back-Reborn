@@ -39,6 +39,17 @@ public class PetController {
         return ApiResponse.onSuccess(SuccessCode.PET_CREATE_SUCCESS, petList);
     }
 
+    @Operation(summary = "반려동물 조회", description = "사용자의 반려동물의 상세정보를 조회합니다.")
+    @GetMapping("/{petId}")
+    public ApiResponse<PetResponseDto> getPetDetail(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable int petId
+    ) {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
+        PetResponseDto pet = petService.getPetById(petId, user.getName());
+        return ApiResponse.onSuccess(SuccessCode.PET_LIST_VIEW_SUCCESS, pet);
+    }
+
     @Operation(summary = "반려동물 목록 조회", description = "사용자의 반려동물 목록을 스크롤 기반으로 조회합니다.")
     @GetMapping("/list/{scrollPosition}")
     public ApiResponse<List<PetResponseDto>> getPetList(
