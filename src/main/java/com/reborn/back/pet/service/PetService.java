@@ -56,6 +56,7 @@ public class PetService {
 
         return petSlice.getContent().stream()
                 .map(pet -> PetSimpleDto.builder()
+                        .id(pet.getId())
                         .name(pet.getName())
                         .petCase(pet.getPetCase())
                         .death(pet.getDeath()!=null)
