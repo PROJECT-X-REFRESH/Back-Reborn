@@ -12,12 +12,13 @@ import com.reborn.back.login.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.handler.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "chat", description = "chat 관련 API")
 @RestController
@@ -34,7 +35,7 @@ public class ChatController {
             @Parameter(name = "fetchSize", description = "한 번에 불러올 채팅 개수")
     })
     @GetMapping("/list")
-    public ApiResponse<ChatRoomDto.RoomList> getListChat(
+    public ApiResponse<List<ChatRoomDto.RoomList>> getListChat(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(name = "scrollPosition", defaultValue = "0") int scrollPosition,
             @RequestParam(name = "fetchSize", defaultValue = "50") int fetchSize
@@ -44,16 +45,15 @@ public class ChatController {
                 SuccessCode.CHAT_LIST_VIEW_SUCESS,
                 chatService.getRoomList(user, scrollPosition, fetchSize)
         );
-        return ApiResponse.onSuccess(SuccessCode.CHAT_LIST_VIEW_SUCESS, null);
     }
 
 
-    /** 1) handshake – 방이 없으면 생성 */
+    // 1) handshake – 방이 없으면 생성
     @Operation(summary = "채팅방 생성/조회", description = "상대 UID 로 handshake")
     @GetMapping("/handshake/{partnerId}")
     public ApiResponse<ChatRoomDto.RoomList> handshake(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @PathVariable Long partnerId) {
+            @PathVariable String partnerId) {
 
         User user = userService.findUserByUserName(customUserDetails.getUsername());
         return ApiResponse.onSuccess(
@@ -69,7 +69,7 @@ public class ChatController {
             @Parameter(name = "fetchSize", description = "한 번에 불러올 채팅 개수")
     })
     @GetMapping("/{chatId}")
-    public ApiResponse<ChatRoomDto.RoomList> getChatDetail(
+    public ApiResponse<List<ChatResDto.MessageResponse>> getChatDetail(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Integer chatId,
             @RequestParam(name = "scrollPosition", defaultValue = "0") int scrollPosition,
@@ -83,13 +83,12 @@ public class ChatController {
     }
 
 
-    // 2. 메세지 전송, STOMP
+    // 3. 메세지 전송, STOMP
     @MessageMapping("/chat.sendMessage/{chatId}")
     public ChatResDto.MessageResponse sendMessage(
             @DestinationVariable Integer chatId,
             ChatReqDto.SendMessage payload,
             @AuthenticationPrincipal CustomUserDetails customUserDetail) {
-
         User user = userService.findUserByUserName(customUserDetail.getUsername());
         return chatService.writeMessage(user, chatId, payload.getText());
     }

@@ -13,6 +13,6 @@ public class ChatReqDto {
     public static class SendMessage {
         private Integer roomId;
         private boolean isFrom;
-        private String Text;
+        private String text;
     }
 }

@@ -15,8 +15,8 @@ public class ChatResDto {
     @AllArgsConstructor
     public static class MessageResponse {
         private Integer messageId;
-        private Boolean isFrom;
-        private String Text;
+        private Boolean mine;
+        private String text;
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime sentAt;
     }

@@ -82,6 +82,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.springframework:spring-messaging'
+    testImplementation 'org.springframework:spring-websocket'
 
     // Env
     implementation 'io.github.cdimascio:dotenv-java:3.0.0'
@@ -90,7 +92,6 @@ dependencies {
     implementation 'org.webjars:stomp-websocket:2.3.4'
     implementation 'org.webjars:sockjs-client:1.5.1'
     implementation 'org.springframework.boot:spring-boot-starter-websocket:3.4.5'
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
 }
 
 // 테스트 플랫폼

@@ -14,107 +14,107 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.reborn.back.domain.chat.ChatRoomStatus.FROM_LEFT;
+import static com.reborn.back.domain.chat.ChatRoomStatus.TO_LEFT;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatService {
 
-    private final ChatRoomRepository roomRepo;
-    private final ChatMessageRepository msgRepo;
-    private final UserRepository userRepo;
+    private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository msgRepository;
+    private final UserRepository userRepository;
 
-    /* ========== 0) 목록 ========== */
     @Transactional(readOnly = true)
     public List<ChatRoomDto.RoomList> getRoomList(User me, int offset, int size) {
         Pageable page = PageRequest.of(offset / size, size, Sort.by(Sort.Direction.DESC, "lastTime"));
-        return roomRepo.findRoomsByParticipant(me, page)
+        return chatRoomRepository.findRoomsByParticipant(me, page)
                 .stream()
-                .map(this::toRoomListDto)
+                .map(room -> toRoomListDto(room, me))  // me 전달
                 .toList();
     }
 
-    /* ========== 1) handshake ========== */
     @Transactional
-    public ChatRoomDto.RoomList handshake(User me, Long partnerId) {
-        User partner = userRepo.findById(partnerId)
-                .orElseThrow(() -> new EntityNotFoundException("상대방을 찾을 수 없습니다."));
-
-        // 양방향 모두 조회
-        ChatRoom room = roomRepo.findBetweenUsers(me.getId(), partnerId)
+    public ChatRoomDto.RoomList handshake(User me, String partnerUid) {
+        User partner = userRepository.findByName(partnerUid)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("상대방을 찾을 수 없습니다."));
+        ChatRoom room = chatRoomRepository
+                .findBetweenUsers(me.getUid(), partnerUid)
                 .orElseGet(() -> createRoom(me, partner));
-
-        return toRoomListDto(room);
+        return toRoomListDto(room, me);
     }
 
-    /* ========== 2) 채팅 세부조회 ========== */
     @Transactional(readOnly = true)
-    public List<ChatResDto.MessageResponse> getChatDetail(User me, Integer chatId,
-                                                          int offset, int size) {
-
+    public List<ChatResDto.MessageResponse> getChatDetail(User me, Integer chatId, int offset, int size) {
         ChatRoom room = authorizeAndGetRoom(chatId, me);
-
         Pageable page = PageRequest.of(offset / size, size,
-                Sort.by(Sort.Direction.DESC, "createdAt"));
-
-        return msgRepo.findByChatRoom(room, page)
-                .map(this::toMsgDto)
+                Sort.by(Sort.Direction.ASC, "createdAt"));
+        return msgRepository.findByChatRoom(room, page)
+                .map(msg -> toMsgDto(msg, me))
                 .getContent();
     }
 
-    /* ========== 3) 메시지 저장 & 브로드캐스트 ========== */
+    // 3) 메시지 저장 / 브로드캐스트
     @Transactional
-    public ChatResDto.MessageResponse writeMessage(User me,
-                                                   Integer chatId,
-                                                   String text) {
+    public ChatResDto.MessageResponse writeMessage(User me, Integer chatId, String text) {
 
         ChatRoom room = authorizeAndGetRoom(chatId, me);
 
         ChatMessage entity = ChatMessage.builder()
                 .chatRoom(room)
-                .isFrom(room.getFromUser().getId().equals(me.getId())) // from → true
+                .isFrom(room.getFromUser().getUid().equals(me.getUid())) // from → true
                 .text(text)
                 .build();
 
-        msgRepo.save(entity);
-
-        // 방 메타정보 갱신
+        msgRepository.save(entity);
         room.setLastTime(LocalDateTime.now());
-        roomRepo.save(room);
+        chatRoomRepository.save(room);
 
-        return toMsgDto(entity);
+        return toMsgDto(entity,me);
     }
 
-    /* ========== 4) 방 나가기 ========== */
+    // 4) 방 나가기
     @Transactional
     public void leaveRoom(User me, Integer chatId) {
-        ChatRoom room = authorizeAndGetRoom(chatId, me);
-
-        // 누가 나갔는지 상태 업데이트
-        if (room.getFromUser().equals(me)) room.setStatus(ChatRoomStatus.FROM_LEFT);
-        else                               room.setStatus(ChatRoomStatus.TO_LEFT);
-
-        if (room.getStatus() == ChatRoomStatus.TO_LEFT && room.getStatus() == ChatRoomStatus.FROM_LEFT) {
-            room.setStatus(ChatRoomStatus.BOTH_LEFT);
+        ChatRoom room   = authorizeAndGetRoom(chatId, me);
+        boolean meIsFrom = room.getFromUser().equals(me);
+        switch (room.getStatus()) {
+            case NORMAL -> {
+                room.setStatus(meIsFrom ? FROM_LEFT : TO_LEFT);
+                chatRoomRepository.save(room);
+            }
+            case FROM_LEFT -> {
+                if (meIsFrom) throw new IllegalStateException("이미 방을 나갔습니다.");
+                chatRoomRepository.delete(room);
+                return;
+            }
+            case TO_LEFT -> {
+                if (!meIsFrom) throw new IllegalStateException("이미 방을 나갔습니다.");
+                chatRoomRepository.delete(room);
+                return;
+            }
+            case BOTH_LEFT -> throw new IllegalStateException("이미 삭제된 방입니다.");
         }
-
-        roomRepo.save(room);
     }
 
-    /* ====== 내부 유틸 ====== */
     private ChatRoom createRoom(User from, User to) {
         ChatRoom room = ChatRoom.builder()
                 .fromUser(from)
                 .toUser(to)
                 .status(ChatRoomStatus.NORMAL)
                 .lastTime(LocalDateTime.now())
+                .messageList(new ArrayList<>())
                 .build();
-        return roomRepo.save(room);
+        return chatRoomRepository.save(room);
     }
 
     private ChatRoom authorizeAndGetRoom(Integer id, User me) {
-        ChatRoom room = roomRepo.findById(id)
+        ChatRoom room = chatRoomRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("채팅방이 없습니다."));
         boolean participant = room.getFromUser().equals(me) || room.getToUser().equals(me);
         if (!participant) throw new IllegalArgumentException("권한이 없습니다.");
@@ -122,24 +122,25 @@ public class ChatService {
     }
 
     /* ====== DTO 변환 ====== */
-    private ChatRoomDto.RoomList toRoomListDto(ChatRoom r) {
-        User partner = r.getFromUser();
-        if (partner.getId().equals(r.getFromUser().getId())) partner = r.getToUser();
+    private ChatRoomDto.RoomList toRoomListDto(ChatRoom r, User me) {
+        // 어느 쪽이 '상대'인지 정확히 판단
+        User partner = r.getFromUser().equals(me) ? r.getToUser() : r.getFromUser();
 
         return ChatRoomDto.RoomList.builder()
                 .roomId(r.getId())
-                .partnerUserId(partner.getId())
-                .partnerNickname(partner.getNickname())
+                .partnerUserId(partner.getUid())
+                .partnerNickname(partner.getName())
                 .lastMsg(r.getMessageList().isEmpty() ? "" :
                         r.getMessageList().get(r.getMessageList().size() - 1).getText())
                 .lastTime(r.getLastTime())
                 .build();
     }
-
-    private ChatResDto.MessageResponse toMsgDto(ChatMessage m) {
+    private ChatResDto.MessageResponse toMsgDto(ChatMessage m, User me) {
+        boolean iAmFrom = m.getChatRoom().getFromUser().equals(me);
+        boolean mine    = (iAmFrom && m.getIsFrom()) || (!iAmFrom && !m.getIsFrom());
         return ChatResDto.MessageResponse.builder()
                 .messageId(m.getId())
-                .isFrom(m.getIsFrom())
+                .mine(mine)
                 .text(m.getText())
                 .sentAt(m.getCreatedAt())
                 .build();

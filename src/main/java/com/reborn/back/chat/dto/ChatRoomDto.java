@@ -22,7 +22,7 @@ public class ChatRoomDto {
     @AllArgsConstructor
     public static class RoomList {
         private Integer roomId;
-        private Long partnerUserId;
+        private String partnerUserId;
         private String partnerNickname;
         private String lastMsg;
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
