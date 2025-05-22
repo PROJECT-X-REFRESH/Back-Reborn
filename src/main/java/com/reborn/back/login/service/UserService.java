@@ -113,7 +113,7 @@ public class UserService {
         }
 
         // 만료시간을 지정해 setDataExpire를 호출하면, 해당 기간이 지나면 자동으로 key-value가 삭제됩니다.
-        redisUtil.setDataExpire("username" + username, jwt.getRefreshToken(), validPeriod);
+        redisUtil.setDataExpire("username" + username, jwt.getRefreshToken(), 604800000);
 
         // JSON 형태로 응답
         return jwt;

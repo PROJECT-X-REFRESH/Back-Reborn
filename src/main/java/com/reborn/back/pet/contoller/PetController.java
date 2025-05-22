@@ -8,6 +8,7 @@ import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
 import com.reborn.back.pet.dto.PetRequestDto;
 import com.reborn.back.pet.dto.PetResponseDto;
+import com.reborn.back.pet.dto.PetSimpleDto;
 import com.reborn.back.pet.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,24 +31,35 @@ public class PetController {
 
     @Operation(summary = "펫 프로필 만들기", description = "펫 프로필을 생성하는 api.")
     @PostMapping(value = "/profile/create")
-    public ApiResponse<List<PetResponseDto>> createPetProfile(
+    public ApiResponse<List<PetSimpleDto>> createPetProfile(
             @RequestBody PetRequestDto petReqDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) throws IOException {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        List<PetResponseDto> petList = petService.createPetProfile(petReqDto, user);
+        List<PetSimpleDto> petList = petService.createPetProfile(petReqDto, user);
         return ApiResponse.onSuccess(SuccessCode.PET_CREATE_SUCCESS, petList);
+    }
+
+    @Operation(summary = "반려동물 조회", description = "사용자의 반려동물의 상세정보를 조회합니다.")
+    @GetMapping("/{petId}")
+    public ApiResponse<PetResponseDto> getPetDetail(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @PathVariable int petId
+    ) {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
+        PetResponseDto pet = petService.getPetById(petId, user.getName());
+        return ApiResponse.onSuccess(SuccessCode.PET_LIST_VIEW_SUCCESS, pet);
     }
 
     @Operation(summary = "반려동물 목록 조회", description = "사용자의 반려동물 목록을 스크롤 기반으로 조회합니다.")
     @GetMapping("/list/{scrollPosition}")
-    public ApiResponse<List<PetResponseDto>> getPetList(
+    public ApiResponse<List<PetSimpleDto>> getPetList(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable int scrollPosition,
             @RequestParam(name = "fetchSize", defaultValue = "10") int fetchSize
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        List<PetResponseDto> petList = petService.getPetList(user, scrollPosition, fetchSize);
+        List<PetSimpleDto> petList = petService.getPetList(user, scrollPosition, fetchSize);
         return ApiResponse.onSuccess(SuccessCode.PET_LIST_VIEW_SUCCESS, petList);
     }
 
