@@ -37,26 +37,26 @@ public class RemindController {
 
     @Operation(summary = "remind 수정", description = "remind 내용을 수정하는 API")
     @PutMapping("/{remindId}")
-    public ApiResponse<RemindDto.RemindResDto> updateRemind(
+    public ApiResponse<RemindDto.RemindSimpleResDto> updateRemind(
             @PathVariable Integer remindId,
             @RequestBody RemindDto.RemindReqDto remindDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        RemindDto.RemindResDto res = remindService.updateRemind(remindId, remindDto, user);
+        RemindDto.RemindSimpleResDto res = remindService.updateRemind(remindId, remindDto, user);
         return ApiResponse.onSuccess(SuccessCode.REMIND_UPDATED, res);
     }
 
     @Operation(summary = "remind 목록 조회", description = "remind 목록을 조회하는 API")
     @PostMapping("/list/{petId}/{scrollPosition}/{fetchSize}")
-    public ApiResponse<List<RemindDto.RemindResDto>> getListReminds(
+    public ApiResponse<List<RemindDto.RemindSimpleResDto>> getListReminds(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable int petId,
             @PathVariable int scrollPosition,
             @PathVariable int fetchSize
     ) {
         userService.findUserByUserName(customUserDetails.getUsername());
-        List<RemindDto.RemindResDto> list = remindService.getRemindList(petId, scrollPosition, fetchSize);
+        List<RemindDto.RemindSimpleResDto> list = remindService.getRemindList(petId, scrollPosition, fetchSize);
         return ApiResponse.onSuccess(SuccessCode.REMIND_LIST_VIEW_SUCCESS, list);
     }
 

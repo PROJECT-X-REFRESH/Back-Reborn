@@ -1,6 +1,7 @@
 package com.reborn.back.review.recollection.service;
 
 import com.reborn.back.domain.pet.Pet;
+import com.reborn.back.domain.review.recollection.Recollection;
 import com.reborn.back.domain.review.recollection.Record;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ErrorCode;
@@ -31,6 +32,7 @@ public class RecordService {
     private final RedisUtil redisUtil;
     private final RecordRepository recordRepository;
     private final PetRepository petRepository;
+    private final RecollectionService recollectionService;
 
     public boolean checkTodayRecord(String username, Pet pet) {
         return redisUtil.getData("record" + username + pet.getId()) != null;
@@ -49,17 +51,18 @@ public class RecordService {
                         LocalDateTime.now().toLocalDate().plusDays(1).atStartOfDay())
                 .getSeconds();
         redisUtil.setDataExpire(key, "", ttl);
-        Record entity = RecordConverter.toRecord(dto, pet);
+        Recollection recollection = recollectionService.getOrCreateRecollection(pet);
+        Record entity = RecordConverter.toRecord(dto, pet,recollection);
         return recordRepository.save(entity).getId();
     }
 
-    public RecordDto.RecordResDto updateRecord(Integer recordId, RecordDto.RecordReqDto dto, User user) {
+    public RecordDto.RecordSimpleResDto updateRecord(Integer recordId, RecordDto.RecordReqDto dto, User user) {
         Record record = findById(recordId);
         String key = "record" + user.getName() + record.getPet().getId();
         if (redisUtil.getData(key) == null)
             throw new GeneralException(ErrorCode.RECORD_NOT_WRITE_TODAY);
         Record updated = RecordConverter.updateRecord(record, dto);
-        return RecordConverter.toResDto(recordRepository.save(updated));
+        return RecordConverter.toResSimpleDto(recordRepository.save(updated));
     }
 
     public Record findById(Integer id) {
@@ -80,7 +83,7 @@ public class RecordService {
         recordRepository.deleteById(recordId);
     }
 
-    public List<RecordDto.RecordResDto> getRecordList(Integer petId, int scrollPosition, int fetchSize) {
+    public List<RecordDto.RecordSimpleResDto> getRecordList(Integer petId, int scrollPosition, int fetchSize) {
         Pageable page = PageRequest.of(scrollPosition, fetchSize, Sort.by("createdAt").descending());
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));

@@ -19,6 +19,7 @@ public enum SuccessCode implements BaseCode { // 성공
 
     USER_PROFILE_IMAGE_UPDATED(HttpStatus.OK, "USER_2004", "프로필 사진 업데이트가 완료되었습니다."),
     USER_PROFILE_IMAGE_BROWSE(HttpStatus.OK, "USER_2006", "프로필 사진 열람이 완료되었습니다."),
+    USER_NAME_UPDATED(HttpStatus.OK, "USER_2007", "닉네임 업데이트가 완료되었습니다."),
 
     FILE_DELETE_SUCCESS(HttpStatus.OK, "FILE_2001", "파일 삭제가 완료되었습니다."),
     FCM_SEND_SUCCESS(HttpStatus.OK, "FCM_2001", "알림 전송이 완료되었습니다."),
@@ -65,6 +66,8 @@ public enum SuccessCode implements BaseCode { // 성공
     COMMENT_LIST_VIEW_SUCCESS(HttpStatus.OK, "BOARD_2002", "댓글 리스트 조회가 완료되었습니다."),
 
     RECOLLECTION_WEEK_VIEW_SUCCESS(HttpStatus.OK, "RECOLLECTION_2011", "이번주 추억쌓기 조회가 완료되었습니다."),
+    RECOLLECTION_ALBUM_EXIST(HttpStatus.OK, "RECOLLECTION_2012", "추억 앨범이 있습니다." ),
+    RECOLLECTION_NOT_FOUND(HttpStatus.OK, "RECOLLECTION_2013", "추억 앨범이 없습니다."),
 
     RECORD_CREATED(HttpStatus.CREATED, "RECORD_2011", "기록 생성이 완료되었습니다."),
     RECORD_LIST_VIEW_SUCCESS(HttpStatus.OK, "RECORD_2001", "기록 목록 조회가 완료되었습니다."),
@@ -135,8 +138,7 @@ public enum SuccessCode implements BaseCode { // 성공
     CHAT_DETAIL_VIEW_SUCESS(HttpStatus.OK, "CHAT_2002", "채팅방 세부 조회 성공."),
     CHAT_ROOM_CREATE(HttpStatus.OK, "CHAT_2003", "채팅방 생성 완료."),
     CHAT_MESSAGE_SEND(HttpStatus.OK, "CHAT_2004", "메세지 전송 성공."),
-    CHAT_DELETED(HttpStatus.OK, "CHAT_2005", "채팅방 나가기 성공.")
-    ;
+    CHAT_DELETED(HttpStatus.OK, "CHAT_2005", "채팅방 나가기 성공.");
 
     private final HttpStatus httpStatus;
     private final String code;

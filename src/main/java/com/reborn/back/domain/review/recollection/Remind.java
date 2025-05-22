@@ -30,4 +30,8 @@ public class Remind extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pId", nullable = false)
     private Pet pet;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recollection_id")
+    private Recollection recollection;
 }

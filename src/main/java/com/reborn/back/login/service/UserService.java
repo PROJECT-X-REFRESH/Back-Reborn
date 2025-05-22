@@ -287,4 +287,15 @@ public class UserService {
         List<AiPost> recentPosts = aiPostService.getRecentAiPosts();
         return UserConverter.mainDto(user, petList, recentPosts);
     }
+
+    public String checkMemberByName(String username) {
+        User user = findUserByUserName(username);
+        if (user.getNickname() != null) return "wasUser";
+        return "newUser";
+    }
+
+    public void updateNickName(String newName, User user) {
+        user.setNickname(newName);
+        userRepository.save(user);
+    }
 }

@@ -32,4 +32,14 @@ public class RecordDto {
         private String content;
         private Emotion emotion;
     }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @Schema(description = "Record 짧은 응답 DTO")
+    public static class RecordSimpleResDto {
+        private Integer id;
+        private LocalDateTime createdAt;
+    }
 }

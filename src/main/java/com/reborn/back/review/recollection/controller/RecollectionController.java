@@ -12,10 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,4 +38,16 @@ public class RecollectionController {
         return ApiResponse.onSuccess(SuccessCode.RECOLLECTION_WEEK_VIEW_SUCCESS, recollections);
     }
 
+    @Operation(summary = "추억 앨범 ID 조회 (존재 시)")
+    @GetMapping("/id")
+    public ApiResponse<Integer> getRecollectionId(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam Integer petId) {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
+        Integer result = recollectionService.checkRecollection(user, petId);
+        if (result == null) {
+            return ApiResponse.onSuccess(SuccessCode.RECOLLECTION_NOT_FOUND, null);
+        }
+        return ApiResponse.onSuccess(SuccessCode.RECOLLECTION_ALBUM_EXIST, result);
+    }
 }
