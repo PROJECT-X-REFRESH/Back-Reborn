@@ -28,4 +28,13 @@ public class RemindDto {
         private String title;
         private String content;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @Schema(description = "Remind 짧은 응답")
+    public static class RemindSimpleResDto {
+        private Integer id;
+        private String title;
+    }
 }

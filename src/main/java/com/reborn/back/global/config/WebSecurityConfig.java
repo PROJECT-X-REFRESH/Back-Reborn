@@ -46,6 +46,7 @@ public class WebSecurityConfig {
                                 "/token/**",
                                 "/oauth/**",
                                 "/token/return",
+                                "/index.html",
                                 "/users/me",
                                 "/users/logout"
                         ).permitAll()

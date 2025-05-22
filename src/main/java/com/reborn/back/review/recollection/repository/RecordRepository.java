@@ -9,11 +9,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public interface RecordRepository extends JpaRepository<Record, Integer>, JpaSpecificationExecutor<Record> {
-    boolean existsByPetAndCreatedAtBetween(Pet pet, LocalDateTime start, LocalDateTime end);
-
     List<Record> findByPet(Pet pet, Pageable pageable);
+
+    Optional<Record> findTopByPetAndCreatedAtBetweenOrderByCreatedAtDesc(Pet pet, LocalDateTime dayStart, LocalDateTime dayEnd);
 }

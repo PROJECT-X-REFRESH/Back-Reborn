@@ -1,14 +1,21 @@
 package com.reborn.back.review.recollection.service;
 
+import com.amazonaws.services.cloudformation.model.AlreadyExistsException;
+import com.reborn.back.domain.entity.EmotionState;
 import com.reborn.back.domain.pet.Pet;
+import com.reborn.back.domain.review.recollection.Recollection;
 import com.reborn.back.domain.user.User;
+import com.reborn.back.global.api.ErrorCode;
+import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.pet.repository.PetRepository;
 import com.reborn.back.review.recollection.dto.RecollectionDto;
+import com.reborn.back.review.recollection.repository.RecollectionRepository;
 import com.reborn.back.review.recollection.repository.RecordRepository;
 import com.reborn.back.review.recollection.repository.RemindRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -21,6 +28,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RecollectionService {
+    private final RecollectionRepository recollectionRepository;
     private final RecordRepository recordRepository;
     private final RemindRepository remindRepository;
     private final PetRepository petRepository;
@@ -38,9 +46,32 @@ public class RecollectionService {
             LocalDateTime dayStart = currentDate.atStartOfDay();
             LocalDateTime dayEnd = currentDate.atTime(23, 59, 59, 999_999_999);
             boolean didRemind = remindRepository.existsByPetAndCreatedAtBetween(pet, dayStart, dayEnd);
-            boolean didRecord = recordRepository.existsByPetAndCreatedAtBetween(pet, dayStart, dayEnd);
-            weeklyList.add(new RecollectionDto(currentDate, didRemind, didRecord));
+            EmotionState emotionState = null;
+            boolean didRecord = false;
+            var optionalRecord = recordRepository.findTopByPetAndCreatedAtBetweenOrderByCreatedAtDesc(pet, dayStart, dayEnd);
+            if (optionalRecord.isPresent()) {
+                didRecord = true;
+                emotionState = optionalRecord.get().getEmotion().getState();
+            }
+            weeklyList.add(new RecollectionDto(currentDate, didRemind, didRecord, emotionState));
         }
         return weeklyList;
+    }
+
+    @Transactional
+    public Recollection getOrCreateRecollection(Pet pet) {
+        return recollectionRepository.findByPet(pet)
+                .orElseGet(() -> recollectionRepository.save(
+                        Recollection.builder()
+                                .pet(pet)
+                                .build()));
+}
+
+    public Integer checkRecollection(User user, Integer petId) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
+        return recollectionRepository.findByPet(pet)
+                .map(Recollection::getId)
+                .orElse(null);
     }
 }

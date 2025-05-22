@@ -9,6 +9,7 @@ import com.reborn.back.pet.dto.PetRequestDto;
 import com.reborn.back.pet.dto.PetResponseDto;
 import com.reborn.back.pet.dto.PetSimpleDto;
 import com.reborn.back.pet.repository.PetRepository;
+import com.reborn.back.review.farewell.repository.FarewellRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,7 @@ import java.util.List;
 public class PetService {
 
     private final PetRepository petRepository;
+    private final FarewellRepository farewellRepository;
 
     //반려동물 등록
     @Transactional
@@ -73,7 +75,10 @@ public class PetService {
         if (!pet.getUser().getName().equals(username)) {
             throw new GeneralException(ErrorCode.BAD_REQUEST);
         }
-
+        if (pet.getDeath() != null && petRequestDto.getDeath() == null && pet.getFarewell() != null) {
+            farewellRepository.delete(pet.getFarewell());
+            pet.setFarewell(null);
+        }
         pet.setName(petRequestDto.getName());
         pet.setPetCase(petRequestDto.getPetCase());
         pet.setBirth(petRequestDto.getBirth());

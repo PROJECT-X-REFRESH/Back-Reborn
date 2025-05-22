@@ -28,6 +28,12 @@ public class AiPost extends BaseEntity {
     @Column(name = "apAttachImg", length = 255)
     private String attachImg;
 
+    @Column(name = "apUrl", columnDefinition = "text", nullable = false)
+    private String url;
+
+    @Column(name = "apTitle", columnDefinition = "text", nullable = false)
+    private String title;
+
     @OneToMany(mappedBy = "aiPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AiPostLike> aiPostLikeList = new ArrayList<>();
 

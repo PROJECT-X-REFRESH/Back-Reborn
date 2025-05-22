@@ -120,4 +120,17 @@ public class UserController {
         return ApiResponse.onSuccess(SuccessCode.MAIN_INFO_SUCCESS, userService.getMainInfo(customUserDetails.getUsername()));
     }
 
+    @Operation(summary = "닉네임 변경", description = "닉네임을 변경하는 메서드입니다.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse()
+    })
+    @PostMapping(value = "/name/update")
+    public ApiResponse<Boolean> changeNickName(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestBody String newName
+    ) throws IOException {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
+        userService.updateNickName(newName, user);
+        return ApiResponse.onSuccess(SuccessCode.USER_NAME_UPDATED, true);
+    }
 }

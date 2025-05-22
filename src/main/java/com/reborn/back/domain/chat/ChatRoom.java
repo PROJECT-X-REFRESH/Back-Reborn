@@ -29,23 +29,8 @@ public class ChatRoom extends BaseEntity {
     @Column(name = "crStatus", nullable = false)
     private ChatRoomStatus status;
 
-    @Column(name = "crLastMsg", length = 255)
-    private String lastMsg;
-
     @Column(name = "crLastTime")
     private LocalDateTime lastTime;
-
-    @Column(name = "crToPubKey", length = 255)
-    private String toPubKey;
-
-    @Column(name = "crFromPubKey", length = 255)
-    private String fromPubKey;
-
-    @Column(name = "crToSKey", length = 255)
-    private String toSKey;
-
-    @Column(name = "crFromSKey", length = 255)
-    private String fromSKey;
 
     // FK: crTo → User(uid)
     @ManyToOne(fetch = FetchType.LAZY)

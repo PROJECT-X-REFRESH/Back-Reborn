@@ -47,7 +47,7 @@ public class RecordController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2002", description = "게시물 수정이 완료되었습니다.")
     })
     @PutMapping("/{recordId}")
-    public ApiResponse<RecordDto.RecordResDto> updateRecord(
+    public ApiResponse<RecordDto.RecordSimpleResDto> updateRecord(
             @PathVariable Integer recordId,
             @RequestBody RecordDto.RecordReqDto dto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
@@ -66,15 +66,14 @@ public class RecordController {
             @Parameter(name = "fetchSize", description = "한 번에 불러올 게시글 개수")
     })
     @PostMapping("/list/{petId}/{scrollPosition}/{fetchSize}")
-    public ApiResponse<List<RecordDto.RecordResDto>> getListRecords(
+    public ApiResponse<List<RecordDto.RecordSimpleResDto>> getListRecords(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Integer petId,
             @PathVariable int scrollPosition,
             @PathVariable int fetchSize
     ) {
         userService.findUserByUserName(customUserDetails.getUsername());
-        return ApiResponse.onSuccess(SuccessCode.RECORD_LIST_VIEW_SUCCESS,
-                recordService.getRecordList(petId, scrollPosition, fetchSize));
+        return ApiResponse.onSuccess(SuccessCode.RECORD_LIST_VIEW_SUCCESS, recordService.getRecordList(petId, scrollPosition, fetchSize));
     }
 
     @Operation(summary = "record 상세 조회", description = "특정 record 조회하는 API")
@@ -87,8 +86,7 @@ public class RecordController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         userService.findUserByUserName(customUserDetails.getUsername());
-        return ApiResponse.onSuccess(SuccessCode.RECORD_DETAIL_VIEW_SUCCESS,
-                recordService.getRecord(recordId));
+        return ApiResponse.onSuccess(SuccessCode.RECORD_DETAIL_VIEW_SUCCESS, recordService.getRecord(recordId));
     }
 
     @Operation(summary = "record 삭제", description = "기록을 삭제하는 API (오늘만 가능)")

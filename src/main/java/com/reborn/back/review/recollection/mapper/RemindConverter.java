@@ -1,6 +1,7 @@
 package com.reborn.back.review.recollection.mapper;
 
 import com.reborn.back.domain.pet.Pet;
+import com.reborn.back.domain.review.recollection.Recollection;
 import com.reborn.back.domain.review.recollection.Remind;
 import com.reborn.back.review.recollection.dto.RemindDto;
 import lombok.NoArgsConstructor;
@@ -18,18 +19,29 @@ public class RemindConverter {
                 .createdAt(r.getCreatedAt())
                 .build();
     }
-
-    public static List<RemindDto.RemindResDto> remindListDto(List<Remind> list) {
-        return list.stream().map(RemindConverter::toResDto).toList();
-    }
-
-    public static Remind toRemind(RemindDto.RemindReqDto dto, Pet pet) {
-        return new Remind(null, dto.getTitle(), dto.getContent(), pet);
+    public static Remind toRemind(RemindDto.RemindReqDto dto, Pet pet, Recollection recollection) {
+        Remind remind = new Remind();
+        remind.setName(dto.getTitle());
+        remind.setContents(dto.getContent());
+        remind.setPet(pet);
+        remind.setRecollection(recollection);
+        return remind;
     }
 
     public static Remind updateRemind(Remind entity, RemindDto.RemindReqDto dto) {
         entity.setName(dto.getTitle());
         entity.setContents(dto.getContent());
         return entity;
+    }
+
+    public static RemindDto.RemindSimpleResDto toSimpleResDto(Remind r) {
+        return RemindDto.RemindSimpleResDto.builder()
+                .id(r.getId())
+                .title(r.getName())
+                .build();
+    }
+
+    public static List<RemindDto.RemindSimpleResDto> remindSimpleListDto(List<Remind> list) {
+        return list.stream().map(RemindConverter::toSimpleResDto).toList();
     }
 }
