@@ -89,7 +89,7 @@ public enum SuccessCode implements BaseCode { // 성공
 
     FAREWELL_REVIEW_SUCCESS(HttpStatus.OK, "FAREWELL_2002", "작별 앨범 조회가 완료되었습니다."),
 
-    RECOGNIZE_NEARBY_SUCCESS(HttpStatus.OK, "2001", "주변 상담소 조회가 완료되었습니다"),
+    RECOGNIZE_NEARBY_SUCCESS(HttpStatus.OK, "2001", "주변 정신과 조회가 완료되었습니다"),
     RECOGNIZE_CREATED(HttpStatus.CREATED, "RECOGNIZE_2011", "나의 상태 알아보기 생성이 완료되었습니다."),
 
     REVEAL_CREATED(HttpStatus.CREATED, "REVEAL_2011", "나의 감정 들여다보기 생성이 완료되었습니다."),

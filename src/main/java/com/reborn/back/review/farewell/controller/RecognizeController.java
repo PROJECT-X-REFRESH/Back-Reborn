@@ -44,6 +44,9 @@ public class RecognizeController {
     }
 
     @Operation(summary = "주변 상담소 + HIRA 평가정보 조회")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "RECOGNIZE_2001", description = "주변 정신과 조회가 완료되었습니다.")
+    })
     @GetMapping("/nearby")
     public ApiResponse<List<CounselingCenterDto>> getNearbyCounselingCenters(
             @PathVariable Integer farewellId,
