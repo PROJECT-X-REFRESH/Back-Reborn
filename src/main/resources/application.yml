@@ -111,6 +111,12 @@ google:
       key: ${GOOGLE_PLACES_API_KEY}
       base-url: ${GOOGLE_PLACES_BASE_URL}
       end-point: ${GOOGLE_PLACES_END_POINT}
+
+hira:
+  info:
+    service-key: ${HIRA_INFO_SERVICE_KEY} # 병원 목록용
+  asm:
+    service-key: ${HIRA_SERVICE_KEY} # 병원 평가용
 ---
 # Local
 spring:
