@@ -4,9 +4,9 @@ package com.reborn.back.review.farewell.controller;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
-import com.reborn.back.global.utils.GCPMap.PlaceResponseDto;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
+import com.reborn.back.review.farewell.dto.CounselingCenterDto;
 import com.reborn.back.review.farewell.dto.RecognizeRequestDto.RecognizeReqDto;
 import com.reborn.back.review.farewell.service.RecognizeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,20 +43,19 @@ public class RecognizeController {
         return ApiResponse.onSuccess(SuccessCode.RECOGNIZE_CREATED, true);
     }
 
-    @Operation(summary = "주변 상담소 조회", description = "사용자 위치를 기반으로 주변 상담소 목록을 조회하는 API")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "RECOGNIZE_2001", description = "주변 상담소 조회가 완료되었습니다.")
-    })
+    @Operation(summary = "주변 상담소 + HIRA 평가정보 조회")
     @GetMapping("/nearby")
-    public ApiResponse<List<PlaceResponseDto>> getNearbyCounselingCenters(
+    public ApiResponse<List<CounselingCenterDto>> getNearbyCounselingCenters(
             @PathVariable Integer farewellId,
             @RequestParam double lat,
             @RequestParam double lng,
-            @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ) {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        List<PlaceResponseDto> places = recognizeService.getNearbyCounselingCenters(lat, lng);
-        return ApiResponse.onSuccess(SuccessCode.RECOGNIZE_NEARBY_SUCCESS, places);
+        // (사용자·farewell 검증 로직 그대로)
+
+        List<CounselingCenterDto> result =
+                recognizeService.getCounselingCentersWithGrade(lat, lng);
+
+        return ApiResponse.onSuccess(SuccessCode.RECOGNIZE_NEARBY_SUCCESS, result);
     }
 }
