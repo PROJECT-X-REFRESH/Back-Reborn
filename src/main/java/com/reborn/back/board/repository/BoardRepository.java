@@ -22,7 +22,10 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("UPDATE Board b SET b.viewCount = b.viewCount + 1 WHERE b.id = :boardId")
     void incrementViewCount(@Param("boardId") Integer boardId);
 
-    // 특정 카테고리 게시물 최신순 조회
+    // 전체 게시물 최신순
+    Slice<Board> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    // 특정 카테고리 최신순
     Slice<Board> findByCategoryOrderByCreatedAtDesc(BoardType boardType, Pageable pageable);
 
     // 사용자가 좋아요한 게시글을 최신순으로 조회

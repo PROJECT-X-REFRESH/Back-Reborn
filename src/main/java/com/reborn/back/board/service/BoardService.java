@@ -134,7 +134,7 @@ public class BoardService {
 
     // 게시물 업데이트
     @Transactional
-    public Board updateBoard(Integer bId, BoardReqDto boardReqDto, User user) {
+    public Integer updateBoard(Integer bId, BoardReqDto boardReqDto, User user) {
         Board board = findById(bId);
 
         if (!Objects.equals(board.getUser().getUid(), user.getUid())) {
@@ -143,7 +143,10 @@ public class BoardService {
 
         board.setCategory(boardReqDto.getCategory());
         board.setContent(boardReqDto.getContent());
-        return boardRepository.save(board);
+
+        boardRepository.save(board);
+
+        return board.getId();
     }
 
     // 게시물 삭제
@@ -163,14 +166,21 @@ public class BoardService {
     }
 
     // 특정 카테고리별 게시물 조회 (최신순)
-    @Transactional
-    public List<Board> getBoardList(BoardType boardType, int scrollPosition, int fetchSize) {
+    @Transactional(readOnly = true)
+    public List<Board> getBoardList(String type, int scrollPosition, int fetchSize) {
+
         PageRequest pageRequest = PageRequest.of(scrollPosition, fetchSize);
 
-        // 최신순 정렬 유지
-        Slice<Board> boardSlice = boardRepository.findByCategoryOrderByCreatedAtDesc(boardType, pageRequest);
+        // 1) ALL → 카테고리 무시
+        if ("ALL".equalsIgnoreCase(type)) {
+            Slice<Board> slice = boardRepository.findAllByOrderByCreatedAtDesc(pageRequest);
+            return slice.getContent();
+        }
 
-        return boardSlice.getContent();
+        // 2) 특정 카테고리
+        BoardType boardType = BoardType.valueOf(type.toUpperCase());
+        Slice<Board> slice = boardRepository.findByCategoryOrderByCreatedAtDesc(boardType, pageRequest);
+        return slice.getContent();
     }
 
     // 사용자가 좋아요한 게시글 리스트 조회
