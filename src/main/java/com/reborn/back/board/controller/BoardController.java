@@ -6,7 +6,6 @@ import com.reborn.back.board.dto.BoardResponseDto.BoardListResDto;
 import com.reborn.back.board.dto.BoardResponseDto.BoardResDto;
 import com.reborn.back.board.service.BoardService;
 import com.reborn.back.domain.board.Board;
-import com.reborn.back.domain.entity.BoardType;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
@@ -91,19 +90,20 @@ public class BoardController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2007", description = "게시물 목록 조회가 완료되었습니다.")
     })
     @Parameters({
-            @Parameter(name = "type", description = "조회할 게시글 종류. TALK, SHARE, VOLUNTEER, ALL"),
+            @Parameter(name = "type", description = "조회할 게시글 종류. POST, SHARE, VOLUNTEER, ALL"),
             @Parameter(name = "scrollPosition", description = "가져올 데이터의 시작 위치 (0부터 시작)"),
             @Parameter(name = "fetchSize", description = "한 번에 불러올 게시글 개수")
     })
     @GetMapping("/list")
     public ApiResponse<BoardListResDto> getListBoards(
-            @RequestParam(name = "type") String type,
+            @RequestParam(name = "type", defaultValue = "ALL") String type,
             @RequestParam(name = "scrollPosition", defaultValue = "0") int scrollPosition,
-            @RequestParam(name = "fetchSize", defaultValue = "50") int fetchSize
-    ) {
-        BoardType boardType = BoardType.valueOf(type);
-        List<Board> boards = boardService.getBoardList(boardType, scrollPosition, fetchSize);
-        return ApiResponse.onSuccess(SuccessCode.BOARD_LIST_VIEW_SUCCESS, BoardConverter.boardListResDto(boards));
+            @RequestParam(name = "fetchSize", defaultValue = "50") int fetchSize) {
+
+        List<Board> boards = boardService.getBoardList(type, scrollPosition, fetchSize);
+        return ApiResponse.onSuccess(
+                SuccessCode.BOARD_LIST_VIEW_SUCCESS,
+                BoardConverter.boardListResDto(boards));
     }
 
     @Operation(summary = "사용자가 좋아요한 게시물 목록 조회", description = "사용자가 좋아요한 게시물을 최신순으로 조회하는 API")
@@ -140,13 +140,14 @@ public class BoardController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2002", description = "게시물 수정이 완료되었습니다.")
     })
     @PutMapping("/{boardId}")
-    public ApiResponse<Board> updateBoard(
+    public ApiResponse<Integer> updateBoard(
             @PathVariable Integer boardId,
             @RequestBody BoardReqDto boardReqDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        return ApiResponse.onSuccess(SuccessCode.BOARD_UPDATED, boardService.updateBoard(boardId, boardReqDto, user));
+        Integer updatedId = boardService.updateBoard(boardId, boardReqDto, user);
+        return ApiResponse.onSuccess(SuccessCode.BOARD_UPDATED, updatedId);
     }
 
 }
