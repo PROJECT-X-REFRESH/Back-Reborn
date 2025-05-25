@@ -11,9 +11,11 @@ import java.util.List;
 @NoArgsConstructor
 public class RemindConverter {
 
-    public static RemindDto.RemindResDto toResDto(Remind r) {
+    public static RemindDto.RemindResDto toResDto(Remind r, String name) {
         return RemindDto.RemindResDto.builder()
                 .id(r.getId())
+                .userName(name)
+                .petName(r.getPet().getName())
                 .title(r.getName())
                 .content(r.getContents())
                 .createdAt(r.getCreatedAt())
