@@ -14,7 +14,6 @@ public class RecordConverter {
     public static RecordDto.RecordResDto toResDto(Record r) {
         return RecordDto.RecordResDto.builder()
                 .id(r.getId())
-                .title(r.getTitle())
                 .content(r.getContent())
                 .emotion(r.getEmotion())
                 .createdAt(r.getCreatedAt())
@@ -27,7 +26,6 @@ public class RecordConverter {
 
     public static Record toRecord(RecordDto.RecordReqDto dto, Pet pet, Recollection recollection) {
         Record record = new Record();
-        record.setTitle(dto.getTitle());
         record.setContent(dto.getContent());
         record.setEmotion(dto.getEmotion());
         record.setPet(pet);
@@ -36,7 +34,6 @@ public class RecordConverter {
     }
 
     public static Record updateRecord(Record entity, RecordDto.RecordReqDto dto) {
-        entity.setTitle(dto.getTitle());
         entity.setContent(dto.getContent());
         entity.setEmotion(dto.getEmotion());
         return entity;

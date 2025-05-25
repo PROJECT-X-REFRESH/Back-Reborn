@@ -16,11 +16,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Emotion {
 
-    @Column(name = "Pos")
-    private Float pos;
+    // @Column(name = "Pos")
+    // private Float pos;
 
-    @Column(name = "Neg")
-    private Float neg;
+    // @Column(name = "Neg")
+    // private Float neg;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "State")

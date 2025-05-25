@@ -23,8 +23,18 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
         SELECT r FROM ChatRoom r
         WHERE ((r.fromUser.uid = :uid1 AND r.toUser.uid = :uid2)
             OR (r.fromUser.uid = :uid2 AND r.toUser.uid = :uid1))
-          AND r.status <> 'BOTH_LEFT'
+        AND r.status <> 'BOTH_LEFT'
         """)
     Optional<ChatRoom> findBetweenUsers(@Param("uid1") String uid1,
                                         @Param("uid2") String uid2);
+
+    @Query("""
+            SELECT r FROM ChatRoom r
+            WHERE ((r.fromUser.uid = :a AND r.toUser.uid = :b)
+                OR (r.fromUser.uid = :b AND r.toUser.uid = :a))
+            AND r.status <> 'BOTH_LEFT'
+            ORDER BY r.id ASC
+            LIMIT 1
+             """)
+    Optional<ChatRoom> findBetween(@Param("a") String a, @Param("b") String b);
 }

@@ -54,12 +54,6 @@ public class RevealResponseDto {
         @Schema(description = "나의 감정 드러내기 내용")
         private String contents;
 
-        @Schema(description = "긍정표현 지수")
-        private Float pos;
-
-        @Schema(description = "부정표현 지수")
-        private Float neg;
-
         @Schema(description = "결과로 나온 감정 상태(SUNNY, CLOUDY, RAINY)")
         private EmotionState emotionState;
     }

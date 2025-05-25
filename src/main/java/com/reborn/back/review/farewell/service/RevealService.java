@@ -68,8 +68,8 @@ public class RevealService {
                 .orElseThrow(() -> GeneralException.of(ErrorCode.REVEAL_NOT_FOUND));
 
         Emotion emotion = new Emotion(
-                revealReqDto.getPos(),
-                revealReqDto.getNeg(),
+                //revealReqDto.getPos(),
+                //revealReqDto.getNeg(),
                 revealReqDto.getEmotionState()
         );
 
