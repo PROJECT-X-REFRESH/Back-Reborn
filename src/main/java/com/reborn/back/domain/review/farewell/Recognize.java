@@ -20,6 +20,15 @@ public class Recognize extends BaseEntity {
     @Column(name = "cogId")
     private Integer id;
 
+    @Column(name = "cogFeed")
+    private Boolean feed;
+
+    @Column(name = "cogSnack")
+    private Boolean snack;
+
+    @Column(name = "cogWalk")
+    private Boolean walk;
+
     @Column(name = "cogScore")
     private Integer score;
 

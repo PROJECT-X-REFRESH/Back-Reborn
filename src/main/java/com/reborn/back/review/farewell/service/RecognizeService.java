@@ -11,9 +11,11 @@ import com.reborn.back.global.utils.hira.HiraEvaluationService;
 import com.reborn.back.global.utils.hira.HiraInfoService;
 import com.reborn.back.review.farewell.converter.RecognizeConverter;
 import com.reborn.back.review.farewell.dto.CounselingCenterDto;
-import com.reborn.back.review.farewell.dto.RecognizeRequestDto.RecognizeReqDto;
+import com.reborn.back.review.farewell.dto.RecognizeRequestDto;
+import com.reborn.back.review.farewell.dto.RecognizeResponseDto;
 import com.reborn.back.review.farewell.repository.FarewellRepository;
 import com.reborn.back.review.farewell.repository.RecognizeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,15 +37,62 @@ public class RecognizeService {
     private final HiraInfoService hiraInfoService;
     private final HiraEvaluationService hiraEvalService;
 
-    public void createRecognize(Integer farewellId, RecognizeReqDto recognizeDto) {
+    @Transactional
+    public Recognize createRecognize(Integer farewellId) {
         Farewell farewell = farewellRepository.findById(farewellId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.FAREWELL_NOT_FOUND));
 
-        Recognize recognize = RecognizeConverter.saveRecognize(recognizeDto, farewell);
+        Recognize recognize = RecognizeConverter.saveRecognize(farewell);
+        recognizeRepository.save(recognize);
 
-        farewell.setStep(farewell.getStep() + 1);
+        return recognize;
+    }
+
+    @Transactional
+    public void updateRecognizeActivity(Integer farewellId, String activityType) {
+        Farewell farewell = farewellRepository.findById(farewellId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.FAREWELL_NOT_FOUND));
+
+        Recognize recognize = recognizeRepository.findByFarewell(farewell)
+                .orElseThrow(() -> new GeneralException(ErrorCode.RECOGNIZE_NOT_FOUND));
+
+        // activityType에 따라 적절한 필드를 true로 변경
+        switch (activityType.toLowerCase()) {
+            case "feed":
+                recognize.setFeed(true);
+                break;
+            case "snack":
+                recognize.setSnack(true);
+                break;
+            case "walk":
+                recognize.setWalk(true);
+                break;
+            default:
+                throw new GeneralException(ErrorCode.INVALID_ACTIVITY_TYPE);
+        }
 
         recognizeRepository.save(recognize);
+    }
+
+    @Transactional
+    public void saveScore(Integer farewellId, RecognizeRequestDto.RecognizeReqDto recognizeDto) {
+        Farewell farewell = farewellRepository.findById(farewellId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.FAREWELL_NOT_FOUND));
+
+        Recognize recognize = recognizeRepository.findByFarewell(farewell)
+                .orElseThrow(() -> new GeneralException(ErrorCode.RECOGNIZE_NOT_FOUND));
+
+        recognize.setScore(recognizeDto.getScore());
+    }
+
+    public RecognizeResponseDto.DetailRecognizeDto getDetailRecognize(Integer farewellId) {
+        Farewell farewell = farewellRepository.findById(farewellId)
+                .orElseThrow(() -> GeneralException.of(ErrorCode.FAREWELL_NOT_FOUND));
+
+        Recognize recognize = recognizeRepository.findByFarewell(farewell)
+                .orElseThrow(() -> GeneralException.of(ErrorCode.RECOGNIZE_NOT_FOUND));
+
+        return RecognizeConverter.toDto(recognize);
     }
 
     /** 10 km 반경 “정신” 키워드 상위 3곳 + HIRA 평가정보까지 한 번에 반환 */
