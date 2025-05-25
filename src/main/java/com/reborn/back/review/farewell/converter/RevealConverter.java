@@ -29,8 +29,6 @@ public class RevealConverter {
         return RevealResponseDto.ReviewRevealDto.builder()
                 .createdAt(reveal.getCreatedAt())
                 .contents(reveal.getContents())
-                .pos(reveal.getEmotion().getPos())
-                .neg(reveal.getEmotion().getNeg())
                 .emotionState(reveal.getEmotion().getState())
                 .build();
     }

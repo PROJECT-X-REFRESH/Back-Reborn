@@ -28,7 +28,6 @@ public class ChatController {
     private final ChatService chatService;
     private final UserService userService;
     // 0. 목록 가져오기
-    // post
     @Operation(summary = "전체 채팅 목록 조회", description = "채팅 목록 조회")
     @Parameters({
             @Parameter(name = "scrollPosition", description = "가져올 데이터의 시작 위치 (0부터 시작)"),

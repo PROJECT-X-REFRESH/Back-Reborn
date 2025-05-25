@@ -16,7 +16,6 @@ public class RecordDto {
     @Schema(description = "Record 응답 DTO")
     public static class RecordResDto {
         private Integer id;
-        private String title;
         private String content;
         private Emotion emotion;
         private LocalDateTime createdAt;
@@ -28,7 +27,6 @@ public class RecordDto {
     @AllArgsConstructor
     @Schema(description = "Record 요청 DTO")
     public static class RecordReqDto {
-        private String title;
         private String content;
         private Emotion emotion;
     }
