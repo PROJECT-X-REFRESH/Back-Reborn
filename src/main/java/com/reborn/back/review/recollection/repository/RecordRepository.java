@@ -17,4 +17,5 @@ public interface RecordRepository extends JpaRepository<Record, Integer>, JpaSpe
     List<Record> findByPet(Pet pet, Pageable pageable);
 
     Optional<Record> findTopByPetAndCreatedAtBetweenOrderByCreatedAtDesc(Pet pet, LocalDateTime dayStart, LocalDateTime dayEnd);
+
 }
