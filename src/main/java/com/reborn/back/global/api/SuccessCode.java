@@ -138,7 +138,12 @@ public enum SuccessCode implements BaseCode { // 성공
     CHAT_DETAIL_VIEW_SUCESS(HttpStatus.OK, "CHAT_2002", "채팅방 세부 조회 성공."),
     CHAT_ROOM_CREATE(HttpStatus.OK, "CHAT_2003", "채팅방 생성 완료."),
     CHAT_MESSAGE_SEND(HttpStatus.OK, "CHAT_2004", "메세지 전송 성공."),
-    CHAT_DELETED(HttpStatus.OK, "CHAT_2005", "채팅방 나가기 성공.");
+    CHAT_DELETED(HttpStatus.OK, "CHAT_2005", "채팅방 나가기 성공."),
+    AIPOST_LIST_VIEW_OK(HttpStatus.OK, "AIPOST_2001", "AI 포스트 리스트보기."),
+    AIPOST_RECENT_OK(HttpStatus.OK, "AIPOST_2002", "AI 포스트 최근 3개 조회."),
+    AIPOST_DETAIL_OK(HttpStatus.OK, "AIPOST_2003", "AI 포스트 상세 조회."),
+    AIPOST_BOOKMARK_TOGGLE_OK(HttpStatus.OK, "AIPOST_2004", "AI 포스트 북마크 토글 성공."),
+    AIPOST_BOOKMARK_LIST_OK(HttpStatus.OK, "AIPOST_2005", "AI 포스트 북마크 목록 보기.");
 
     private final HttpStatus httpStatus;
     private final String code;
