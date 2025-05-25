@@ -7,6 +7,7 @@ import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.pet.dto.PetRequestDto;
 import com.reborn.back.pet.dto.PetResponseDto;
+import com.reborn.back.pet.dto.PetSimpleDto;
 import com.reborn.back.pet.repository.PetRepository;
 import com.reborn.back.review.farewell.repository.FarewellRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class PetService {
 
     //반려동물 등록
     @Transactional
-    public List<PetResponseDto> createPetProfile(PetRequestDto petReqDto, User user) {
+    public List<PetSimpleDto> createPetProfile(PetRequestDto petReqDto, User user) {
         Pet.PetBuilder petBuilder = Pet.builder()
                 .name(petReqDto.getName())
                 .petCase(petReqDto.getPetCase())
@@ -51,16 +52,16 @@ public class PetService {
     }
 
     // 반려동물 목록 조회
-    public List<PetResponseDto> getPetList(User user, int scrollPosition, int fetchSize) {
+    public List<PetSimpleDto> getPetList(User user, int scrollPosition, int fetchSize) {
         PageRequest pageRequest = PageRequest.of(scrollPosition, fetchSize);
         Slice<Pet> petSlice = petRepository.findByUser(user, pageRequest);
 
         return petSlice.getContent().stream()
-                .map(pet -> PetResponseDto.builder()
+                .map(pet -> PetSimpleDto.builder()
+                        .id(pet.getId())
                         .name(pet.getName())
                         .petCase(pet.getPetCase())
-                        .birth(pet.getBirth())
-                        .death(pet.getDeath())
+                        .death(pet.getDeath()!=null)
                         .color(pet.getColor())
                         .build())
                 .toList();
@@ -99,4 +100,16 @@ public class PetService {
         petRepository.delete(pet);
     }
 
+
+    @Transactional(readOnly = true)
+    public PetResponseDto getPetById(Integer petId, String username) {
+
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
+
+        if (!pet.getUser().getName().equals(username)) {
+            throw new GeneralException(ErrorCode.BAD_REQUEST);
+        }
+        return PetResponseDto.fromEntity(pet);
+    }
 }

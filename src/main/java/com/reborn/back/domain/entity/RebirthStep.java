@@ -7,7 +7,7 @@ public enum RebirthStep {
     WASH("wash"),
     DRESS("dress"),
     RIBBON("ribbon"),
-    POST("post"),
+    POST("letter"),
     OUTRO("outro");
 
     @JsonValue
