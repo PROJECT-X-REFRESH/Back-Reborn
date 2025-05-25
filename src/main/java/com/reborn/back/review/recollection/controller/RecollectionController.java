@@ -6,6 +6,7 @@ import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
 import com.reborn.back.review.recollection.dto.RecollectionDto;
+import com.reborn.back.review.recollection.dto.TodayRecollctDto;
 import com.reborn.back.review.recollection.service.RecollectionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,9 +26,6 @@ public class RecollectionController {
     private final RecollectionService recollectionService;
 
     @Operation(summary = "주간 상황 조회", description = "이번주 추억쌓기 목록을 조회하는 API")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2004", description = "게시물 목록 조회가 완료되었습니다.")
-    })
     @PostMapping("/week/{petId}")
     public ApiResponse<List<RecollectionDto>> getWeeksRecollection(
             @PathVariable Integer petId,
@@ -38,8 +36,19 @@ public class RecollectionController {
         return ApiResponse.onSuccess(SuccessCode.RECOLLECTION_WEEK_VIEW_SUCCESS, recollections);
     }
 
+    @Operation(summary = "일간 상황 조회", description = "오늘의 추억쌓기를 조회하는 API")
+    @PostMapping("/today/{petId}")
+    public ApiResponse<TodayRecollctDto> getTodaysRecollection(
+            @PathVariable Integer petId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
+        TodayRecollctDto recollections = recollectionService.getTodayList(user, petId);
+        return ApiResponse.onSuccess(SuccessCode.RECOLLECTION_WEEK_VIEW_SUCCESS, recollections);
+    }
+
     @Operation(summary = "추억 앨범 ID 조회 (존재 시)")
-    @GetMapping("/id")
+    @GetMapping("/id/{petId}")
     public ApiResponse<Integer> getRecollectionId(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam Integer petId) {

@@ -4,11 +4,14 @@ import com.amazonaws.services.cloudformation.model.AlreadyExistsException;
 import com.reborn.back.domain.entity.EmotionState;
 import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.review.recollection.Recollection;
+import com.reborn.back.domain.review.recollection.Record;
+import com.reborn.back.domain.review.recollection.Remind;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.pet.repository.PetRepository;
 import com.reborn.back.review.recollection.dto.RecollectionDto;
+import com.reborn.back.review.recollection.dto.TodayRecollctDto;
 import com.reborn.back.review.recollection.repository.RecollectionRepository;
 import com.reborn.back.review.recollection.repository.RecordRepository;
 import com.reborn.back.review.recollection.repository.RemindRepository;
@@ -73,5 +76,23 @@ public class RecollectionService {
         return recollectionRepository.findByPet(pet)
                 .map(Recollection::getId)
                 .orElse(null);
+    }
+
+    public TodayRecollctDto getTodayList(User user, Integer petId) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
+        LocalDate today = LocalDate.now();
+        LocalDateTime dayStart = today.atStartOfDay();
+        LocalDateTime dayEnd = today.atTime(23, 59, 59, 999_999_999);
+        Integer remindId = remindRepository.findTopByPetAndCreatedAtBetweenOrderByCreatedAtDesc(pet, dayStart, dayEnd)
+                .map(Remind::getId)
+                .orElse(null);
+        Integer recordId = recordRepository.findTopByPetAndCreatedAtBetweenOrderByCreatedAtDesc(pet, dayStart, dayEnd)
+                .map(Record::getId)
+                .orElse(null);
+        return TodayRecollctDto.builder()
+                .remindId(remindId)
+                .recordId(recordId)
+                .build();
     }
 }
