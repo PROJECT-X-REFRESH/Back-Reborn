@@ -16,6 +16,8 @@ public class RemindDto {
     @Schema(description = "RemindResDto")
     public static class RemindResDto {
         private Integer id;
+        private String userName;
+        private String petName;
         private String title;
         private String content;
         private LocalDateTime createdAt;
@@ -36,5 +38,14 @@ public class RemindDto {
     public static class RemindSimpleResDto {
         private Integer id;
         private String title;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @Schema(description = "Remind 요청 정보")
+    public static class RemindInfoDto {
+        private String userName;
+        private String petName;
     }
 }

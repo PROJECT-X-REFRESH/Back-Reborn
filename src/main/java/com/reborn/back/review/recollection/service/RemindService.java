@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -67,8 +68,8 @@ public class RemindService {
         return RemindConverter.toSimpleResDto(remindRepository.save(updated));
     }
 
-    public RemindDto.RemindResDto getRemind(Integer id) {
-        return RemindConverter.toResDto(findById(id));
+    public RemindDto.RemindResDto getRemind(Integer id, User user) {
+        return RemindConverter.toResDto(findById(id), user.getName());
     }
 
     public List<RemindDto.RemindSimpleResDto> getRemindList(Integer petId, int scrollPosition, int fetchSize) {
@@ -92,5 +93,14 @@ public class RemindService {
 
         redisUtil.deleteData(key);
         remindRepository.deleteById(remindId);
+    }
+
+    public RemindDto.RemindInfoDto getRemindInfo(Integer petId, User user) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
+        return RemindDto.RemindInfoDto.builder()
+                .userName(user.getName())
+                .petName(pet.getName())
+                .build();
     }
 }

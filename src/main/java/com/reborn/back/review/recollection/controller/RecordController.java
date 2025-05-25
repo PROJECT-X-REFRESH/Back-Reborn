@@ -65,7 +65,7 @@ public class RecordController {
             @Parameter(name = "scrollPosition", description = "가져올 데이터의 시작 위치 (0부터 시작)"),
             @Parameter(name = "fetchSize", description = "한 번에 불러올 게시글 개수")
     })
-    @PostMapping("/list/{petId}/{scrollPosition}/{fetchSize}")
+    @GetMapping("/list/{petId}/{scrollPosition}/{fetchSize}")
     public ApiResponse<List<RecordDto.RecordSimpleResDto>> getListRecords(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Integer petId,

@@ -48,7 +48,7 @@ public class RemindController {
     }
 
     @Operation(summary = "remind 목록 조회", description = "remind 목록을 조회하는 API")
-    @PostMapping("/list/{petId}/{scrollPosition}/{fetchSize}")
+    @GetMapping("/list/{petId}/{scrollPosition}/{fetchSize}")
     public ApiResponse<List<RemindDto.RemindSimpleResDto>> getListReminds(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable int petId,
@@ -66,8 +66,19 @@ public class RemindController {
             @PathVariable Integer remindId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        userService.findUserByUserName(customUserDetails.getUsername());
-        RemindDto.RemindResDto res = remindService.getRemind(remindId);
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
+        RemindDto.RemindResDto res = remindService.getRemind(remindId, user);
+        return ApiResponse.onSuccess(SuccessCode.REMIND_DETAIL_VIEW_SUCCESS, res);
+    }
+
+    @Operation(summary = "remind 기본 정보 조회", description = "생성을 위한 기본 데이터 조회")
+    @GetMapping("/info/{petId}")
+    public ApiResponse<RemindDto.RemindInfoDto> getPetAndUserInfo(
+            @PathVariable Integer petId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        User user=userService.findUserByUserName(customUserDetails.getUsername());
+        RemindDto.RemindInfoDto res = remindService.getRemindInfo(petId,user);
         return ApiResponse.onSuccess(SuccessCode.REMIND_DETAIL_VIEW_SUCCESS, res);
     }
 

@@ -11,8 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface PetRepository extends JpaRepository<Pet, Long>, JpaSpecificationExecutor<Pet> {
+public interface PetRepository extends JpaRepository<Pet, Integer>, JpaSpecificationExecutor<Pet> {
     Slice<Pet> findByUser(User user, Pageable pageable);
-
-    Optional<Pet> findById(Integer petId);
 }
