@@ -24,4 +24,12 @@ public class FarewellService {
 
         return FarewellConverter.toReviewResponse(farewell);
     }
+
+    @Transactional
+    public void increaseFstep(Integer farewellId) {
+        Farewell farewell = farewellRepository.findById(farewellId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.FAREWELL_NOT_FOUND));
+
+        farewell.setStep(farewell.getStep()+1);
+    }
 }

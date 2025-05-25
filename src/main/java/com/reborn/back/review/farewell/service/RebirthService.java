@@ -37,7 +37,7 @@ public class RebirthService {
         Farewell farewell = farewellRepository.findById(farewellId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.FAREWELL_NOT_FOUND));
 
-        Rebirth rebirth = rebirthRepository.findTopByFarewellOrderByCreatedAtDesc(farewell)
+        Rebirth rebirth = rebirthRepository.findByFarewell(farewell)
                 .orElseThrow(() -> new GeneralException(ErrorCode.REBIRTH_NOT_FOUND));
 
         // activityType에 따라 적절한 필드를 true로 변경
@@ -70,7 +70,7 @@ public class RebirthService {
         Farewell farewell = farewellRepository.findById(farewellId)
                 .orElseThrow(() -> GeneralException.of(ErrorCode.FAREWELL_NOT_FOUND));
 
-        Rebirth rebirth = rebirthRepository.findTopByFarewellOrderByCreatedAtDesc(farewell)
+        Rebirth rebirth = rebirthRepository.findByFarewell(farewell)
                 .orElseThrow(() -> GeneralException.of(ErrorCode.REBIRTH_NOT_FOUND));
 
         rebirth.setPetPost(rebirthRequestDto.getPetPost());
@@ -82,7 +82,7 @@ public class RebirthService {
         Farewell farewell = farewellRepository.findById(farewellId)
                 .orElseThrow(() -> GeneralException.of(ErrorCode.FAREWELL_NOT_FOUND));
 
-        Rebirth rebirth = rebirthRepository.findTopByFarewellOrderByCreatedAtDesc(farewell)
+        Rebirth rebirth = rebirthRepository.findByFarewell(farewell)
                 .orElseThrow(() -> GeneralException.of(ErrorCode.REBIRTH_NOT_FOUND));
 
         return RebirthConverter.toDto(rebirth);

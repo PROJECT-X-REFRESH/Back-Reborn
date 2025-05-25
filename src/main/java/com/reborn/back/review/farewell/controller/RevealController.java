@@ -8,6 +8,7 @@ import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
 import com.reborn.back.review.farewell.dto.RevealRequestDto.RevealReqDto;
 import com.reborn.back.review.farewell.dto.RevealResponseDto.DetailRevealDto;
+import com.reborn.back.review.farewell.service.FarewellService;
 import com.reborn.back.review.farewell.service.RevealService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,6 +25,7 @@ public class RevealController {
 
     private final RevealService revealService;
     private final UserService userService;
+    private final FarewellService farewellService;
 
     //나의 감정 드러내기
     @Operation(summary = "Reveal 생성", description = "fstep에 따라 Reveal을 생성하는 API")
@@ -87,5 +89,20 @@ public class RevealController {
 
         DetailRevealDto detail = revealService.getDetailReveal(farewellId);
         return ApiResponse.onSuccess(SuccessCode.REVEAL_DETAIL_VIEW_SUCCESS, detail);
+    }
+
+    @Operation(summary = "fstep 증가", description = "farewell의 fstep을 증가시키는 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REVEAL_2004", description = "fstep 증가가 완료되었습니다.")
+    })
+    @PutMapping("/nextday")
+    public ApiResponse<Boolean> increaseDate(
+            @PathVariable Integer farewellId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
+
+        farewellService.increaseFstep(farewellId);
+        return ApiResponse.onSuccess(SuccessCode.REVEAL_DATE_SUCCESS, true);
     }
 }
