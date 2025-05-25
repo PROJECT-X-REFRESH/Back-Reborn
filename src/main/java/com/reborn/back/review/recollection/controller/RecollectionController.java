@@ -26,7 +26,7 @@ public class RecollectionController {
     private final RecollectionService recollectionService;
 
     @Operation(summary = "주간 상황 조회", description = "이번주 추억쌓기 목록을 조회하는 API")
-    @PostMapping("/week/{petId}")
+    @GetMapping("/week/{petId}")
     public ApiResponse<List<RecollectionDto>> getWeeksRecollection(
             @PathVariable Integer petId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
@@ -37,7 +37,7 @@ public class RecollectionController {
     }
 
     @Operation(summary = "일간 상황 조회", description = "오늘의 추억쌓기를 조회하는 API")
-    @PostMapping("/today/{petId}")
+    @GetMapping("/today/{petId}")
     public ApiResponse<TodayRecollctDto> getTodaysRecollection(
             @PathVariable Integer petId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
