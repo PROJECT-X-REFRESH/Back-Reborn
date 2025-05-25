@@ -8,6 +8,7 @@ import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
 import com.reborn.back.review.farewell.dto.RebirthRequestDto.RebirthReqDto;
 import com.reborn.back.review.farewell.dto.RebirthResponseDto.DetailRebirthDto;
+import com.reborn.back.review.farewell.service.FarewellService;
 import com.reborn.back.review.farewell.service.RebirthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,6 +25,7 @@ public class RebirthController {
 
     private final RebirthService rebirthService;
     private final UserService userService;
+    private final FarewellService farewellService;
 
     // 반려동물과 건강한 작별하기
     @Operation(summary = "Rebirth 생성", description = "fstep에 따라 Rebirth을 생성하는 API")
@@ -41,7 +43,7 @@ public class RebirthController {
         return ApiResponse.onSuccess(SuccessCode.REBIRTH_CREATED, rebirth.getId());
     }
 
-    @Operation(summary = "컨텐츠 상태 변경", description = "Rebirth 컨텐츠(wash, dress, ribbon{string}, outro, complete)의 상태를 변경하는 API")
+    @Operation(summary = "컨텐츠 상태 변경", description = "Rebirth 컨텐츠(wash, dress, ribbon{yribbon -> 노란색, bribbon -> 검정색}, outro)의 상태를 변경하는 API")
     @ApiResponses(value =  {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REBIRTH_2003", description = "컨텐츠가 완료되었습니다.")
     })
@@ -87,5 +89,20 @@ public class RebirthController {
 
         DetailRebirthDto detail = rebirthService.getDetailRebirth(farewellId);
         return ApiResponse.onSuccess(SuccessCode.REBIRTH_DETAIL_VIEW_SUCCESS, detail);
+    }
+
+    @Operation(summary = "fstep 증가", description = "farewell의 fstep을 증가시키는 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REBIRTH_2004", description = "fstep 증가가 완료되었습니다.")
+    })
+    @PutMapping("/nextday")
+    public ApiResponse<Boolean> increaseDate(
+            @PathVariable Integer farewellId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
+
+        farewellService.increaseFstep(farewellId);
+        return ApiResponse.onSuccess(SuccessCode.REBIRTH_DATE_SUCCESS, true);
     }
 }

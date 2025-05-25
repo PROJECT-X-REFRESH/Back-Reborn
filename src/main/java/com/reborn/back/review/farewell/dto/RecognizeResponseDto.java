@@ -21,4 +21,23 @@ public class RecognizeResponseDto {
         @Schema(description = "검사 결과 점수")
         private Integer score;
     }
+
+    @Schema(description = "DetailRecognizeDto")
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DetailRecognizeDto {
+        @Schema(description = "사료 진행 상태")
+        private Boolean feed;
+
+        @Schema(description = "간식 진행 상태")
+        private Boolean snack;
+
+        @Schema(description = "산책 진행 상태")
+        private Boolean walk;
+
+        @Schema(description = "검사 결과 점수")
+        private Integer score;
+    }
 }

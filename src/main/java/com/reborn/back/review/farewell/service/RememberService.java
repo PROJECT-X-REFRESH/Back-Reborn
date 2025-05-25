@@ -122,10 +122,6 @@ public class RememberService {
         }
 
         clearedThings.add(type);
-
-        if (clearedThings.size() % 2 == 0) {
-            farewell.setStep(farewell.getStep() + 1);
-        }
     }
 
     public RememberResponseDto.DetailRememberDto getDetailRemember(Integer farewellId) {

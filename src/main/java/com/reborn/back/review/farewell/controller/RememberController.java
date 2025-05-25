@@ -8,6 +8,7 @@ import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
 import com.reborn.back.review.farewell.dto.RememberRequestDto.RememberReqDto;
 import com.reborn.back.review.farewell.dto.RememberResponseDto.DetailRememberDto;
+import com.reborn.back.review.farewell.service.FarewellService;
 import com.reborn.back.review.farewell.service.RememberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -28,6 +29,7 @@ public class RememberController {
 
     private final RememberService rememberService;
     private final UserService userService;
+    private final FarewellService farewellService;
 
     //반려동물과 추억 정리하기
     @Operation(summary = "Remember 생성", description = "fstep에 따라 Remember을 생성하는 API")
@@ -105,5 +107,20 @@ public class RememberController {
 
         DetailRememberDto detail = rememberService.getDetailRemember(farewellId);
         return ApiResponse.onSuccess(SuccessCode.REMEMBER_DETAIL_VIEW_SUCCESS, detail);
+    }
+
+    @Operation(summary = "fstep 증가", description = "farewell의 fstep을 증가시키는 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REMEMBER_2004", description = "fstep 증가가 완료되었습니다.")
+    })
+    @PutMapping("/nextday")
+    public ApiResponse<Boolean> increaseDate(
+            @PathVariable Integer farewellId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
+
+        farewellService.increaseFstep(farewellId);
+        return ApiResponse.onSuccess(SuccessCode.REMEMBER_DATE_SUCCESS, true);
     }
 }

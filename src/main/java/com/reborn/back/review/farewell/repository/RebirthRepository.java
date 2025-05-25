@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface RebirthRepository extends JpaRepository<Rebirth, Long>, JpaSpecificationExecutor<Rebirth> {
 
-    Optional<Rebirth> findTopByFarewellOrderByCreatedAtDesc(Farewell farewell);
+    Optional<Rebirth> findByFarewell(Farewell farewell);
 }

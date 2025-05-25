@@ -50,6 +50,7 @@ public enum ErrorCode implements BaseCode { // 실패
     FAREWELL_NOT_FOUND(HttpStatus.NOT_FOUND, "FAREWELL_4041", "존재하지 않는 작별하기 입니다."),
     INVALID_ACTIVITY_TYPE(HttpStatus.NOT_FOUND, "ACTIVITY_4041", "유효하지 않은 컨텐츠 타입입니다."),
 
+    RECOGNIZE_NOT_FOUND(HttpStatus.NOT_FOUND, "RECOGNIZE_4041", "존재하지 않는 나의 상태 알아보기입니다."),
     REVEAL_NOT_FOUND(HttpStatus.NOT_FOUND, "REVEAL_4041", "존재하지 않는 나의 감정 들여다보기입니다."),
 
     REMIND_ALREADY_EXISTS_TODAY(HttpStatus.CONFLICT, "REMIND_4041", "오늘은 이미 기록을 작성했습니다."),

@@ -76,8 +76,6 @@ public class RevealService {
         reveal.setContents(revealReqDto.getContents());
         reveal.setEmotion(emotion);
 
-        farewell.setStep(farewell.getStep() + 1);
-
         return reveal;
     }
 
