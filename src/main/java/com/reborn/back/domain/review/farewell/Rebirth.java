@@ -23,8 +23,8 @@ public class Rebirth extends BaseEntity {
     @Column(name = "birthWash")
     private Boolean wash;
 
-    @Column(name = "birthDress")
-    private Boolean dress;
+    @Column(name = "birthClothes")
+    private Boolean clothes;
 
     @Column(name = "birthRibbon")
     private String ribbon;

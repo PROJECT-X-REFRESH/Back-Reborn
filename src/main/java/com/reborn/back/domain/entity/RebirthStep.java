@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum RebirthStep {
 
     WASH("wash"),
-    DRESS("dress"),
+    CLOTHES("clothes"),
     RIBBON("ribbon"),
     POST("letter"),
     OUTRO("outro");

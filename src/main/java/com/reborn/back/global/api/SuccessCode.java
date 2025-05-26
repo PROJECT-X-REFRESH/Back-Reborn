@@ -90,6 +90,7 @@ public enum SuccessCode implements BaseCode { // 성공
     REDIARY_DELETED(HttpStatus.OK, "REDIARY_2004", "감정 일기 삭제가 완료되었습니다."),
     REDIARY_TODAY_WRITTEN_CHECKD(HttpStatus.OK, "REDIARY_2005", "당일 감정일기 작성한 여부 알려줍니다."),
 
+    FAREWELL_PET_SIMPLE_SUCCESS(HttpStatus.OK, "FAREWELL_2001", "Pet 간략 정보 조회 완료되었습니다."),
     FAREWELL_REVIEW_SUCCESS(HttpStatus.OK, "FAREWELL_2002", "작별 앨범 조회가 완료되었습니다."),
 
     RECOGNIZE_NEARBY_SUCCESS(HttpStatus.OK, "2001", "주변 정신과 조회가 완료되었습니다"),

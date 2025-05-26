@@ -45,8 +45,8 @@ public class RebirthService {
             case "wash":
                 rebirth.setWash(true);
                 break;
-            case "dress":
-                rebirth.setDress(true);
+            case "clothes":
+                rebirth.setClothes(true);
                 break;
             case "yribbon":
                 rebirth.setRibbon("YELLOW");
