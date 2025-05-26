@@ -3,6 +3,7 @@ package com.reborn.back.review.farewell.dto;
 import com.reborn.back.review.farewell.dto.RecognizeResponseDto.RecognizeResDto;
 import com.reborn.back.review.farewell.dto.RememberResponseDto.SimpleRememberDto;
 import com.reborn.back.review.farewell.dto.RevealResponseDto.SimpleRevealDto;
+import com.reborn.back.review.farewell.dto.RebirthResponseDto.ReviewRebirthDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,5 +29,5 @@ public class FarewellResponseDto {
     private List<SimpleRememberDto> rememberList;
 
     @Schema(description = "Rebirth 편지")
-    private RebirthResponseDto.ReviewRebirthDto rebirth;
+    private ReviewRebirthDto rebirth;
 }

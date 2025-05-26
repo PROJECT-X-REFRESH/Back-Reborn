@@ -3,6 +3,7 @@ package com.reborn.back.review.farewell.converter;
 import com.reborn.back.domain.entity.RebirthStep;
 import com.reborn.back.domain.review.farewell.Farewell;
 import com.reborn.back.domain.review.farewell.Rebirth;
+import com.reborn.back.review.farewell.dto.RebirthResponseDto;
 import com.reborn.back.review.farewell.dto.RebirthResponseDto.DetailRebirthDto;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,14 @@ public class RebirthConverter {
     public static DetailRebirthDto toDto(Rebirth r) {
         return DetailRebirthDto.builder()
                 .nextStep(calcNextStep(r))
+                .build();
+    }
+
+    public static RebirthResponseDto.SimpleRebirthDto toReviewDto(Rebirth rebirth, String username, String petname) {
+        return RebirthResponseDto.SimpleRebirthDto.builder()
+                .petPost(rebirth.getPetPost())
+                .username(username)
+                .petName(petname)
                 .build();
     }
 

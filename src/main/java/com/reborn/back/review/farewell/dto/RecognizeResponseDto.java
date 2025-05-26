@@ -17,7 +17,14 @@ public class RecognizeResponseDto {
     public static class RecognizeResDto {
         @Schema(description = "나의 상태 알아보기 id")
         private Integer id;
+    }
 
+    @Schema(description = "SimpleRecognizeResDto")
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SimpleRecognizeResDto {
         @Schema(description = "검사 결과 점수")
         private Integer score;
     }

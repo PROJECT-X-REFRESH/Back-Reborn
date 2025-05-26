@@ -2,6 +2,7 @@ package com.reborn.back.review.farewell.service;
 
 import com.reborn.back.domain.review.farewell.Farewell;
 import com.reborn.back.domain.review.farewell.Recognize;
+import com.reborn.back.domain.review.farewell.Remember;
 import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.global.utils.GCPMap.GooglePlacesResponse;
@@ -10,9 +11,8 @@ import com.reborn.back.global.utils.GCPMap.PlaceConverter;
 import com.reborn.back.global.utils.hira.HiraEvaluationService;
 import com.reborn.back.global.utils.hira.HiraInfoService;
 import com.reborn.back.review.farewell.converter.RecognizeConverter;
-import com.reborn.back.review.farewell.dto.CounselingCenterDto;
-import com.reborn.back.review.farewell.dto.RecognizeRequestDto;
-import com.reborn.back.review.farewell.dto.RecognizeResponseDto;
+import com.reborn.back.review.farewell.converter.RememberConverter;
+import com.reborn.back.review.farewell.dto.*;
 import com.reborn.back.review.farewell.repository.FarewellRepository;
 import com.reborn.back.review.farewell.repository.RecognizeRepository;
 import jakarta.transaction.Transactional;
@@ -146,5 +146,12 @@ public class RecognizeService {
     /** ykiho 로 asmGrd09 추출 (없으면 null) */
     private String extractGrade(String ykiho) {
         return hiraEvalService.getHospitalEvaluationGrade(ykiho);
+    }
+
+    public RecognizeResponseDto.SimpleRecognizeResDto getReviewRecognize(Integer recognizeId) {
+        Recognize recognize = recognizeRepository.findById(recognizeId)
+                .orElseThrow(() -> GeneralException.of(ErrorCode.RECOGNIZE_NOT_FOUND));
+
+        return RecognizeConverter.toReviewDto(recognize);
     }
 }
