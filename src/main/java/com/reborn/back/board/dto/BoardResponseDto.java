@@ -43,6 +43,9 @@ public class BoardResponseDto {
 
         @Schema(description = "게시판 이미지")
         private String attachImg;
+
+        @Schema(description = "좋아요 여부")
+        private Boolean like;
     }
 
     @Schema(description = "BoardListResDto")

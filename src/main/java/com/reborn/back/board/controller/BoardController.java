@@ -4,6 +4,7 @@ import com.reborn.back.board.converter.BoardConverter;
 import com.reborn.back.board.dto.BoardRequestDto.BoardReqDto;
 import com.reborn.back.board.dto.BoardResponseDto.BoardListResDto;
 import com.reborn.back.board.dto.BoardResponseDto.BoardResDto;
+import com.reborn.back.board.repository.BoardLikeRepository;
 import com.reborn.back.board.service.BoardService;
 import com.reborn.back.domain.board.Board;
 import com.reborn.back.domain.user.User;
@@ -23,7 +24,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Tag(name = "board", description = "board 관련 API")
 @RestController
@@ -33,8 +37,9 @@ public class BoardController {
 
     private final UserService userService;
     private final BoardService boardService;
+    private final BoardLikeRepository boardLikeRepository;
 
-    @Operation(summary = "게시물 생성", description = "게시물을 생성하는 API")
+    @Operation(summary = "게시물 생성{POST, SHARE, VOLUNTEER}", description = "게시물을 생성하는 API")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2011", description = "게시물 생성이 완료되었습니다.")
     })
@@ -67,7 +72,9 @@ public class BoardController {
 
         boardService.increaseViewCount(boardId, user.getUid());
 
-        return ApiResponse.onSuccess(SuccessCode.BOARD_DETAIL_VIEW_SUCCESS, BoardConverter.simpleBoardDto(board));
+        boolean liked = boardLikeRepository.existsByUserAndBoard(user, board);
+
+        return ApiResponse.onSuccess(SuccessCode.BOARD_DETAIL_VIEW_SUCCESS, BoardConverter.simpleBoardDto(board, liked));
     }
 
     @Operation(summary = "게시물 삭제", description = "게시물을 삭제하는 API (작성자만 가능)") // 작성자만 삭제 사능
@@ -98,12 +105,21 @@ public class BoardController {
     public ApiResponse<BoardListResDto> getListBoards(
             @RequestParam(name = "type", defaultValue = "ALL") String type,
             @RequestParam(name = "scrollPosition", defaultValue = "0") int scrollPosition,
-            @RequestParam(name = "fetchSize", defaultValue = "50") int fetchSize) {
-
+            @RequestParam(name = "fetchSize", defaultValue = "50") int fetchSize,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails)
+    {
+        User user   = userService.findUserByUserName(customUserDetails.getUsername());
         List<Board> boards = boardService.getBoardList(type, scrollPosition, fetchSize);
-        return ApiResponse.onSuccess(
-                SuccessCode.BOARD_LIST_VIEW_SUCCESS,
-                BoardConverter.boardListResDto(boards));
+
+        List<Integer> boardIds = boards.stream().map(Board::getId).toList();
+        Set<Integer> likedIds = boardIds.isEmpty()
+                ? Set.of()
+                : new HashSet<>(
+                boardLikeRepository.findLikedBoardIds(user.getUid(), boardIds));
+
+        BoardListResDto dto = BoardConverter.boardListResDto(boards, likedIds);
+
+        return ApiResponse.onSuccess(SuccessCode.BOARD_LIST_VIEW_SUCCESS, dto);
     }
 
     @Operation(summary = "사용자가 좋아요한 게시물 목록 조회", description = "사용자가 좋아요한 게시물을 최신순으로 조회하는 API")
@@ -122,7 +138,14 @@ public class BoardController {
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
         List<Board> likedBoards = boardService.getLikedBoardList(user, scrollPosition, fetchSize);
-        return ApiResponse.onSuccess(SuccessCode.BOARD_LIKED_LIST_VIEW_SUCCESS, BoardConverter.boardListResDto(likedBoards));
+
+        Set<Integer> likedIds = likedBoards.stream()
+                .map(Board::getId)
+                .collect(Collectors.toSet());
+
+        return ApiResponse.onSuccess(
+                SuccessCode.BOARD_LIKED_LIST_VIEW_SUCCESS,
+                BoardConverter.boardListResDto(likedBoards, likedIds));
     }
 
     @Operation(summary = "인기 게시글 조회", description = "인기 게시글 목록을 조회하는 API")
@@ -130,9 +153,21 @@ public class BoardController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2006", description = "인기 게시글 목록 조회가 완료되었습니다.")
     })
     @GetMapping("/popular")
-    public ApiResponse<BoardListResDto> getPopularBoards() {
+    public ApiResponse<BoardListResDto> getPopularBoards(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
         List<Board> boards = boardService.getPopularBoards();
-        return ApiResponse.onSuccess(SuccessCode.BOARD_POPULAR_LIST_VIEW_SUCCESS, BoardConverter.boardListResDto(boards));
+
+        List<Integer> boardIds = boards.stream().map(Board::getId).toList();
+        Set<Integer> likedIds = boardIds.isEmpty()
+                ? Set.of()
+                : new HashSet<>(
+                boardLikeRepository.findLikedBoardIds(user.getUid(), boardIds));
+
+        return ApiResponse.onSuccess(
+                SuccessCode.BOARD_POPULAR_LIST_VIEW_SUCCESS,
+                BoardConverter.boardListResDto(boards, likedIds));
     }
 
     @Operation(summary = "게시물 수정", description = "게시물 내용을 수정하는 API") // 작성자만 수정 가능

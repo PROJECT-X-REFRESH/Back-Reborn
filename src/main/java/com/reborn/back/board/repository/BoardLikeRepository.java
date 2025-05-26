@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
     // 특정 사용자가 특정 게시글을 좋아요 했는지 확인
@@ -28,4 +30,14 @@ public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
     @Query(value = "INSERT INTO board_like (uid, b_id) VALUES (:userId, :boardId) " +
             "ON DUPLICATE KEY UPDATE bl_id = LAST_INSERT_ID(bl_id)", nativeQuery = true)
     void insertOrUpdateLike(@Param("userId") String userId, @Param("boardId") Integer boardId);
+
+    /* boardIds 중 사용자가 누른 좋아요 ID를 한 번에 조회 */
+    @Query("""
+           SELECT bl.board.id
+           FROM BoardLike bl
+           WHERE bl.user.uid = :uid
+             AND bl.board.id IN :boardIds
+           """)
+    List<Integer> findLikedBoardIds(@Param("uid")  String uid,
+                                    @Param("boardIds") List<Integer> boardIds);
 }
