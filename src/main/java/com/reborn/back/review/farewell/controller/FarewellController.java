@@ -6,6 +6,7 @@ import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
 import com.reborn.back.review.farewell.dto.FarewellResponseDto;
+import com.reborn.back.review.farewell.dto.FarewellSimpleDto;
 import com.reborn.back.review.farewell.dto.RememberResponseDto.ReviewRememberDto;
 import com.reborn.back.review.farewell.dto.RevealResponseDto.ReviewRevealDto;
 import com.reborn.back.review.farewell.service.FarewellService;
@@ -32,9 +33,30 @@ public class FarewellController {
     private final RememberService rememberService;
     private final UserService userService;
 
+    @Operation(summary = "리뷰 카드용 Pet 간략 정보",
+            description = "petId 하나만으로 이름·품종·컬러·death·farewellId 를 반환")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "FAREWELL_2001",
+                    description  = "Pet 간략 정보 조회 완료되었습니다.")
+    })
+    @GetMapping("/pet/{petId}")
+    public ApiResponse<FarewellSimpleDto> getPetSimple(
+            @PathVariable Integer petId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
+
+        FarewellSimpleDto dto = farewellService.getPetSimpleDto(petId);
+
+        return ApiResponse.onSuccess(SuccessCode.FAREWELL_PET_SIMPLE_SUCCESS, dto);
+    }
+
     @Operation(summary = "작별 앨범 전체 조회", description = "Recognize, Reveal, Remember, Rebirth 전체 리뷰 조회 API")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "FAREWELL_2002", description = "작별 앨범 조회가 완료되었습니다.")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "FAREWELL_2002",
+                    description = "작별 앨범 조회가 완료되었습니다.")
     })
     @GetMapping("/review")
     public ApiResponse<FarewellResponseDto> getFarewellReview(

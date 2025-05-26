@@ -1,10 +1,13 @@
 package com.reborn.back.review.farewell.service;
 
+import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.review.farewell.Farewell;
 import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
+import com.reborn.back.pet.repository.PetRepository;
 import com.reborn.back.review.farewell.converter.FarewellConverter;
 import com.reborn.back.review.farewell.dto.FarewellResponseDto;
+import com.reborn.back.review.farewell.dto.FarewellSimpleDto;
 import com.reborn.back.review.farewell.repository.FarewellRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FarewellService {
     private final FarewellRepository farewellRepository;
+    private final PetRepository petRepository;
+
+    public FarewellSimpleDto getPetSimpleDto(Integer petId) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
+
+        return FarewellSimpleDto.fromEntity(pet);
+    }
 
     @Transactional
     public FarewellResponseDto getFarewellReview(Integer farewellId) {
