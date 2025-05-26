@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface RecognizeRepository extends JpaRepository<Recognize, Long>, JpaSpecificationExecutor<Recognize> {
 
     Optional<Recognize> findByFarewell(Farewell farewell);
+
+    Optional<Recognize> findById(Integer recognizeId);
 }

@@ -25,4 +25,10 @@ public class RecognizeConverter {
                 .score(recognize.getScore())
                 .build();
     }
+
+    public static RecognizeResponseDto.SimpleRecognizeResDto toReviewDto(Recognize recognize) {
+        return RecognizeResponseDto.SimpleRecognizeResDto.builder()
+                .score(recognize.getScore())
+                .build();
+    }
 }

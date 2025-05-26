@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface RebirthRepository extends JpaRepository<Rebirth, Long>, JpaSpecificationExecutor<Rebirth> {
 
     Optional<Rebirth> findByFarewell(Farewell farewell);
+
+    Optional<Rebirth> findById(Integer rebirthId);
 }

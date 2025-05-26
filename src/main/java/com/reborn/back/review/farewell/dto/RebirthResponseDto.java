@@ -30,8 +30,21 @@ public class RebirthResponseDto {
     public static class ReviewRebirthDto {
         @Schema(description = "건강한 작별하기 id")
         private Integer id;
+    }
 
+    @Schema(description = "SimpleRebirthDto")
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SimpleRebirthDto {
         @Schema(description = "반려동물 편지")
         private String petPost;
+
+        @Schema(description = "반려동물 이름")
+        private String petName;
+
+        @Schema(description = "사용자명")
+        private String username;
     }
 }

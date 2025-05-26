@@ -7,6 +7,7 @@ import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.review.farewell.converter.RebirthConverter;
 import com.reborn.back.review.farewell.dto.RebirthRequestDto.RebirthReqDto;
 import com.reborn.back.review.farewell.dto.RebirthResponseDto.DetailRebirthDto;
+import com.reborn.back.review.farewell.dto.RebirthResponseDto.SimpleRebirthDto;
 import com.reborn.back.review.farewell.repository.FarewellRepository;
 import com.reborn.back.review.farewell.repository.RebirthRepository;
 import jakarta.transaction.Transactional;
@@ -86,5 +87,12 @@ public class RebirthService {
                 .orElseThrow(() -> GeneralException.of(ErrorCode.REBIRTH_NOT_FOUND));
 
         return RebirthConverter.toDto(rebirth);
+    }
+
+    public SimpleRebirthDto getReviewRebirth(Integer rebirthId, String username, String petname) {
+        Rebirth rebirth = rebirthRepository.findById(rebirthId)
+                .orElseThrow(() -> GeneralException.of(ErrorCode.REBIRTH_NOT_FOUND));
+
+        return RebirthConverter.toReviewDto(rebirth, username, petname);
     }
 }

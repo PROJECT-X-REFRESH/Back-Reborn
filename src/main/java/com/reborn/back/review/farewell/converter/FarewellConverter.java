@@ -26,7 +26,6 @@ public class FarewellConverter {
                 .recognize(farewell.getRecognize() != null ?
                         RecognizeResDto.builder()
                                 .id(farewell.getRecognize().getId())
-                                .score(farewell.getRecognize().getScore())
                                 .build()
                         : null)
 
@@ -43,7 +42,6 @@ public class FarewellConverter {
                         farewell.getRebirth().getPetPost() != null ?
                         ReviewRebirthDto.builder()
                                 .id(farewell.getRebirth().getId())
-                                .petPost(farewell.getRebirth().getPetPost())
                                 .build()
                         : null)
                 .build();
