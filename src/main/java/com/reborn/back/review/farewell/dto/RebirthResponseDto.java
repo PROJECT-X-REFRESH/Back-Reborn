@@ -16,8 +16,8 @@ public class RebirthResponseDto {
     @NoArgsConstructor
     public static class DetailRebirthDto {
         @Schema(
-                description = "wash, dress, ribbon, post, outro= 중 하나",
-                example = "dress"
+                description = "wash, clothes, ribbon, post, outro= 중 하나",
+                example = "clothes"
         )
         private RebirthStep nextStep;
     }
