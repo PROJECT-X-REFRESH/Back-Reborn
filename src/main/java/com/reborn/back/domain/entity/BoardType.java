@@ -4,5 +4,4 @@ public enum BoardType {
     POST,
     VOLUNTEER,
     SHARE,
-    TALK,
 }
