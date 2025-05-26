@@ -60,7 +60,7 @@ public class UserConverter {
 
         // fStep: 살아있으면 0, 죽었으면 farewell.step
         Integer fStep = isAlive ? 0 : pet.getFarewell().getStep();
-
+        Integer farewellId=null;
         // 살아있으면 remind/record 체크, 죽었으면 null 처리
         Boolean todayRemind = null;
         Boolean todayRecord = null;
@@ -68,12 +68,16 @@ public class UserConverter {
             todayRemind = remindService.checkTodayRemind(username, pet);
             todayRecord = recordService.checkTodayRecord(username, pet);
         }
+        else{
+            farewellId = pet.getFarewell().getId();
+        }
 
         return UserResponseDto.mainInfoPet.builder()
                 .pet(toPetInfo(pet))
                 .petCondition(isAlive)  // true or false
                 .todayRemind(Boolean.TRUE.equals(todayRemind))
                 .todayRecord(Boolean.TRUE.equals(todayRecord))
+                .farewellId(farewellId)
                 .fStep(fStep)
                 .build();
     }

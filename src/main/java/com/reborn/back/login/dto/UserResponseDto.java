@@ -54,6 +54,7 @@ public class UserResponseDto {
         private boolean todayRemind;
         private boolean todayRecord;
         private Integer fStep;
+        private Integer farewellId;
     }
 
     @Schema(description = "PetInfoDto")
