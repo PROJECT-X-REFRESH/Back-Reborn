@@ -27,6 +27,12 @@ public class PetService {
     private final PetRepository petRepository;
     private final FarewellRepository farewellRepository;
 
+    @Transactional
+    public Pet findById(Integer pId) {
+        return petRepository.findById(pId)
+                .orElseThrow(() -> GeneralException.of(ErrorCode.PET_NOT_FOUND));
+    }
+
     //반려동물 등록
     @Transactional
     public List<PetSimpleDto> createPetProfile(PetRequestDto petReqDto, User user) {
