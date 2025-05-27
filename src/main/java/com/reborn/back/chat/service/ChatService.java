@@ -9,13 +9,17 @@ import com.reborn.back.login.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 import static com.reborn.back.domain.chat.ChatRoomStatus.FROM_LEFT;
 import static com.reborn.back.domain.chat.ChatRoomStatus.TO_LEFT;
@@ -38,15 +42,28 @@ public class ChatService {
                 .toList();
     }
 
-    @Transactional
     public ChatRoomDto.RoomList handshake(User me, String partnerUid) {
         User partner = userRepository.findByName(partnerUid)
                 .orElseThrow(() ->
                         new EntityNotFoundException("상대방을 찾을 수 없습니다."));
-        ChatRoom room = chatRoomRepository
-                .findBetweenUsers(me.getUid(), partnerUid)
-                .orElseGet(() -> createRoom(me, partner));
-        return toRoomListDto(room, me);
+        return chatRoomRepository.findBetweenUsers(me.getUid(), partnerUid)
+                .map(r -> toRoomListDto(r, me))
+                .orElseGet(() -> tryCreateRoom(me, partner));
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public ChatRoomDto.RoomList tryCreateRoom(User me, User partner) {
+
+        try {
+            ChatRoom created = createRoom(me, partner);
+            return toRoomListDto(created, me);
+
+        } catch (DataIntegrityViolationException dup) {
+            ChatRoom existing = chatRoomRepository.findBetweenUsers(
+                            me.getUid(), partner.getUid())
+                    .orElseThrow();
+            return toRoomListDto(existing, me);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -113,11 +130,16 @@ public class ChatService {
         return chatRoomRepository.save(room);
     }
 
-    private ChatRoom authorizeAndGetRoom(Integer id, User me) {
+    public ChatRoom authorizeAndGetRoom(int id, User me) {
         ChatRoom room = chatRoomRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("채팅방이 없습니다."));
-        boolean participant = room.getFromUser().equals(me) || room.getToUser().equals(me);
-        if (!participant) throw new IllegalArgumentException("권한이 없습니다.");
+        String myId     = me.getUid();
+        String fromId   = room.getFromUser().getUid();
+        String toId     = room.getToUser().getUid();
+
+        if (!Objects.equals(myId, fromId) && !Objects.equals(myId, toId)) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
         return room;
     }
 
