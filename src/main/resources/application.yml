@@ -191,3 +191,13 @@ spring:
 spring:
   application:
     name: RE-Born-Back
+
+# application.yml
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          socket: DEBUG
+        messaging:
+          simp: DEBUG

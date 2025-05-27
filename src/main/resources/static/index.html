@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat WS Quick Test</title>
+    <style>
+        body { font-family: sans-serif; padding: 1rem }
+        input, button { margin: .25rem 0 }
+        #chat { border: 1px solid #ccc; height: 200px; overflow: auto; padding: .25rem }
+        #chat li.mine { color: blue; text-align: right }
+        #chat li.other { color: green; text-align: left }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+
+<h3>1) JWT 붙여 넣기</h3>
+<textarea id="token" placeholder="Bearer … 또는 순수 토큰" rows="3" style="width:100%"></textarea>
+
+<h3>2) Handshake (REST 호출)</h3>
+<input id="partner" placeholder="상대 uid">
+<button onclick="handshake()">/chat/handshake</button>
+<span id="roomInfo"></span>
+
+<h3>3) WebSocket 연결</h3>
+<button onclick="connectWs()">Connect WS</button>
+<span><b>WS 상태:</b> <span id="wsState" style="font-weight:bold;color:red">❌ 미연결</span></span>
+<button onclick="clearLog()">log 지우기</button>
+<pre id="wsLog" style="border:1px solid #ddd;height:120px;overflow:auto;margin-bottom:1rem"></pre>
+
+<h3>4) 채팅</h3>
+<ul id="chat"></ul>
+<input id="msg" placeholder="메시지">
+<button onclick="send()">Send</button>
+
+<script>
+    let roomId = null, client = null;
+
+    function bearer() {
+        const raw = document.getElementById('token').value.trim();
+        return raw.startsWith('Bearer ') ? raw : 'Bearer ' + raw;
+    }
+
+    function setState(txt, color) {
+        const s = document.getElementById('wsState');
+        s.textContent = txt; s.style.color = color;
+    }
+
+    function log(msg) {
+        const pre = document.getElementById('wsLog');
+        pre.textContent += `[${new Date().toLocaleTimeString()}] ${msg}\n`;
+        pre.scrollTop = pre.scrollHeight;
+    }
+
+    function clearLog() {
+        document.getElementById('wsLog').textContent = '';
+    }
+
+    async function handshake() {
+        const partner = document.getElementById('partner').value.trim();
+        if (!partner) return alert('partner uid 입력');
+        const res = await fetch('/chat/handshake/' + partner, {
+            headers: { Authorization: bearer() }
+        });
+        if (!res.ok) return alert('handshake 실패 ' + res.status);
+        const data = await res.json();
+        roomId = data.result.roomId;
+        document.getElementById('roomInfo').textContent = 'roomId=' + roomId;
+    }
+
+    function connectWs() {
+        if (!roomId) return alert('먼저 handshake!');
+        const sock = new SockJS('/ws-chat');
+        client = Stomp.over(sock);
+        client.debug = null;
+
+        sock.onopen = () => { setState('🟢 raw open', 'green'); log('sockJS open'); };
+        sock.onclose = e => { setState('🔴 closed', 'red'); log('sockJS close ' + e.code); };
+        sock.onerror = e => { setState('🔴 error', 'red'); log('sockJS error ' + e); };
+
+        client.connect(
+            { Authorization: bearer() },
+            frame => {
+                setState('🟢 CONNECTED', 'green');
+                log('STOMP connected');
+                client.subscribe('/sub/chat/' + roomId, m => {
+                    const { text, mine } = JSON.parse(m.body);
+                    draw(text, mine);
+                });
+            },
+            err => {
+                setState('🔴 STOMP error', 'red');
+                log('STOMP error ' + err);
+            }
+        );
+    }
+
+    function send() {
+        if (!client?.connected) return alert('WS 연결 안됨');
+        const text = document.getElementById('msg').value.trim();
+        if (!text) return;
+        client.send('/pub/chat/send/' + roomId,
+            { Authorization: bearer() },
+            JSON.stringify({ text }));
+        document.getElementById('msg').value = '';
+    }
+
+    function draw(msg, mine) {
+        const li = document.createElement('li');
+        li.className = mine ? 'mine' : 'other';
+        li.textContent = msg;
+        const ul = document.getElementById('chat');
+        ul.append(li);
+        ul.scrollTop = ul.scrollHeight;
+    }
+</script>
+</body>
+</html>

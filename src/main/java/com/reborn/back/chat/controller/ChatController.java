@@ -7,6 +7,7 @@ import com.reborn.back.chat.service.ChatService;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
+import com.reborn.back.login.auth.jwt.JwtTokenUtils;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,17 +80,6 @@ public class ChatController {
                 SuccessCode.CHAT_DETAIL_VIEW_SUCESS,
                 chatService.getChatDetail(user, chatId, scrollPosition, fetchSize)
         );
-    }
-
-
-    // 3. 메세지 전송, STOMP
-    @MessageMapping("/chat.sendMessage/{chatId}")
-    public ChatResDto.MessageResponse sendMessage(
-            @DestinationVariable Integer chatId,
-            ChatReqDto.SendMessage payload,
-            @AuthenticationPrincipal CustomUserDetails customUserDetail) {
-        User user = userService.findUserByUserName(customUserDetail.getUsername());
-        return chatService.writeMessage(user, chatId, payload.getText());
     }
 
     // 4. 방 나가기
