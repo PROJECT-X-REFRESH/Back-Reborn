@@ -6,6 +6,7 @@ import com.reborn.back.aiPost.repository.AiPostRepository;
 import com.reborn.back.domain.aiPost.AiPost;
 import com.reborn.back.domain.aiPost.AiPostBookmark;
 import com.reborn.back.domain.user.User;
+import com.reborn.back.login.dto.UserResponseDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +26,16 @@ public class AiPostService {
     private final AiPostRepository aiPostRepository;
     private final AiPostBookmarkRepository bookmarkRepository;
 
-    public List<AiPost> getRecentAiPosts() {
+    public List<UserResponseDto.AiPostSimpleDto> getRecentAiPosts() {
         Pageable pageable = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdAt"));
-        return aiPostRepository.findAll(pageable).getContent();
+        List<AiPost> posts = aiPostRepository.findAll(pageable).getContent();
+        return posts.stream()
+                .map(post -> UserResponseDto.AiPostSimpleDto.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .imgUrl(post.getAttachImg())
+                        .build())
+                .toList();
     }
 
     public List<AiPost> getPostList(int scrollPosition, int fetchSize) {

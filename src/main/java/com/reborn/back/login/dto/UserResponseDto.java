@@ -1,5 +1,6 @@
 package com.reborn.back.login.dto;
 
+import com.reborn.back.aiPost.dto.AiPostDetailDto;
 import com.reborn.back.domain.aiPost.AiPost;
 import com.reborn.back.domain.pet.Pet;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -40,7 +41,18 @@ public class UserResponseDto {
         @Schema(description = "펫 정보")
         private List<mainInfoPet> petList;
         @Schema(description = "포스트")
-        private List<AiPost> post;
+        private List<AiPostSimpleDto> aiPost;
+    }
+
+    @Schema(description = "AiPostSimpleDto")
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AiPostSimpleDto {
+        private Integer id;
+        private String title;
+        private String imgUrl;
     }
 
     @Schema(description = "MainInfoPet")

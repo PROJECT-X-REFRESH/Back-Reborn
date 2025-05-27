@@ -95,12 +95,12 @@ public class UserConverter {
 
     public static UserResponseDto.MainInfoResDto mainDto(User user,
                                                          List<UserResponseDto.mainInfoPet> petList,
-                                                         List<AiPost> recentPosts) {
+                                                         List<UserResponseDto.AiPostSimpleDto> recentPosts) {
         return UserResponseDto.MainInfoResDto.builder()
                 .name(user.getName().substring(user.getName().indexOf("}") + 1))
                 .profileImage(user.getImg())
                 .petList(petList)
-                .post(recentPosts)
+                .aiPost(recentPosts)
                 .build();
     }
 }

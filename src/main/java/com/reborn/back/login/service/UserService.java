@@ -284,7 +284,7 @@ public class UserService {
         User user = findUserByUserName(username);
         List<UserResponseDto.mainInfoPet> petList =
                 UserConverter.toMainInfoPetList(user.getPetList(), username, remindService, recordService);
-        List<AiPost> recentPosts = aiPostService.getRecentAiPosts();
+        List<UserResponseDto.AiPostSimpleDto> recentPosts = aiPostService.getRecentAiPosts();
         return UserConverter.mainDto(user, petList, recentPosts);
     }
 
