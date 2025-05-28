@@ -33,7 +33,7 @@ public class UserConverter {
     public static UserResponseDto.UserInfoResDto infoDto(User user) {
         return UserResponseDto.UserInfoResDto.builder()
                 .email(user.getEmail())
-                .name(user.getName().substring(user.getName().indexOf("}") + 1))
+                .name(user.getNickname())
                 .profileImage(user.getImg())
                 .build();
     }
@@ -91,7 +91,7 @@ public class UserConverter {
                                                          List<UserResponseDto.mainInfoPet> petList,
                                                          List<UserResponseDto.AiPostSimpleDto> recentPosts) {
         return UserResponseDto.MainInfoResDto.builder()
-                .name(user.getName().substring(user.getName().indexOf("}") + 1))
+                .name(user.getNickname())
                 .profileImage(user.getImg())
                 .petList(petList)
                 .aiPost(recentPosts)

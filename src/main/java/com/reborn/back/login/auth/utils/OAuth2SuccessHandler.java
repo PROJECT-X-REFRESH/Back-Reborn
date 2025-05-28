@@ -48,13 +48,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             String providerAccessToken = oAuth2User.getAttribute("oauth2AccessToken");
             LocalDateTime providerExpiresAt = oAuth2User.getAttribute("oauth2ExpiresAt");
             log.info("🔍 사용자 정보 추출 완료: username={}, email={}, provider={}", username, email, provider);
-
-            // 신규 유저 여부 확인
-            boolean isNewUser = false;
             if (!userDetailsManager.userExists(username)) {
-                isNewUser = true;
                 log.info("🆕 신규 사용자 등록 시작: {}", username);
-
                 CustomUserDetails newUser = CustomUserDetails.builder()
                         .providerId(providerId)
                         .username(username)
@@ -63,7 +58,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                         .accessToken(providerAccessToken)
                         .expireDate(providerExpiresAt)
                         .build();
-
                 userDetailsManager.createUser(newUser);
                 log.info("✅ 신규 사용자 등록 완료: {}", username);
             } else {
@@ -71,34 +65,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             }
 
             // Redis에 authCode 저장
-            String redisValue = username + ":" + (isNewUser ? "newUser" : "wasUser");
             String authCode = UUID.randomUUID().toString();
-            redisUtil.setDataExpire("randomCode" + authCode, redisValue, 300);
+            redisUtil.setDataExpire("randomCode" + authCode, username, 300);
 
-            log.info("🧠 Redis에 인증 코드 저장 완료: key=randomCode{}, value={}", authCode, redisValue);
-
-            //log.info("🔍 사용자 정보 추출 완료: username={}, email={}, provider={}", username, email, provider);
-            //if (!userDetailsManager.userExists(username)) {
-            //    log.info("🆕 신규 사용자 등록 시작: {}", username);
-            //    CustomUserDetails newUser = CustomUserDetails.builder()
-            //            .providerId(providerId)
-            //            .username(username)
-            //            .email(email)
-            //            .provider(provider)
-            //            .accessToken(providerAccessToken)
-            //            .expireDate(providerExpiresAt)
-            //            .build();
-            //    userDetailsManager.createUser(newUser);
-            //    log.info("✅ 신규 사용자 등록 완료: {}", username);
-            //} else {
-            //    log.info("👤 기존 사용자 로그인: {}", username);
-            //}
-
-            // Redis에 authCode 저장
-            //String authCode = UUID.randomUUID().toString();
-            //redisUtil.setDataExpire("randomCode" + authCode, username, 300);
-
-            //log.info("🧠 Redis에 인증 코드 저장 완료: key=randomCode{}, value={}", authCode, username);
+            log.info("🧠 Redis에 인증 코드 저장 완료: key=randomCode{}, value={}", authCode, username);
 
             // 앱으로 리디렉트할 딥링크 구성
             String redirectUrl = String.format("%s?code=%s", baseRedirectUrl, authCode);
