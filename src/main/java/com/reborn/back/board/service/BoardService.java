@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -59,39 +58,34 @@ public class BoardService {
     }
 
     // 인기글 갱신 로직
-    public List<Board> getPopularBoards() {
-        String keyPattern = "board_view:*";  // 모든 `board_view:{boardId}` 조회 키 검색
-        Set<String> keys = redisUtil.getKeys(keyPattern);
-
+    public List<Board> getPopularBoards(String type) {
+        Set<String> keys = redisUtil.getKeys("board_view:*");
         if (keys == null || keys.isEmpty()) {
             log.info("[CACHE] 인기글 데이터 없음");
-            return new ArrayList<>();
+            return List.of();
         }
 
-        // boardId별 조회 수 계산
-        Map<Integer, Integer> boardViewCounts = new HashMap<>();
+        Map<Integer, Integer> viewCnt = new HashMap<>();
         for (String key : keys) {
-            Integer boardId = Integer.parseInt(key.split(":")[1]);
-            Integer viewCount = redisUtil.getSetData(key).size();  // SET 크기 = 조회한 유저 수
-
-            boardViewCounts.put(boardId, viewCount);
+            Integer boardId   = Integer.parseInt(key.split(":")[1]);
+            int      cnt      = redisUtil.getSetData(key).size(); // 유저 수
+            viewCnt.put(boardId, cnt);
         }
 
-        // 조회 수 기준으로 내림차순 정렬하여 상위 10개 추출
-        List<Integer> topBoardIds = boardViewCounts.entrySet().stream()
+        List<Integer> topIds = viewCnt.entrySet().stream()
                 .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
                 .limit(10)
                 .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
-
-        // `Board` 객체 리스트로 변환하여 반환
-        List<Board> popularBoards = topBoardIds.stream()
-                .map(boardId -> boardRepository.findById(boardId).orElse(null))
-                .filter(Objects::nonNull)
                 .toList();
 
-        log.info("[CACHE] 인기글 목록 조회 완료: {}", popularBoards);
-        return popularBoards;
+        BoardType filter = "ALL".equalsIgnoreCase(type) ? null
+                : BoardType.valueOf(type.toUpperCase());
+
+        return topIds.stream()
+                .map(id -> boardRepository.findById(id).orElse(null))
+                .filter(Objects::nonNull)
+                .filter(b -> filter == null || b.getCategory() == filter)   // 🔄
+                .toList();
     }
 
     //--------------------------------------------------------------------------------------------------------
