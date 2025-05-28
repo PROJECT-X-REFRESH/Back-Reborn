@@ -30,11 +30,10 @@ public class Record extends BaseEntity {
     @Column(name = "cordDate")
 
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "pos", column = @Column(name = "cordPos")),
-            @AttributeOverride(name = "neg", column = @Column(name = "cordNeg")),
-            @AttributeOverride(name = "state", column = @Column(name = "cordState")),
-    })
+    @AttributeOverride(
+            name = "state",
+            column = @Column(name = "cordState")
+    )
     private Emotion emotion;
 
     // FK: pId → Pet(pId)

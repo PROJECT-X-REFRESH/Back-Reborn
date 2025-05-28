@@ -35,11 +35,10 @@ public class Reveal extends BaseEntity {
     private String contents;
 
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "pos", column = @Column(name = "vealPos")),
-            @AttributeOverride(name = "neg", column = @Column(name = "vealNeg")),
-            @AttributeOverride(name = "state", column = @Column(name = "vealState")),
-    })
+    @AttributeOverride(
+            name = "state",
+            column = @Column(name = "vealState")
+    )
     private Emotion emotion;
 
     // FK: fId → Farewell(fId)
