@@ -89,10 +89,13 @@ public class RebirthService {
         return RebirthConverter.toDto(rebirth);
     }
 
-    public SimpleRebirthDto getReviewRebirth(Integer rebirthId, String username, String petname) {
-        Rebirth rebirth = rebirthRepository.findById(rebirthId)
+    public SimpleRebirthDto getReviewRebirth(Integer rebirthId, String username) {
+
+        Rebirth rebirth = rebirthRepository.findWithFarewellAndPet(rebirthId)
                 .orElseThrow(() -> GeneralException.of(ErrorCode.REBIRTH_NOT_FOUND));
 
-        return RebirthConverter.toReviewDto(rebirth, username, petname);
+        String petName = rebirth.getFarewell().getPet().getName();
+
+        return RebirthConverter.toReviewDto(rebirth, username, petName);
     }
 }
