@@ -179,11 +179,16 @@ public class BoardService {
 
     // 사용자가 좋아요한 게시글 리스트 조회
     @Transactional
-    public List<Board> getLikedBoardList(User user, int scrollPosition, int fetchSize) {
+    public List<Board> getLikedBoardList(User user, String type, int scrollPosition, int fetchSize) {
         PageRequest pageRequest = PageRequest.of(scrollPosition, fetchSize);
+        BoardType boardType = "ALL".equalsIgnoreCase(type) ? null : BoardType.valueOf(type.toUpperCase());
 
-        // 특정 사용자가 좋아요한 게시글을 최신순으로 가져옴
-        Slice<Board> boardSlice = boardRepository.findByBoardLikeList_User_UidOrderByCreatedAtDesc(user.getUid(), pageRequest);
+        Slice<Board> boardSlice;
+        if (boardType == null) {
+            boardSlice = boardRepository.findByBoardLikeList_User_UidOrderByCreatedAtDesc(user.getUid(), pageRequest);
+        } else {
+            boardSlice = boardRepository.findByBoardLikeList_User_UidAndCategoryOrderByCreatedAtDesc(user.getUid(), boardType, pageRequest);
+        }
 
         return boardSlice.getContent();
     }
