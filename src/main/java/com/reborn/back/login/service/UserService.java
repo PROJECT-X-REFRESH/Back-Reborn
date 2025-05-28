@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -296,6 +297,12 @@ public class UserService {
 
     public void updateNickName(String newName, User user) {
         user.setNickname(newName);
+        userRepository.save(user);
+    }
+
+    public void registerDeviceToken(String username, String deviceToken) {
+        User user = findUserByUserName(username);
+        user.setDeviceToken(deviceToken);
         userRepository.save(user);
     }
 }
