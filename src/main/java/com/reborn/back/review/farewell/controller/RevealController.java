@@ -32,7 +32,7 @@ public class RevealController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REVEAL_2011", description = "나의 감정 드러내기 생성이 완료되었습니다.")
     })
-    @PostMapping
+    @PostMapping("/create")
     public ApiResponse<Integer> createReveal(
             @PathVariable Integer farewellId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails

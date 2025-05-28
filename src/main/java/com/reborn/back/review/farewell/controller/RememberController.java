@@ -36,7 +36,7 @@ public class RememberController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REMEMBER_2011", description = "반려동물과 추억 정리하기 생성이 완료되었습니다.")
     })
-    @PostMapping
+    @PostMapping("/create")
     public ApiResponse<Integer> createRemember(
             @PathVariable Integer farewellId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
