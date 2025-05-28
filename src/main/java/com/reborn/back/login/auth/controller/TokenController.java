@@ -5,6 +5,7 @@ import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.global.utils.Redis.RedisUtil;
 import com.reborn.back.login.auth.dto.JwtDto;
+import com.reborn.back.login.auth.dto.TokenExchangeRequest;
 import com.reborn.back.login.dto.UserRequestDto;
 import com.reborn.back.login.mapper.UserConverter;
 import com.reborn.back.login.service.UserService;
@@ -32,20 +33,37 @@ public class TokenController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_2011", description = "회원가입 & 로그인 성공"),
     })
     @PostMapping("/return")
-    public ApiResponse<JwtDto> exchangeTokenByCode(@RequestBody Map<String, String> request) {
-        String authCode = request.get("code");
-        String username = redisUtil.getData("randomCode" + authCode);
+    public ApiResponse<JwtDto> exchangeTokenByCode(
+            @RequestBody TokenExchangeRequest request) {
+
+        // 1) authCode 검증
+        String authCode    = request.getCode();
+        String username    = redisUtil.getData("randomCode:" + authCode);
         if (username == null) {
             throw new IllegalArgumentException("잘못되었거나 만료된 인증 코드입니다.");
         }
-        redisUtil.deleteData("randomCode" + authCode);
-        String signIn =userService.checkMemberByName(username);
-        // 사용자 정보 조회
-        JwtDto jwt = userService.jwtMakeSave(username);
-        return ApiResponse.onSuccess(SuccessCode.USER_LOGIN_SUCCESS,
-                UserConverter.jwtDto(jwt.getAccessToken(), jwt.getRefreshToken(), signIn));
-    }
+        redisUtil.deleteData("randomCode:" + authCode);
 
+        // 2) 회원 조회/가입
+        String signIn = userService.checkMemberByName(username);
+
+        // 3) 디바이스 토큰 저장 (새로 추가)
+        String deviceToken = request.getDeviceToken();
+        if (deviceToken != null && !deviceToken.isBlank()) {
+            userService.registerDeviceToken(username, deviceToken);
+        }
+
+        // 4) JWT 생성 및 응답
+        JwtDto jwt = userService.jwtMakeSave(username);
+        return ApiResponse.onSuccess(
+                SuccessCode.USER_LOGIN_SUCCESS,
+                UserConverter.jwtDto(
+                        jwt.getAccessToken(),
+                        jwt.getRefreshToken(),
+                        signIn
+                )
+        );
+    }
 
     // 프론트엔드가 준 정보 저장
     // 클라이언트->유저 정보->회원 가입 or JWT 생성 -> return
