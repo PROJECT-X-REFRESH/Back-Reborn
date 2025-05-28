@@ -73,6 +73,7 @@ public class PetService {
                 .toList();
     }
 
+    @Transactional
     public Pet updatePetProfile(Integer petId, PetRequestDto petRequestDto, String username) {
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
