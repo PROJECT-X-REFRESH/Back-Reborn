@@ -37,10 +37,10 @@ public class FarewellService {
     }
 
     @Transactional
-    public void increaseFstep(Integer farewellId) {
+    public void increaseFstep(Integer farewellId, Integer step) {
         Farewell farewell = farewellRepository.findById(farewellId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.FAREWELL_NOT_FOUND));
 
-        farewell.setStep(farewell.getStep()+1);
+        farewell.setStep(step + 1);
     }
 }

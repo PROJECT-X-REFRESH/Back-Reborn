@@ -14,6 +14,8 @@ import com.reborn.back.review.farewell.dto.RememberResponseDto.ReviewRememberDto
 import com.reborn.back.review.farewell.dto.RevealResponseDto.ReviewRevealDto;
 import com.reborn.back.review.farewell.service.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -126,14 +128,18 @@ public class FarewellController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "FAREWELL_2004", description = "fstep 증가가 완료되었습니다.")
     })
-    @PutMapping("/nextday")
+    @Parameters({
+            @Parameter(name = "fstep", description = "현재 fstep")
+    })
+    @PutMapping("/nextday/{fstep}")
     public ApiResponse<Boolean> increaseDate(
             @PathVariable Integer farewellId,
+            @PathVariable Integer fstep,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
 
-        farewellService.increaseFstep(farewellId);
+        farewellService.increaseFstep(farewellId, fstep);
         return ApiResponse.onSuccess(SuccessCode.FAREWELL_DATE_SUCCESS, true);
     }
 }
