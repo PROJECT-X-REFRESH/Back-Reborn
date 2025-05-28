@@ -59,7 +59,7 @@ public class RevealController {
         return ApiResponse.onSuccess(SuccessCode.REVEAL_ACTIVITY_UPDATED, activityType);
     }
 
-    @Operation(summary = "일기 작성", description = "일기를 작성하는 API(SUNNY, CLOUDY, RAINY)")
+    @Operation(summary = "일기 작성", description = "일기를 작성하는 API(SUN, CLOUD, RAIN)")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REVEAL_2003", description = "일기 작성이 완료되었습니다.")
     })
