@@ -31,6 +31,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     // 사용자가 좋아요한 게시글을 최신순으로 조회
     Slice<Board> findByBoardLikeList_User_UidOrderByCreatedAtDesc(String userId, Pageable pageable);
 
+    Slice<Board> findByBoardLikeList_User_UidAndCategoryOrderByCreatedAtDesc(String uid, BoardType category, Pageable pageable);
+
     // 특정 게시물 ID로 commentCount 증가
     @Modifying
     @Query("UPDATE Board b SET b.commentCount = b.commentCount + 1 WHERE b.id = :boardId")
