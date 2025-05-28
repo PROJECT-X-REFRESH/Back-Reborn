@@ -27,6 +27,7 @@ public class RevealConverter {
                 .snack(reveal.getSnack())
                 .walk(reveal.getWalk())
                 .contents1(analyzed)
+                .contents2(false)
                 .build();
     }
 

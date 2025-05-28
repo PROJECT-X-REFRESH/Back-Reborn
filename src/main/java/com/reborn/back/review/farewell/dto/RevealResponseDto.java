@@ -40,6 +40,9 @@ public class RevealResponseDto {
 
         @Schema(description = "감정 분석 여부")
         private Boolean contents1;
+
+        @Schema(description = "검사 여부(반드시 false)")
+        private Boolean contents2;
     }
 
     @Schema(description = "ReviewRevealDto")

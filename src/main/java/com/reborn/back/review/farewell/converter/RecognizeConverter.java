@@ -23,6 +23,7 @@ public class RecognizeConverter {
                 .snack(recognize.getSnack())
                 .walk(recognize.getWalk())
                 .contents1(recognize.getScore() != null)
+                .contents2(false)
                 .build();
     }
 
