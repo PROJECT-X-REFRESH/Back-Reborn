@@ -19,7 +19,7 @@ public class RevealRequestDto {
     public static class RevealReqDto {
         @Schema(description = "나의 감정 드러내기 내용")
         private String contents;
-        @Schema(description = "결과로 나온 감정 상태(SUNN, CLOUD, RAIN)")
+        @Schema(description = "결과로 나온 감정 상태(SUN, CLOUD, RAIN)")
         private EmotionState emotionState;
     }
 }
