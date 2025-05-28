@@ -9,16 +9,14 @@ import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.global.utils.Redis.RedisUtil;
 import com.reborn.back.pet.repository.PetRepository;
 import com.reborn.back.review.recollection.dto.RecordDto;
-import com.reborn.back.review.recollection.mapper.RecordConverter;
+import com.reborn.back.review.recollection.converter.RecordConverter;
 import com.reborn.back.review.recollection.repository.RecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

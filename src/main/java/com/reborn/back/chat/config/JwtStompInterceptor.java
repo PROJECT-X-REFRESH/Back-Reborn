@@ -1,4 +1,4 @@
-package com.reborn.back.global.config;
+package com.reborn.back.chat.config;
 
 import com.reborn.back.login.auth.jwt.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;

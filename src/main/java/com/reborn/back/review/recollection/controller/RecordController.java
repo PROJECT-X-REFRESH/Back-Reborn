@@ -1,13 +1,11 @@
 package com.reborn.back.review.recollection.controller;
 
-import com.reborn.back.domain.review.recollection.Record;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
 import com.reborn.back.review.recollection.dto.RecordDto;
-import com.reborn.back.review.recollection.mapper.RecordConverter;
 import com.reborn.back.review.recollection.service.RecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

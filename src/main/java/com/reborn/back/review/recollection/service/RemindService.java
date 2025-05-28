@@ -9,8 +9,7 @@ import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.global.utils.Redis.RedisUtil;
 import com.reborn.back.pet.repository.PetRepository;
 import com.reborn.back.review.recollection.dto.RemindDto;
-import com.reborn.back.review.recollection.mapper.RemindConverter;
-import com.reborn.back.review.recollection.repository.RecollectionRepository;
+import com.reborn.back.review.recollection.converter.RemindConverter;
 import com.reborn.back.review.recollection.repository.RemindRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
