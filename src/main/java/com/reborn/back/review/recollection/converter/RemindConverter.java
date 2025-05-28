@@ -1,4 +1,4 @@
-package com.reborn.back.review.recollection.mapper;
+package com.reborn.back.review.recollection.converter;
 
 import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.review.recollection.Recollection;

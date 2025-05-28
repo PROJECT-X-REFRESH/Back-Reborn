@@ -1,4 +1,4 @@
-package com.reborn.back.login.mapper;
+package com.reborn.back.login.converter;
 
 import com.reborn.back.domain.aiPost.AiPost;
 import com.reborn.back.domain.pet.Pet;

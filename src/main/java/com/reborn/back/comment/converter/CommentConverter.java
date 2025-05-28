@@ -24,7 +24,7 @@ public class CommentConverter {
     public static CommentResDto toCommentResDto(Comment comment) {
         return CommentResDto.builder()
                 .id(comment.getId())
-                .commentWriter(comment.getUser().getName())
+                .commentWriter(comment.getUser().getNickname())
                 .writerProfileImage(comment.getUser().getImg())
                 .contents(comment.getContents())
                 .createdAt(comment.getCreatedAt())

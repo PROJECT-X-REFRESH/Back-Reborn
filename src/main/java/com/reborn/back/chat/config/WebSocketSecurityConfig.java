@@ -1,4 +1,4 @@
-package com.reborn.back.global.config;
+package com.reborn.back.chat.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;

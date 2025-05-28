@@ -29,7 +29,7 @@ public class BoardConverter {
         return BoardResDto.builder()
                 .id(board.getId())
                 .category(board.getCategory())
-                .writerName(board.getUser().getName())
+                .writerName(board.getUser().getNickname())
                 .writerProfileImage(board.getUser().getImg())
                 .commentCount(board.getCommentCount())
                 .content(board.getContent())

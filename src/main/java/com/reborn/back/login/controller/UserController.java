@@ -8,7 +8,7 @@ import com.reborn.back.login.auth.dto.JwtDto;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.dto.NickNameUpdateRequestDto;
 import com.reborn.back.login.dto.UserResponseDto;
-import com.reborn.back.login.mapper.UserConverter;
+import com.reborn.back.login.converter.UserConverter;
 import com.reborn.back.login.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
