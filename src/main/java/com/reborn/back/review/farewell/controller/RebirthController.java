@@ -90,19 +90,4 @@ public class RebirthController {
         DetailRebirthDto detail = rebirthService.getDetailRebirth(farewellId);
         return ApiResponse.onSuccess(SuccessCode.REBIRTH_DETAIL_VIEW_SUCCESS, detail);
     }
-
-    @Operation(summary = "fstep 증가", description = "farewell의 fstep을 증가시키는 API")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REBIRTH_2004", description = "fstep 증가가 완료되었습니다.")
-    })
-    @PutMapping("/nextday")
-    public ApiResponse<Boolean> increaseDate(
-            @PathVariable Integer farewellId,
-            @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ) {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
-
-        farewellService.increaseFstep(farewellId);
-        return ApiResponse.onSuccess(SuccessCode.REBIRTH_DATE_SUCCESS, true);
-    }
 }
