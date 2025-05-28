@@ -44,7 +44,7 @@ public class RecognizeResponseDto {
         @Schema(description = "산책 진행 상태")
         private Boolean walk;
 
-        @Schema(description = "검사 결과 점수")
-        private Integer score;
+        @Schema(description = "검사 여부")
+        private Boolean contents1;
     }
 }

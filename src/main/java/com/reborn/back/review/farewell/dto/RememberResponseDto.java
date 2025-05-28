@@ -39,11 +39,14 @@ public class RememberResponseDto {
         @Schema(description = "산책 진행 상태")
         private Boolean walk;
 
-        @Schema(description = "추억 정리하기 내용")
-        private String contents;
+        @Schema(description = "추억 정리하기 내용 작성 여부")
+        private Boolean contents1;
 
         @Schema(description = "남은 정리 품목")
         private List<OrganizeType> remainingThings;
+
+        @Schema(description = "물품 정리 여부")
+        private Boolean contents2;
     }
 
     @Schema(description = "ReviewRememberDto")

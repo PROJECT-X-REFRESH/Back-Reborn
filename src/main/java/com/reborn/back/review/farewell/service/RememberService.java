@@ -110,19 +110,26 @@ public class RememberService {
 
         OrganizeType type;
         try {
-            type = OrganizeType.valueOf(cleanType.toUpperCase());
+            type = OrganizeType.valueOf(cleanType.toUpperCase());   // SNACK‧TOY‧BATH‧LIVING
         } catch (IllegalArgumentException e) {
             throw new GeneralException(ErrorCode.INVALID_ACTIVITY_TYPE);
         }
 
-        Set<OrganizeType> clearedThings = farewell.getClearedThings();
+        Remember remember = rememberRepository.findTopByFarewellOrderByCreatedAtDesc(farewell)
+                .orElseThrow(() -> new GeneralException(ErrorCode.REMEMBER_NOT_FOUND));
 
-        if (clearedThings.contains(type)) {
+        if (remember.getCleanedThings().contains(type)) {
             return;
         }
 
-        clearedThings.add(type);
+        if (farewell.getClearedThings().contains(type)) {
+            return;
+        }
+
+        remember.getCleanedThings().add(type);
+        farewell.getClearedThings().add(type);
     }
+
 
     public RememberResponseDto.DetailRememberDto getDetailRemember(Integer farewellId) {
         Farewell farewell = farewellRepository.findById(farewellId)

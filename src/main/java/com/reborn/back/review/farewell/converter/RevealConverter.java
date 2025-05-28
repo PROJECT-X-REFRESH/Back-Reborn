@@ -17,11 +17,16 @@ public class RevealConverter {
     }
 
     public static RevealResponseDto.DetailRevealDto toDto(Reveal reveal) {
+        boolean analyzed =
+                reveal.getEmotion() != null &&
+                        reveal.getEmotion().getState() != null;
+
+
         return RevealResponseDto.DetailRevealDto.builder()
                 .feed(reveal.getFeed())
                 .snack(reveal.getSnack())
                 .walk(reveal.getWalk())
-                .emotionState(String.valueOf(reveal.getEmotion().getState()))
+                .contents1(analyzed)
                 .build();
     }
 

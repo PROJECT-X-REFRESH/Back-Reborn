@@ -1,10 +1,14 @@
 package com.reborn.back.domain.review.farewell;
 
 import com.reborn.back.domain.entity.BaseEntity;
+import com.reborn.back.domain.entity.OrganizeType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "reMember")
@@ -35,6 +39,12 @@ public class Remember extends BaseEntity {
     @Lob
     @Column(name = "memberContent", columnDefinition = "longtext")
     private String content;
+
+    @ElementCollection(targetClass = OrganizeType.class)
+    @CollectionTable(name="remember_thing", joinColumns=@JoinColumn(name="remember_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name="thing")
+    private Set<OrganizeType> cleanedThings = new HashSet<>();
 
     // FK: fId → Farewell(fId)
     @ManyToOne(fetch = FetchType.LAZY)

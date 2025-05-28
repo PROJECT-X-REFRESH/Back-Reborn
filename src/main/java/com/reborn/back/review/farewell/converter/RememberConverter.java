@@ -22,12 +22,16 @@ public class RememberConverter {
     }
 
     public static RememberResponseDto.DetailRememberDto toDto(Remember remember, List<OrganizeType> remainingThings) {
+        boolean contents2 = remember.getCleanedThings() != null
+                && remember.getCleanedThings().size() >= 2;
+
         return RememberResponseDto.DetailRememberDto.builder()
                 .feed(remember.getFeed())
                 .snack(remember.getSnack())
                 .walk(remember.getWalk())
-                .contents(remember.getContent())
+                .contents1(remember.getContent() != null)
                 .remainingThings(remainingThings)
+                .contents2(contents2)
                 .build();
     }
 

@@ -38,8 +38,8 @@ public class RevealResponseDto {
         @Schema(description = "산책 진행 상태")
         private Boolean walk;
 
-        @Schema(description = "결과로 나온 감정 상태(SUN, CLOUD, RAIN)")
-        private String emotionState;
+        @Schema(description = "감정 분석 여부")
+        private Boolean contents1;
     }
 
     @Schema(description = "ReviewRevealDto")
