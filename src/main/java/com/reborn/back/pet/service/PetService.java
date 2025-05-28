@@ -67,17 +67,24 @@ public class PetService {
                 .toList();
     }
 
-    // 반려동물 프로필 수정
     public Pet updatePetProfile(Integer petId, PetRequestDto petRequestDto, String username) {
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
-
         if (!pet.getUser().getName().equals(username)) {
             throw new GeneralException(ErrorCode.BAD_REQUEST);
         }
+        // 죽였다가 살린 경우 → farewell 삭제
         if (pet.getDeath() != null && petRequestDto.getDeath() == null && pet.getFarewell() != null) {
             farewellRepository.delete(pet.getFarewell());
             pet.setFarewell(null);
+        }
+        // 다시 죽인 경우 → farewell 없으면 생성
+        if (pet.getDeath() == null && petRequestDto.getDeath() != null && pet.getFarewell() == null) {
+            Farewell farewell = Farewell.builder()
+                    .pet(pet)
+                    .step(0)
+                    .build();
+            pet.setFarewell(farewell);
         }
         pet.setName(petRequestDto.getName());
         pet.setPetCase(petRequestDto.getPetCase());
