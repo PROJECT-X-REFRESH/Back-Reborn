@@ -148,22 +148,27 @@ public class BoardController {
                 BoardConverter.boardListResDto(likedBoards, likedIds));
     }
 
-    @Operation(summary = "인기 게시글 조회", description = "인기 게시글 목록을 조회하는 API")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_2006", description = "인기 게시글 목록 조회가 완료되었습니다.")
+    @Operation(summary = "인기 게시글 조회", description = "카테고리별 인기 게시글 목록 조회 API")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "BOARD_2006",
+                    description  = "인기 게시글 목록 조회가 완료되었습니다.")
+    })
+    @Parameters({
+            @Parameter(name = "type", description = "POST | SHARE | VOLUNTEER | ALL(기본값)")
     })
     @GetMapping("/popular")
     public ApiResponse<BoardListResDto> getPopularBoards(
+            @RequestParam(name = "type", defaultValue = "ALL") String type,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
-        List<Board> boards = boardService.getPopularBoards();
+        User user   = userService.findUserByUserName(customUserDetails.getUsername());
+        List<Board> boards = boardService.getPopularBoards(type);
 
         List<Integer> boardIds = boards.stream().map(Board::getId).toList();
         Set<Integer> likedIds = boardIds.isEmpty()
                 ? Set.of()
-                : new HashSet<>(
-                boardLikeRepository.findLikedBoardIds(user.getUid(), boardIds));
+                : new HashSet<>(boardLikeRepository.findLikedBoardIds(user.getUid(), boardIds));
 
         return ApiResponse.onSuccess(
                 SuccessCode.BOARD_POPULAR_LIST_VIEW_SUCCESS,
