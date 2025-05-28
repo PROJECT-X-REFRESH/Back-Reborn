@@ -32,7 +32,7 @@ public class RebirthController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "Rebirth_2011", description = "반려동물과 건강한 작별하기 생성이 완료되었습니다.")
     })
-    @PostMapping
+    @PostMapping("/create")
     public ApiResponse<Integer> createRebirth(
             @PathVariable Integer farewellId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
