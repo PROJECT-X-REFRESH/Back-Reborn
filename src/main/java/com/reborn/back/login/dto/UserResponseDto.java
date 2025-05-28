@@ -61,7 +61,12 @@ public class UserResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class mainInfoPet {
-        private PetInfoDto pet;
+        private Integer id;
+        private String name;
+        private String petCase;
+        private LocalDate birth;
+        private LocalDate death;
+        private String color;
         private boolean petCondition;
         private boolean todayRemind;
         private boolean todayRecord;
@@ -69,17 +74,4 @@ public class UserResponseDto {
         private Integer farewellId;
     }
 
-    @Schema(description = "PetInfoDto")
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class PetInfoDto {
-        private Integer id;
-        private String name;
-        private String petCase;
-        private LocalDate birth;
-        private LocalDate death;
-        private String color;
-    }
 }

@@ -73,23 +73,17 @@ public class UserConverter {
         }
 
         return UserResponseDto.mainInfoPet.builder()
-                .pet(toPetInfo(pet))
-                .petCondition(isAlive)  // true or false
-                .todayRemind(Boolean.TRUE.equals(todayRemind))
-                .todayRecord(Boolean.TRUE.equals(todayRecord))
-                .farewellId(farewellId)
-                .fStep(fStep)
-                .build();
-    }
-
-    private static UserResponseDto.PetInfoDto toPetInfo(Pet pet) {
-        return UserResponseDto.PetInfoDto.builder()
                 .id(pet.getId())
                 .name(pet.getName())
                 .petCase(pet.getPetCase().name())   // enum → 문자열
                 .birth(pet.getBirth())
                 .death(pet.getDeath())
                 .color(pet.getColor().name())
+                .petCondition(isAlive)  // true or false
+                .todayRemind(Boolean.TRUE.equals(todayRemind))
+                .todayRecord(Boolean.TRUE.equals(todayRecord))
+                .farewellId(farewellId)
+                .fStep(fStep)
                 .build();
     }
 
