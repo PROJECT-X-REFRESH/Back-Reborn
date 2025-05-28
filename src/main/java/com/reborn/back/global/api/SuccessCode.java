@@ -33,6 +33,8 @@ public enum SuccessCode implements BaseCode { // 성공
     PET_DELETED(HttpStatus.OK, "PET_2004", "반려동물 삭제가 완료되었습니다."),
     PET_UPDATED(HttpStatus.OK, "PET_2005", "반려동물 수정이 완료되었습니다."),
 
+    FAREWELL_DATE_SUCCESS(HttpStatus.OK, "FAREWELL_2004", "fstep 증가가 완료되었습니다."),
+
     REVIEW_RECONNECT_VIEW_SUCCESS(HttpStatus.OK, "REVIEW_2001", "나의 반려동물과 만나기 조회가 완료되었습니다."),
     REVIEW_REMIND_VIEW_SUCCESS(HttpStatus.OK, "REVIEW_2002", "충분한 대화 나누기 내용 조회가 완료되었습니다."),
     REVIEW_REVEAL_VIEW_SUCCESS(HttpStatus.OK, "REVIEW_2003", "나의 감정 들여다보기 내용 조회가 완료되었습니다."),
@@ -96,7 +98,6 @@ public enum SuccessCode implements BaseCode { // 성공
     RECOGNIZE_NEARBY_SUCCESS(HttpStatus.OK, "2001", "주변 정신과 조회가 완료되었습니다"),
     RECOGNIZE_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REVEAL_2002", "나의 상태 알아보기 조회가 완료되었습니다."),
     RECOGNIZE_ACTIVITY_UPDATED(HttpStatus.OK, "RECOGNIZE_2003", "컨텐츠가 완료되었습니다."),
-    RECOGNIZE_DATE_SUCCESS(HttpStatus.OK, "RECOGNIZE_2004", "fstep 증가가 완료되었습니다."),
     RECOGNIZE_CREATED(HttpStatus.CREATED, "RECOGNIZE_2011", "나의 상태 알아보기 생성이 완료되었습니다."),
     RECOGNIZE_SAVE_COMPLETED(HttpStatus.OK, "RECOGNIZE_2012", "자가진단 점수를 저장이 완료되었습니다."),
 
@@ -105,7 +106,6 @@ public enum SuccessCode implements BaseCode { // 성공
     REVEAL_LIST_VIEW_SUCCESS(HttpStatus.OK, "REVEAL_2001", "나의 감정 들여다보기 목록 조회가 완료되었습니다."),
     REVEAL_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REVEAL_2002", "나의 감정 들여다보기 조회가 완료되었습니다."),
     REVEAL_WRITE_COMPLETED(HttpStatus.OK, "REVEAL_2003", "일기 작성이 완료되었습니다."),
-    REVEAL_DATE_SUCCESS(HttpStatus.OK, "REVEAL_2004", "fstep 증가가 완료되었습니다."),
     REVEAL_FEED_COMPLETED(HttpStatus.OK, "REVEAL_2005", "밥주기가 완료되었습니다."),
     REVEAL_WALK_COMPLETED(HttpStatus.OK, "REVEAL_2006", "산책하기가 완료되었습니다."),
     REVEAL_SNACK_COMPLETED(HttpStatus.OK, "REVEAL_2007", "간식주기가 완료되었습니다."),
@@ -121,7 +121,6 @@ public enum SuccessCode implements BaseCode { // 성공
     REMEMBER_ACTIVITY_UPDATED(HttpStatus.OK, "REMEMBER_2003", "컨텐츠가 완료되었습니다."),
     REMEMBER_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REMEMBER_2002", "반려동물과 추억 정리하기 조회가 완료되었습니다."),
     REMEMBER_WRITE_COMPLETED(HttpStatus.OK, "REMEMBER_2003", "그림일기 작성이 완료되었습니다."),
-    REMEMBER_DATE_SUCCESS(HttpStatus.OK, "REMEMBER_2004", "fstep 증가가 완료되었습니다."),
     GET_REMAINING_THINGS_SUCCESS(HttpStatus.OK, "REMEMBER_2004", "남은 정리 품목 조회가 완료되었습니다."),
     THING_CLEANED_SUCCESS(HttpStatus.OK, "REMEMBER_2005", "정리 품목이 정상적으로 등록되었습니다."),
     REMEMBER_FEED_COMPLETED(HttpStatus.OK, "REMEMBER_2005", "밥주기가 완료되었습니다."),
@@ -134,7 +133,6 @@ public enum SuccessCode implements BaseCode { // 성공
     REBIRTH_ACTIVITY_UPDATED(HttpStatus.OK, "REBIRTH_2003", "컨텐츠가 완료되었습니다."),
     REBIRTH_WRITE_COMPLETED(HttpStatus.OK, "REBIRTH_2003", "편지 저장이 완료되었습니다."),
     REBIRTH_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REBIRTH_2002", "건강한 작별하기 조회가 완료되었습니다."),
-    REBIRTH_DATE_SUCCESS(HttpStatus.OK, "REBIRTH_2004", "fstep 증가가 완료되었습니다."),
     REBORN_FEED_COMPLETED(HttpStatus.OK, "REBORN_2005", "밥주기가 완료되었습니다."),
     REBORN_WASH_COMPLETED(HttpStatus.OK, "REBORN_2006", "씻겨주기가 완료되었습니다."),
     REBORN_CLOTHE_COMPLETED(HttpStatus.OK, "REBORN_2007", "옷 입혀주기가 완료되었습니다."),

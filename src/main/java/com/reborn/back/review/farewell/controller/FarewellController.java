@@ -89,7 +89,7 @@ public class FarewellController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REVEAL_2003", description = "감정 드러내기 상세 조회 완료")
     })
-    @GetMapping("/review/reavel/{revealId}")
+    @GetMapping("/review/reveal/{revealId}")
     public ApiResponse<ReviewRevealDto> getReviewReveal(
             @PathVariable Integer revealId
     ) {
@@ -127,5 +127,20 @@ public class FarewellController {
         Pet pet = petService.findById(petId);
         SimpleRebirthDto dto = rebirthService.getReviewRebirth(rebirthId, user.getName(), pet.getName());
         return ApiResponse.onSuccess(SuccessCode.REBIRTH_DETAIL_VIEW_SUCCESS, dto);
+    }
+
+    @Operation(summary = "fstep 증가", description = "farewell의 fstep을 증가시키는 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "FAREWELL_2004", description = "fstep 증가가 완료되었습니다.")
+    })
+    @PutMapping("/nextday")
+    public ApiResponse<Boolean> increaseDate(
+            @PathVariable Integer farewellId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
+
+        farewellService.increaseFstep(farewellId);
+        return ApiResponse.onSuccess(SuccessCode.FAREWELL_DATE_SUCCESS, true);
     }
 }
