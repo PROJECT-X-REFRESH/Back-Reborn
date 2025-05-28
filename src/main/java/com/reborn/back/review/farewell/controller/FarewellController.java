@@ -1,6 +1,5 @@
 package com.reborn.back.review.farewell.controller;
 
-import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
@@ -15,8 +14,6 @@ import com.reborn.back.review.farewell.dto.RememberResponseDto.ReviewRememberDto
 import com.reborn.back.review.farewell.dto.RevealResponseDto.ReviewRevealDto;
 import com.reborn.back.review.farewell.service.*;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -113,19 +110,15 @@ public class FarewellController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REBIRTH_2003", description = "반려동물과 건강한 작별하기 상세 조회 완료")
     })
-    @Parameters({
-            @Parameter(name = "petId",     description = "반려동물 식별자", example = "42"),
-            @Parameter(name = "rebirthId", description = "Rebirth 식별자",   example = "101")
-    })
     @GetMapping("/review/rebirth/{rebirthId}")
     public ApiResponse<SimpleRebirthDto> getReviewRebirth(
-            @RequestParam(name = "petId") Integer petId,
-            @RequestParam(name = "rebirthId") Integer rebirthId,
-            @AuthenticationPrincipal CustomUserDetails customUserDetails
+            @PathVariable Integer rebirthId,
+            @AuthenticationPrincipal CustomUserDetails principal
     ) {
-        User user = userService.findUserByUserName(customUserDetails.getUsername());
-        Pet pet = petService.findById(petId);
-        SimpleRebirthDto dto = rebirthService.getReviewRebirth(rebirthId, user.getName(), pet.getName());
+        User user = userService.findUserByUserName(principal.getUsername());
+
+        SimpleRebirthDto dto = rebirthService.getReviewRebirth(rebirthId, user.getName());
+
         return ApiResponse.onSuccess(SuccessCode.REBIRTH_DETAIL_VIEW_SUCCESS, dto);
     }
 
