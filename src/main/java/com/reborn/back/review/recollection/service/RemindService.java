@@ -67,7 +67,7 @@ public class RemindService {
     }
 
     public RemindDto.RemindResDto getRemind(Integer id, User user) {
-        return RemindConverter.toResDto(findById(id), user.getName());
+        return RemindConverter.toResDto(findById(id), user.getNickname());
     }
 
     public List<RemindDto.RemindSimpleResDto> getRemindList(Integer petId, int scrollPosition, int fetchSize) {
@@ -85,7 +85,7 @@ public class RemindService {
     }
 
     public void deleteRemind(Integer remindId, User user, Integer petId) {
-        String key = "remind" + user.getName() + petId;
+        String key = "remind" + user.getNickname() + petId;
         if (redisUtil.getData(key) == null)
             throw new GeneralException(ErrorCode.REMIND_NOT_WRITE_TODAY);
 
@@ -97,7 +97,7 @@ public class RemindService {
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
         return RemindDto.RemindInfoDto.builder()
-                .userName(user.getName())
+                .userName(user.getNickname())
                 .petName(pet.getName())
                 .build();
     }
