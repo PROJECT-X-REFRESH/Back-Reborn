@@ -6,6 +6,7 @@ import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.global.utils.S3.AmazonS3Manager;
 import com.reborn.back.login.auth.dto.JwtDto;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
+import com.reborn.back.login.dto.NickNameUpdateRequestDto;
 import com.reborn.back.login.dto.UserResponseDto;
 import com.reborn.back.login.mapper.UserConverter;
 import com.reborn.back.login.service.UserService;
@@ -127,10 +128,10 @@ public class UserController {
     @PostMapping(value = "/name/update")
     public ApiResponse<Boolean> changeNickName(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestBody String newName
-    ) throws IOException {
+            @RequestBody NickNameUpdateRequestDto request
+    ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        userService.updateNickName(newName, user);
+        userService.updateNickName(request.getNickname(), user);
         return ApiResponse.onSuccess(SuccessCode.USER_NAME_UPDATED, true);
     }
 }

@@ -34,24 +34,13 @@ public class TokenController {
     @PostMapping("/return")
     public ApiResponse<JwtDto> exchangeTokenByCode(@RequestBody Map<String, String> request) {
         String authCode = request.get("code");
-        //String username = redisUtil.getData("randomCode" + authCode);
-        //if (username == null) {
-        //    throw new IllegalArgumentException("잘못되었거나 만료된 인증 코드입니다.");
-        //}
-        //redisUtil.deleteData("randomCode" + authCode);
-        //String signIn =userService.checkMemberByName(username);
-        // 사용자 정보 조회
-        String data = redisUtil.getData("randomCode" + authCode);
-        if (data == null) {
+        String username = redisUtil.getData("randomCode" + authCode);
+        if (username == null) {
             throw new IllegalArgumentException("잘못되었거나 만료된 인증 코드입니다.");
         }
         redisUtil.deleteData("randomCode" + authCode);
-
-        // 🔍 데이터 형식: "username:signIn"
-        String[] parts = data.split(":");
-        String username = parts[0];
-        String signIn = parts.length > 1 ? parts[1] : "wasUser"; // fallback
-
+        String signIn =userService.checkMemberByName(username);
+        // 사용자 정보 조회
         JwtDto jwt = userService.jwtMakeSave(username);
         return ApiResponse.onSuccess(SuccessCode.USER_LOGIN_SUCCESS,
                 UserConverter.jwtDto(jwt.getAccessToken(), jwt.getRefreshToken(), signIn));
