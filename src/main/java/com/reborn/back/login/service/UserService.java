@@ -4,7 +4,6 @@ import com.reborn.back.aiPost.service.AiPostService;
 import com.reborn.back.board.repository.BoardLikeRepository;
 import com.reborn.back.board.repository.BoardRepository;
 import com.reborn.back.comment.repository.CommentRepository;
-import com.reborn.back.domain.aiPost.AiPost;
 import com.reborn.back.domain.board.Board;
 import com.reborn.back.domain.board.BoardLike;
 import com.reborn.back.domain.comment.Comment;
@@ -22,6 +21,7 @@ import com.reborn.back.login.dto.UserResponseDto;
 import com.reborn.back.login.mapper.UserConverter;
 import com.reborn.back.login.repository.UserRepository;
 import com.reborn.back.pet.repository.PetRepository;
+import com.reborn.back.review.farewell.repository.FarewellRepository;
 import com.reborn.back.review.recollection.service.RecordService;
 import com.reborn.back.review.recollection.service.RemindService;
 import io.jsonwebtoken.Claims;
@@ -51,6 +51,7 @@ public class UserService {
     private final CommentRepository commentRepository;
     private final PetRepository petRepository;
     private final BoardLikeRepository boardLikeRepository;
+    private final FarewellRepository farewellRepository;
     private final RedisUtil redisUtil;
     private final JpaUserDetailsManager manager;
     private final AmazonS3Manager amazonS3Manager;
@@ -203,12 +204,17 @@ public class UserService {
     }
 
     // 회원 탈퇴
+    @Transactional
     public void deleteUser(String username) {
         User user = userRepository.findByName(username)
                 .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
 
-        // 연관된 펫 엔티티들 삭제 -> 15일 컨텐츠 함께 삭제됨
         List<Pet> pets = user.getPetList();
+
+        // Farewell(→ Rebirth·Recognize·Reveal·Remember) 전부 먼저 삭제
+        farewellRepository.deleteAllByPetIn(pets);
+
+        // 연관된 펫 엔티티들 삭제 -> 15일 컨텐츠 함께 삭제됨
         petRepository.deleteAll(pets);
 
         // 연관된 댓글들 삭제
