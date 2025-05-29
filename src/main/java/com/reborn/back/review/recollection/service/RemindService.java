@@ -8,8 +8,8 @@ import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.global.utils.Redis.RedisUtil;
 import com.reborn.back.pet.repository.PetRepository;
-import com.reborn.back.review.recollection.dto.RemindDto;
 import com.reborn.back.review.recollection.converter.RemindConverter;
+import com.reborn.back.review.recollection.dto.RemindDto;
 import com.reborn.back.review.recollection.repository.RemindRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +60,7 @@ public class RemindService {
         Remind remind = findById(remindId);
         String key = "remind" + user.getName() + remind.getPet().getId();
         if (redisUtil.getData(key) == null)
-            throw new  GeneralException(ErrorCode.REMIND_NOT_WRITE_TODAY);
+            throw new GeneralException(ErrorCode.REMIND_NOT_WRITE_TODAY);
 
         Remind updated = RemindConverter.updateRemind(remind, dto);
         return RemindConverter.toSimpleResDto(remindRepository.save(updated));
@@ -74,7 +74,7 @@ public class RemindService {
 
         Pageable page = PageRequest.of(scrollPosition, fetchSize, Sort.by("createdAt").descending());
         Pet pet = petRepository.findById(petId)
-                .orElseThrow(() ->  new GeneralException(ErrorCode.REMIND_NOT_FOUND));
+                .orElseThrow(() -> new GeneralException(ErrorCode.REMIND_NOT_FOUND));
 
         return RemindConverter.remindSimpleListDto(remindRepository.findByPet(pet, page));
     }

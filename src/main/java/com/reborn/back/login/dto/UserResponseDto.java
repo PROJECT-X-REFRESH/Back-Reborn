@@ -1,8 +1,5 @@
 package com.reborn.back.login.dto;
 
-import com.reborn.back.aiPost.dto.AiPostDetailDto;
-import com.reborn.back.domain.aiPost.AiPost;
-import com.reborn.back.domain.pet.Pet;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -15,13 +15,14 @@ public class ChatStompController {
     private final ChatService chatService;
     private final UserService userService;
     private final JwtTokenUtils jwtTokenUtils;
+
     @MessageMapping("/chat/send/{chatId}")
     @SendTo("/sub/chat/{chatId}")
     public ChatDto.ChatResDto sendMessage(
             @DestinationVariable Integer chatId,
             @Payload ChatDto.ChatReqDto payload,
             @Header("Authorization") String authHeader) {
-            System.out.println("🔥 메시지 메서드 진입함");
+        System.out.println("🔥 메시지 메서드 진입함");
         try {
             System.out.println("DEBUG - chatId: " + chatId);
             System.out.println("DEBUG - payload: " + payload);

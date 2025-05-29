@@ -1,17 +1,20 @@
 package com.reborn.back.chat.service;
 
 import com.reborn.back.chat.converter.ChatConverter;
-import com.reborn.back.chat.dto.*;
+import com.reborn.back.chat.dto.ChatDto;
 import com.reborn.back.chat.repository.ChatMessageRepository;
 import com.reborn.back.chat.repository.ChatRoomRepository;
-import com.reborn.back.domain.chat.*;
+import com.reborn.back.domain.chat.ChatMessage;
+import com.reborn.back.domain.chat.ChatRoom;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.login.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,13 +86,13 @@ public class ChatService {
         msgRepository.save(entity);
         room.setLastTime(LocalDateTime.now());
         chatRoomRepository.save(room);
-        return ChatConverter.toMsgDto(entity,me);
+        return ChatConverter.toMsgDto(entity, me);
     }
 
     // 4) 방 나가기
     @Transactional
     public void leaveRoom(User me, Integer chatId) {
-        ChatRoom room   = authorizeAndGetRoom(chatId, me);
+        ChatRoom room = authorizeAndGetRoom(chatId, me);
         boolean meIsFrom = room.getFromUser().equals(me);
         switch (room.getStatus()) {
             case NORMAL -> {
@@ -99,12 +102,10 @@ public class ChatService {
             case FROM_LEFT -> {
                 if (meIsFrom) throw new IllegalStateException("이미 방을 나갔습니다.");
                 chatRoomRepository.delete(room);
-                return;
             }
             case TO_LEFT -> {
                 if (!meIsFrom) throw new IllegalStateException("이미 방을 나갔습니다.");
                 chatRoomRepository.delete(room);
-                return;
             }
             case BOTH_LEFT -> throw new IllegalStateException("이미 삭제된 방입니다.");
         }
@@ -119,9 +120,9 @@ public class ChatService {
     public ChatRoom authorizeAndGetRoom(int id, User me) {
         ChatRoom room = chatRoomRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("채팅방이 없습니다."));
-        String myId     = me.getUid();
-        String fromId   = room.getFromUser().getUid();
-        String toId     = room.getToUser().getUid();
+        String myId = me.getUid();
+        String fromId = room.getFromUser().getUid();
+        String toId = room.getToUser().getUid();
 
         if (!Objects.equals(myId, fromId) && !Objects.equals(myId, toId)) {
             throw new IllegalArgumentException("권한이 없습니다.");

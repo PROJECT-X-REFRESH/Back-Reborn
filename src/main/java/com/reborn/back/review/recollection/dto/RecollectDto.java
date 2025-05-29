@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+
 @NoArgsConstructor
 public class RecollectDto {
     @Getter

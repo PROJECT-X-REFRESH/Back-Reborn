@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @NoArgsConstructor
@@ -36,7 +37,7 @@ public class PetDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    public static class PetSimpleDto{
+    public static class PetSimpleDto {
         private Integer id;
         private String name;
         private PetType petCase;

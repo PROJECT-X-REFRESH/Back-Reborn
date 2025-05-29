@@ -16,6 +16,7 @@ public class PetConverter {
                 .color(pet.getColor())
                 .build();
     }
+
     public static Pet toPetEntity(PetDto.PetRequestDto dto, User user) {
         Pet.PetBuilder builder = Pet.builder()
                 .name(dto.getName())

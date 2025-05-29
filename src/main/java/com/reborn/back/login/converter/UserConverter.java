@@ -1,6 +1,5 @@
 package com.reborn.back.login.converter;
 
-import com.reborn.back.domain.aiPost.AiPost;
 import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.login.auth.dto.JwtDto;
@@ -60,15 +59,14 @@ public class UserConverter {
 
         // fStep: 살아있으면 0, 죽었으면 farewell.step
         Integer fStep = isAlive ? 0 : pet.getFarewell().getStep();
-        Integer farewellId=null;
+        Integer farewellId = null;
         // 살아있으면 remind/record 체크, 죽었으면 null 처리
         Boolean todayRemind = null;
         Boolean todayRecord = null;
         if (isAlive) {
             todayRemind = remindService.checkTodayRemind(username, pet);
             todayRecord = recordService.checkTodayRecord(username, pet);
-        }
-        else{
+        } else {
             farewellId = pet.getFarewell().getId();
         }
 

@@ -10,5 +10,6 @@ import java.util.Optional;
 @Repository
 public interface RecollectionRepository extends JpaRepository<Recollection, Integer> {
     Optional<Recollection> findByPet(Pet pet);
+
     boolean existsByPet(Pet pet);
 }

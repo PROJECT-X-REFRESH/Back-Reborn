@@ -18,11 +18,11 @@ public interface RebirthRepository extends JpaRepository<Rebirth, Long>, JpaSpec
     Optional<Rebirth> findById(Integer rebirthId);
 
     @Query("""
-    select r
-    from Rebirth r
-    join fetch r.farewell f
-    join fetch f.pet p
-    where r.id = :rebirthId
-""")
+                select r
+                from Rebirth r
+                join fetch r.farewell f
+                join fetch f.pet p
+                where r.id = :rebirthId
+            """)
     Optional<Rebirth> findWithFarewellAndPet(@Param("rebirthId") Integer rebirthId);
 }

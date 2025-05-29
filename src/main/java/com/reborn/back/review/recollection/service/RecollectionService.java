@@ -66,7 +66,7 @@ public class RecollectionService {
                         Recollection.builder()
                                 .pet(pet)
                                 .build()));
-}
+    }
 
     public Integer checkRecollection(User user, Integer petId) {
         Pet pet = petRepository.findById(petId)

@@ -16,17 +16,14 @@ import java.util.List;
 @Builder
 public class Recollection extends BaseEntity {
 
+    @OneToMany(mappedBy = "recollection")
+    List<Record> records;
+    @OneToMany(mappedBy = "recollection")
+    List<Record> reminds;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pId", nullable = false, unique = true)
     private Pet pet;
-
-    @OneToMany(mappedBy = "recollection")
-    List<Record> records;
-
-    @OneToMany(mappedBy = "recollection")
-    List<Record> reminds;
 }

@@ -106,9 +106,8 @@ public class BoardController {
             @RequestParam(name = "type", defaultValue = "ALL") String type,
             @RequestParam(name = "scrollPosition", defaultValue = "0") int scrollPosition,
             @RequestParam(name = "fetchSize", defaultValue = "50") int fetchSize,
-            @AuthenticationPrincipal CustomUserDetails customUserDetails)
-    {
-        User user   = userService.findUserByUserName(customUserDetails.getUsername());
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
         List<Board> boards = boardService.getBoardList(type, scrollPosition, fetchSize);
 
         List<Integer> boardIds = boards.stream().map(Board::getId).toList();
@@ -155,7 +154,7 @@ public class BoardController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "BOARD_2006",
-                    description  = "인기 게시글 목록 조회가 완료되었습니다.")
+                    description = "인기 게시글 목록 조회가 완료되었습니다.")
     })
     @Parameters({
             @Parameter(name = "type", description = "POST | SHARE | VOLUNTEER | ALL(기본값)")
@@ -165,7 +164,7 @@ public class BoardController {
             @RequestParam(name = "type", defaultValue = "ALL") String type,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        User user   = userService.findUserByUserName(customUserDetails.getUsername());
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
         List<Board> boards = boardService.getPopularBoards(type);
 
         List<Integer> boardIds = boards.stream().map(Board::getId).toList();

@@ -24,6 +24,7 @@ import java.util.List;
 public class ChatController {
     private final ChatService chatService;
     private final UserService userService;
+
     // 0. 목록 가져오기
     @Operation(summary = "전체 채팅 목록 조회", description = "채팅 목록 조회")
     @Parameters({

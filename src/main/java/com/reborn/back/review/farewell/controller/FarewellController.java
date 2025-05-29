@@ -41,7 +41,7 @@ public class FarewellController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "FAREWELL_2001",
-                    description  = "Pet 간략 정보 조회 완료되었습니다.")
+                    description = "Pet 간략 정보 조회 완료되었습니다.")
     })
     @GetMapping("/pet/{petId}")
     public ApiResponse<FarewellSimpleDto> getPetSimple(

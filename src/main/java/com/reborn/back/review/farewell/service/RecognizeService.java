@@ -2,7 +2,6 @@ package com.reborn.back.review.farewell.service;
 
 import com.reborn.back.domain.review.farewell.Farewell;
 import com.reborn.back.domain.review.farewell.Recognize;
-import com.reborn.back.domain.review.farewell.Remember;
 import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.global.utils.GCPMap.GooglePlacesResponse;
@@ -11,8 +10,9 @@ import com.reborn.back.global.utils.GCPMap.PlaceConverter;
 import com.reborn.back.global.utils.hira.HiraEvaluationService;
 import com.reborn.back.global.utils.hira.HiraInfoService;
 import com.reborn.back.review.farewell.converter.RecognizeConverter;
-import com.reborn.back.review.farewell.converter.RememberConverter;
-import com.reborn.back.review.farewell.dto.*;
+import com.reborn.back.review.farewell.dto.CounselingCenterDto;
+import com.reborn.back.review.farewell.dto.RecognizeRequestDto;
+import com.reborn.back.review.farewell.dto.RecognizeResponseDto;
 import com.reborn.back.review.farewell.repository.FarewellRepository;
 import com.reborn.back.review.farewell.repository.RecognizeRepository;
 import jakarta.transaction.Transactional;
@@ -95,7 +95,9 @@ public class RecognizeService {
         return RecognizeConverter.toDto(recognize);
     }
 
-    /** 10 km 반경 “정신” 키워드 상위 3곳 + HIRA 평가정보까지 한 번에 반환 */
+    /**
+     * 10 km 반경 “정신” 키워드 상위 3곳 + HIRA 평가정보까지 한 번에 반환
+     */
     public List<CounselingCenterDto> getCounselingCentersWithGrade(double lat, double lng) {
 
         // 1) Google Places (동기) 조회
@@ -125,7 +127,9 @@ public class RecognizeService {
                 .collect(Collectors.toList());
     }
 
-    /** 병원명으로 ykiho 추출 (없으면 null) */
+    /**
+     * 병원명으로 ykiho 추출 (없으면 null)
+     */
     private String extractYkiho(String hospName) {
         String xml = hiraInfoService.getHospBasisListXml(1, 1, hospName);
         try {
@@ -143,7 +147,9 @@ public class RecognizeService {
         }
     }
 
-    /** ykiho 로 asmGrd09 추출 (없으면 null) */
+    /**
+     * ykiho 로 asmGrd09 추출 (없으면 null)
+     */
     private String extractGrade(String ykiho) {
         return hiraEvalService.getHospitalEvaluationGrade(ykiho);
     }

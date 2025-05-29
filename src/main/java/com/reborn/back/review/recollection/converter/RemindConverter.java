@@ -21,6 +21,7 @@ public class RemindConverter {
                 .createdAt(r.getCreatedAt())
                 .build();
     }
+
     public static Remind toRemind(RemindDto.RemindReqDto dto, Pet pet, Recollection recollection) {
         Remind remind = new Remind();
         remind.setName(dto.getTitle());
