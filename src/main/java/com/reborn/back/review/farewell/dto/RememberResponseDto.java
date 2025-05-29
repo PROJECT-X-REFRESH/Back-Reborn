@@ -71,9 +71,9 @@ public class RememberResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CleaningStatusDto {
-        private boolean snack;   // SNACK 남아있으면 true
-        private boolean toy;     // TOY 남아있으면 true
-        private boolean bath;    // BATH 남아있으면 true
-        private boolean living;  // LIVING 남아있으면 true
+        private boolean snack;   // SNACK 남아있으면 false
+        private boolean toy;     // TOY 남아있으면 false
+        private boolean bath;    // BATH 남아있으면 false
+        private boolean living;  // LIVING 남아있으면 false
     }
 }
