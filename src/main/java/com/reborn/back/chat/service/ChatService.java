@@ -1,5 +1,6 @@
 package com.reborn.back.chat.service;
 
+import com.reborn.back.chat.converter.ChatConverter;
 import com.reborn.back.chat.dto.*;
 import com.reborn.back.chat.repository.ChatMessageRepository;
 import com.reborn.back.chat.repository.ChatRoomRepository;
@@ -16,10 +17,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 import static com.reborn.back.domain.chat.ChatRoomStatus.FROM_LEFT;
 import static com.reborn.back.domain.chat.ChatRoomStatus.TO_LEFT;
@@ -34,65 +33,57 @@ public class ChatService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public List<ChatRoomDto.RoomList> getRoomList(User me, int offset, int size) {
+    public List<ChatDto.ChatRoomDto.RoomList> getRoomList(User me, int offset, int size) {
         Pageable page = PageRequest.of(offset / size, size, Sort.by(Sort.Direction.DESC, "lastTime"));
         return chatRoomRepository.findRoomsByParticipant(me, page)
                 .stream()
-                .map(room -> toRoomListDto(room, me))  // me 전달
+                .map(room -> ChatConverter.toRoomListDto(room, me))  // me 전달
                 .toList();
     }
 
-    public ChatRoomDto.RoomList handshake(User me, String partnerUid) {
+    @Transactional
+    public ChatDto.ChatRoomDto.RoomList handshake(User me, String partnerUid) {
         User partner = userRepository.findByName(partnerUid)
                 .orElseThrow(() ->
                         new EntityNotFoundException("상대방을 찾을 수 없습니다."));
         return chatRoomRepository.findBetweenUsers(me.getUid(), partnerUid)
-                .map(r -> toRoomListDto(r, me))
+                .map(r -> ChatConverter.toRoomListDto(r, me))
                 .orElseGet(() -> tryCreateRoom(me, partner));
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public ChatRoomDto.RoomList tryCreateRoom(User me, User partner) {
-
+    public ChatDto.ChatRoomDto.RoomList tryCreateRoom(User me, User partner) {
         try {
             ChatRoom created = createRoom(me, partner);
-            return toRoomListDto(created, me);
-
+            return ChatConverter.toRoomListDto(created, me);
         } catch (DataIntegrityViolationException dup) {
             ChatRoom existing = chatRoomRepository.findBetweenUsers(
                             me.getUid(), partner.getUid())
                     .orElseThrow();
-            return toRoomListDto(existing, me);
+            return ChatConverter.toRoomListDto(existing, me);
         }
     }
 
     @Transactional(readOnly = true)
-    public List<ChatResDto.MessageResponse> getChatDetail(User me, Integer chatId, int offset, int size) {
+    public List<ChatDto.ChatResDto> getChatDetail(User me, Integer chatId, int offset, int size) {
         ChatRoom room = authorizeAndGetRoom(chatId, me);
         Pageable page = PageRequest.of(offset / size, size,
                 Sort.by(Sort.Direction.ASC, "createdAt"));
         return msgRepository.findByChatRoom(room, page)
-                .map(msg -> toMsgDto(msg, me))
+                .map(msg -> ChatConverter.toMsgDto(msg, me))
                 .getContent();
     }
 
     // 3) 메시지 저장 / 브로드캐스트
     @Transactional
-    public ChatResDto.MessageResponse writeMessage(User me, Integer chatId, String text) {
+    public ChatDto.ChatResDto writeMessage(User me, Integer chatId, String text) {
 
         ChatRoom room = authorizeAndGetRoom(chatId, me);
-
-        ChatMessage entity = ChatMessage.builder()
-                .chatRoom(room)
-                .isFrom(room.getFromUser().getUid().equals(me.getUid())) // from → true
-                .text(text)
-                .build();
-
+        ChatMessage entity = ChatConverter.toChatMessage(me, room, text);
         msgRepository.save(entity);
         room.setLastTime(LocalDateTime.now());
         chatRoomRepository.save(room);
-
-        return toMsgDto(entity,me);
+        return ChatConverter.toMsgDto(entity,me);
     }
 
     // 4) 방 나가기
@@ -119,14 +110,9 @@ public class ChatService {
         }
     }
 
-    private ChatRoom createRoom(User from, User to) {
-        ChatRoom room = ChatRoom.builder()
-                .fromUser(from)
-                .toUser(to)
-                .status(ChatRoomStatus.NORMAL)
-                .lastTime(LocalDateTime.now())
-                .messageList(new ArrayList<>())
-                .build();
+    @Transactional
+    public ChatRoom createRoom(User from, User to) {
+        ChatRoom room = ChatConverter.toNewChatRoom(from, to);
         return chatRoomRepository.save(room);
     }
 
@@ -141,30 +127,5 @@ public class ChatService {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
         return room;
-    }
-
-    /* ====== DTO 변환 ====== */
-    private ChatRoomDto.RoomList toRoomListDto(ChatRoom r, User me) {
-        // 어느 쪽이 '상대'인지 정확히 판단
-        User partner = r.getFromUser().equals(me) ? r.getToUser() : r.getFromUser();
-
-        return ChatRoomDto.RoomList.builder()
-                .roomId(r.getId())
-                .partnerUserId(partner.getUid())
-                .partnerNickname(partner.getName())
-                .lastMsg(r.getMessageList().isEmpty() ? "" :
-                        r.getMessageList().get(r.getMessageList().size() - 1).getText())
-                .lastTime(r.getLastTime())
-                .build();
-    }
-    private ChatResDto.MessageResponse toMsgDto(ChatMessage m, User me) {
-        boolean iAmFrom = m.getChatRoom().getFromUser().equals(me);
-        boolean mine    = (iAmFrom && m.getIsFrom()) || (!iAmFrom && !m.getIsFrom());
-        return ChatResDto.MessageResponse.builder()
-                .messageId(m.getId())
-                .mine(mine)
-                .text(m.getText())
-                .sentAt(m.getCreatedAt())
-                .build();
     }
 }

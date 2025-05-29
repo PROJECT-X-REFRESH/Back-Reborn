@@ -14,14 +14,4 @@ public class AiPostDetailDto {
     private String attachImg;
     private boolean bookmarked;
 
-    public static AiPostDetailDto from(AiPost post, boolean bookmarked) {
-        return AiPostDetailDto.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .url(post.getUrl())
-                .attachImg(post.getAttachImg())
-                .bookmarked(bookmarked)
-                .build();
-    }
 }

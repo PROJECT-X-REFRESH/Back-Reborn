@@ -1,5 +1,6 @@
 package com.reborn.back.aiPost.service;
 
+import com.reborn.back.aiPost.converter.AipostConverter;
 import com.reborn.back.aiPost.dto.AiPostDetailDto;
 import com.reborn.back.aiPost.repository.AiPostBookmarkRepository;
 import com.reborn.back.aiPost.repository.AiPostRepository;
@@ -47,7 +48,7 @@ public class AiPostService {
         AiPost aiPost = aiPostRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("AiPost not found"));
         boolean bookmarked = bookmarkRepository.existsByAiPostAndUser(aiPost, user);
-        return AiPostDetailDto.from(aiPost, bookmarked);
+        return AipostConverter.domainToDto(aiPost, bookmarked);
     }
 
     public boolean toggleBookmark(Integer postId, User user) {

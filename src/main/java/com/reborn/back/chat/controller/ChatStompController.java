@@ -1,7 +1,6 @@
 package com.reborn.back.chat.controller;
 
-import com.reborn.back.chat.dto.ChatReqDto;
-import com.reborn.back.chat.dto.ChatResDto;
+import com.reborn.back.chat.dto.ChatDto;
 import com.reborn.back.chat.service.ChatService;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.login.auth.jwt.JwtTokenUtils;
@@ -18,9 +17,9 @@ public class ChatStompController {
     private final JwtTokenUtils jwtTokenUtils;
     @MessageMapping("/chat/send/{chatId}")
     @SendTo("/sub/chat/{chatId}")
-    public ChatResDto.MessageResponse sendMessage(
+    public ChatDto.ChatResDto sendMessage(
             @DestinationVariable Integer chatId,
-            @Payload ChatReqDto.SendMessage payload,
+            @Payload ChatDto.ChatReqDto payload,
             @Header("Authorization") String authHeader) {
             System.out.println("🔥 메시지 메서드 진입함");
         try {

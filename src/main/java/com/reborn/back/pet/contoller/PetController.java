@@ -6,9 +6,7 @@ import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
-import com.reborn.back.pet.dto.PetRequestDto;
-import com.reborn.back.pet.dto.PetResponseDto;
-import com.reborn.back.pet.dto.PetSimpleDto;
+import com.reborn.back.pet.dto.PetDto;
 import com.reborn.back.pet.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,35 +29,35 @@ public class PetController {
 
     @Operation(summary = "펫 프로필 만들기", description = "펫 프로필을 생성하는 api.")
     @PostMapping(value = "/profile/create")
-    public ApiResponse<List<PetSimpleDto>> createPetProfile(
-            @RequestBody PetRequestDto petReqDto,
+    public ApiResponse<List<PetDto.PetSimpleDto>> createPetProfile(
+            @RequestBody PetDto.PetRequestDto petReqDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) throws IOException {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        List<PetSimpleDto> petList = petService.createPetProfile(petReqDto, user);
+        List<PetDto.PetSimpleDto> petList = petService.createPetProfile(petReqDto, user);
         return ApiResponse.onSuccess(SuccessCode.PET_CREATE_SUCCESS, petList);
     }
 
     @Operation(summary = "반려동물 조회", description = "사용자의 반려동물의 상세정보를 조회합니다.")
     @GetMapping("/{petId}")
-    public ApiResponse<PetResponseDto> getPetDetail(
+    public ApiResponse<PetDto.PetResponseDto> getPetDetail(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable int petId
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        PetResponseDto pet = petService.getPetById(petId, user.getName());
+        PetDto.PetResponseDto pet = petService.getPetById(petId, user.getName());
         return ApiResponse.onSuccess(SuccessCode.PET_LIST_VIEW_SUCCESS, pet);
     }
 
     @Operation(summary = "반려동물 목록 조회", description = "사용자의 반려동물 목록을 스크롤 기반으로 조회합니다.")
     @GetMapping("/list/{scrollPosition}")
-    public ApiResponse<List<PetSimpleDto>> getPetList(
+    public ApiResponse<List<PetDto.PetSimpleDto>> getPetList(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable int scrollPosition,
             @RequestParam(name = "fetchSize", defaultValue = "10") int fetchSize
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        List<PetSimpleDto> petList = petService.getPetList(user, scrollPosition, fetchSize);
+        List<PetDto.PetSimpleDto> petList = petService.getPetList(user, scrollPosition, fetchSize);
         return ApiResponse.onSuccess(SuccessCode.PET_LIST_VIEW_SUCCESS, petList);
     }
 
@@ -70,7 +68,7 @@ public class PetController {
     @PutMapping("/update/{petId}")
     public ApiResponse<Integer> updatePet(
             @PathVariable Integer petId,
-            @RequestBody PetRequestDto petRequestDto,
+            @RequestBody PetDto.PetRequestDto petRequestDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         Pet updatedPet = petService.updatePetProfile(petId, petRequestDto, customUserDetails.getUsername());
