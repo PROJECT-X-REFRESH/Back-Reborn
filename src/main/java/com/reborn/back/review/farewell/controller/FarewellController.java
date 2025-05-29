@@ -132,7 +132,7 @@ public class FarewellController {
             @Parameter(name = "fstep", description = "현재 fstep")
     })
     @PutMapping("/nextday/{fstep}")
-    public ApiResponse<Boolean> increaseDate(
+    public ApiResponse<Integer> increaseDate(
             @PathVariable Integer farewellId,
             @PathVariable Integer fstep,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
@@ -140,6 +140,6 @@ public class FarewellController {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
 
         farewellService.increaseFstep(farewellId, fstep);
-        return ApiResponse.onSuccess(SuccessCode.FAREWELL_DATE_SUCCESS, true);
+        return ApiResponse.onSuccess(SuccessCode.FAREWELL_DATE_SUCCESS, fstep+1);
     }
 }
