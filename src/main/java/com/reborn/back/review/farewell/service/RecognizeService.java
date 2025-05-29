@@ -92,35 +92,38 @@ public class RecognizeService {
 
     /** 10 km 반경 “정신” 키워드 상위 3곳 + HIRA 평가정보까지 한 번에 반환 */
     public List<CounselingCenterDto> getCounselingCentersWithGrade(double lat, double lng) {
-        // 1) JSON 응답 가져오기
-        String json = hiraInfoService.getPsychHospitalsJson(
-                1, 3, lng, lat, 10000.0
-        );
+        String json = hiraInfoService.getPsychHospitalsJson(1, 3, lng, lat, 10000.0);
 
         List<CounselingCenterDto> result = new ArrayList<>();
         try {
-            JsonNode root  = objectMapper.readTree(json);
-            JsonNode items = root.path("response")
+            JsonNode items = objectMapper.readTree(json)
+                    .path("response")
                     .path("body")
                     .path("items")
                     .path("item");
 
             for (JsonNode item : items) {
-                String name  = item.path("yadmNm").asText(null);
-                String addr  = item.path("addr").asText(null);
-                String phone = item.path("telno").asText(null);
-                String ykiho = item.path("ykiho").asText(null);
+                // textValue()는 JSON에 key가 없거나 null일 때만 null 반환
+                String name  = item.path("yadmNm").textValue();
+                String addr  = item.path("addr" ).textValue();
+                String phone = item.path("telno").textValue();
+                String ykiho = item.path("ykiho").textValue();
 
                 double latitude  = item.path("YPos").asDouble(0);
                 double longitude = item.path("XPos").asDouble(0);
 
-                // 3) 평가등급 조회
-                String grade = (ykiho == null)
-                        ? "병원 평가정보가 없습니다"
+                // 등급 조회
+                String rawGrade = (ykiho == null)
+                        ? null
                         : hiraEvalService.getHospitalEvaluationGrade(ykiho);
-                if (grade == null) grade = "병원 평가정보가 없습니다";
 
-                // 4) DTO 빌드
+                String grade;
+                if (rawGrade != null && rawGrade.matches("\\d+")) {
+                    grade = rawGrade;
+                } else {
+                    grade = null;
+                }
+
                 result.add(CounselingCenterDto.builder()
                         .displayName(name)
                         .formattedAddress(addr)

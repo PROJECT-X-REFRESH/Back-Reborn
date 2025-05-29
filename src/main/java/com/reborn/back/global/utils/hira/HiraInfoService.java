@@ -19,14 +19,14 @@ public class HiraInfoService {
                                         double xPos, double yPos, double radius) {
         String uri = UriComponentsBuilder
                 .fromHttpUrl("https://apis.data.go.kr/B551182/hospInfoServicev2/getHospBasisList")
-                .queryParam("serviceKey", serviceKey)    // 주의: serviceKey
+                .queryParam("ServiceKey", serviceKey)    // ← 대소문자 정확히!
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
-                .queryParam("clCd", 29)                  // 정신병원
+                .queryParam("clCd", 29)
                 .queryParam("xPos", xPos)
                 .queryParam("yPos", yPos)
                 .queryParam("radius", radius)
-                .queryParam("_type", "json")             // ← JSON 타입으로 변경
+                .queryParam("_type", "json")
                 .build()
                 .toUriString();
 
