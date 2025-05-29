@@ -85,7 +85,7 @@ public class RememberController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REMEMBER_2005", description = "정리 품목이 정상적으로 등록되었습니다.")
     })
-    @PatchMapping("/remember/clean/{cleanType}")
+    @PatchMapping("/clean/{cleanType}")
     public ApiResponse<String> cleanThing(
             @PathVariable Integer farewellId,
             @PathVariable String cleanType
