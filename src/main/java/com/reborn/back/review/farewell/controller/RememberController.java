@@ -7,6 +7,7 @@ import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
 import com.reborn.back.review.farewell.dto.RememberRequestDto.RememberReqDto;
+import com.reborn.back.review.farewell.dto.RememberResponseDto;
 import com.reborn.back.review.farewell.dto.RememberResponseDto.DetailRememberDto;
 import com.reborn.back.review.farewell.service.FarewellService;
 import com.reborn.back.review.farewell.service.RememberService;
@@ -107,5 +108,24 @@ public class RememberController {
 
         DetailRememberDto detail = rememberService.getDetailRemember(farewellId);
         return ApiResponse.onSuccess(SuccessCode.REMEMBER_DETAIL_VIEW_SUCCESS, detail);
+    }
+
+    @Operation(summary = "남아있는 물품 정리 상태 조회", description = "아직 정리되지 않은 물품에 대해 true, 정리된 물품에 대해 false를 반환합니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "REMEMBER_2006", description = "남아있는 물품 정리 상태 조회가 완료되었습니다."
+            )
+    })
+    @GetMapping("/status")
+    public ApiResponse<RememberResponseDto.CleaningStatusDto> getCleaningStatus(
+            @PathVariable Integer farewellId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        userService.findUserByUserName(customUserDetails.getUsername());
+
+        RememberResponseDto.CleaningStatusDto status =
+                rememberService.getCleaningStatus(farewellId);
+
+        return ApiResponse.onSuccess(SuccessCode.REMEMBER_CLEAN_STATUS_VIEW_SUCCESS, status);
     }
 }
