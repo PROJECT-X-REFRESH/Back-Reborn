@@ -50,7 +50,8 @@ public class WebSecurityConfig {
                                 "/index.html",
                                 "/users/me",
                                 "/users/logout",
-                                "/ws-chat/**"
+                                "/ws-chat/**",
+                                "/farewell/*/recognize/nearby"
                         ).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
