@@ -67,7 +67,7 @@ public class RememberController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REMEMBER_2011", description = "그림 일기 생성이 완료되었습니다.")
     })
-    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/write", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Boolean> createRemember(
             @PathVariable Integer farewellId,
             @RequestPart(value = "remember", required = false) MultipartFile file,
