@@ -47,7 +47,12 @@ public class GooglePlacesService {
         return webClient.post()
                 .uri(baseUrl + endPoint)
                 .header("X-Goog-Api-Key", apiKey)
-                .header("X-Goog-FieldMask", "places.displayName,places.formattedAddress,places.location,places.nationalPhoneNumber")
+                .header("X-Goog-FieldMask",
+                        "places.displayName,"
+                                + "places.formattedAddress,"
+                                + "places.location,"
+                                + "places.nationalPhoneNumber,"
+                                + "places.currentOpeningHours.openNow")
                 .bodyValue(body)
                 .retrieve()
                 .bodyToMono(GooglePlacesResponse.class)

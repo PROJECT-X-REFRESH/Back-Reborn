@@ -19,6 +19,7 @@ public class PlaceConverter {
                 .displayName(name)
                 .formattedAddress(placeDto.getFormattedAddress())
                 .nationalPhoneNumber(placeDto.getNationalPhoneNumber())
+                .openNow(placeDto.getOpenNow())
                 .build();
     }
 
@@ -38,6 +39,7 @@ public class PlaceConverter {
                 .formattedAddress(placeDto.getFormattedAddress())
                 .nationalPhoneNumber(placeDto.getNationalPhoneNumber())
                 .distanceInMeters(round)
+                .openNow(placeDto.getOpenNow())   // 중첩 객체에서 값 꺼냄
                 .build();
     }
 }

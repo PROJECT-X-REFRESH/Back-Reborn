@@ -24,4 +24,7 @@ public class PlaceResponseDto {
 
     @Schema(description = "사용자 위치로부터 거리(미터)")
     private Double distanceInMeters;
+
+    @Schema(description = "현재 영업 중인지 여부")
+    private Boolean openNow;
 }
