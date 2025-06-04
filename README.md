@@ -79,7 +79,23 @@ REFRESH 팀의 프로젝트, REBORN(반려동물 동반 애플리케이션)의 �
 ├── 📁 src
 │   ├── 📁 main
 │   │   ├── 📁 java/com/reborn/back
-│   │   ├── 📁 resources
+│   │   │   ├── 📁 aiPost
+│   │   │   │    ├── 📁 controller
+│   │   │   │    ├── 📁 converter
+│   │   │   │    ├── 📁 dto
+│   │   │   │    ├── 📁 service
+│   │   │   │    └── 📁 repository
+│   │   │   ├── 📁 board
+│   │   │   ├── 📁 chat
+│   │   │   ├── 📁 comment
+│   │   │   ├── 📁 domain
+│   │   │   ├── 📁 fcm
+│   │   │   ├── 📁 global
+│   │   │   ├── 📁 login
+│   │   │   │    └── 📁 auth
+│   │   │   ├── 📁 pet
+│   │   │   └── 📁 review
+│   │   └── 📁  resources
 │   └── 📁 test
 ├── 📄 build.gradle
 ├── 📄 README.md
