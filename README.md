@@ -106,8 +106,8 @@ REFRESH 팀의 프로젝트, REBORN(반려동물 동반 애플리케이션)의 �
 
 ```bash
 git clone https://github.com/PROJECT-X-REFRESH/Back-Reborn.git
-cd back-reborn
-./gradle clean
+cd Back-Reborn
+./gradlew clean
 ./gradlew build
 ./gradlew bootRun
 ./gradlew test
