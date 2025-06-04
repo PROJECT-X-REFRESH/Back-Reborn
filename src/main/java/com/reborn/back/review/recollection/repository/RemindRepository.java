@@ -1,6 +1,5 @@
 package com.reborn.back.review.recollection.repository;
 
-import com.google.common.io.Files;
 import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.review.recollection.Remind;
 import org.springframework.data.domain.Pageable;

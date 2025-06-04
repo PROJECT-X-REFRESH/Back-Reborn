@@ -22,6 +22,7 @@ public class RemindDto {
         private String content;
         private LocalDateTime createdAt;
     }
+
     @Getter
     @Builder
     @AllArgsConstructor

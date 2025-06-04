@@ -1,6 +1,5 @@
 package com.reborn.back.review.recollection.service;
 
-import com.amazonaws.services.cloudformation.model.AlreadyExistsException;
 import com.reborn.back.domain.entity.EmotionState;
 import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.review.recollection.Recollection;
@@ -10,8 +9,7 @@ import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.pet.repository.PetRepository;
-import com.reborn.back.review.recollection.dto.RecollectionDto;
-import com.reborn.back.review.recollection.dto.TodayRecollctDto;
+import com.reborn.back.review.recollection.dto.RecollectDto;
 import com.reborn.back.review.recollection.repository.RecollectionRepository;
 import com.reborn.back.review.recollection.repository.RecordRepository;
 import com.reborn.back.review.recollection.repository.RemindRepository;
@@ -36,14 +34,14 @@ public class RecollectionService {
     private final RemindRepository remindRepository;
     private final PetRepository petRepository;
 
-    public List<RecollectionDto> getThisWeekList(User user, Integer petId) {
+    public List<RecollectDto.RecollectionDto> getThisWeekList(User user, Integer petId) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startOfWeek = now
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
                 .toLocalDate()
                 .atStartOfDay();
         Pet pet = petRepository.findById(petId).get();
-        List<RecollectionDto> weeklyList = new ArrayList<>();
+        List<RecollectDto.RecollectionDto> weeklyList = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             LocalDate currentDate = startOfWeek.toLocalDate().plusDays(i);
             LocalDateTime dayStart = currentDate.atStartOfDay();
@@ -56,7 +54,7 @@ public class RecollectionService {
                 didRecord = true;
                 emotionState = optionalRecord.get().getEmotion().getState();
             }
-            weeklyList.add(new RecollectionDto(currentDate, didRemind, didRecord, emotionState));
+            weeklyList.add(new RecollectDto.RecollectionDto(currentDate, didRemind, didRecord, emotionState));
         }
         return weeklyList;
     }
@@ -68,7 +66,7 @@ public class RecollectionService {
                         Recollection.builder()
                                 .pet(pet)
                                 .build()));
-}
+    }
 
     public Integer checkRecollection(User user, Integer petId) {
         Pet pet = petRepository.findById(petId)
@@ -78,7 +76,7 @@ public class RecollectionService {
                 .orElse(null);
     }
 
-    public TodayRecollctDto getTodayList(User user, Integer petId) {
+    public RecollectDto.TodayRecollctDto getTodayList(User user, Integer petId) {
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
         LocalDate today = LocalDate.now();
@@ -90,7 +88,7 @@ public class RecollectionService {
         Integer recordId = recordRepository.findTopByPetAndCreatedAtBetweenOrderByCreatedAtDesc(pet, dayStart, dayEnd)
                 .map(Record::getId)
                 .orElse(null);
-        return TodayRecollctDto.builder()
+        return RecollectDto.TodayRecollctDto.builder()
                 .remindId(remindId)
                 .recordId(recordId)
                 .build();

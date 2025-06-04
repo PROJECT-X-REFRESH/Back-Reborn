@@ -5,11 +5,9 @@ import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
-import com.reborn.back.review.recollection.dto.RecollectionDto;
-import com.reborn.back.review.recollection.dto.TodayRecollctDto;
+import com.reborn.back.review.recollection.dto.RecollectDto;
 import com.reborn.back.review.recollection.service.RecollectionService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,23 +25,23 @@ public class RecollectionController {
 
     @Operation(summary = "주간 상황 조회", description = "이번주 추억쌓기 목록을 조회하는 API")
     @GetMapping("/week/{petId}")
-    public ApiResponse<List<RecollectionDto>> getWeeksRecollection(
+    public ApiResponse<List<RecollectDto.RecollectionDto>> getWeeksRecollection(
             @PathVariable Integer petId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        List<RecollectionDto> recollections = recollectionService.getThisWeekList(user, petId);
+        List<RecollectDto.RecollectionDto> recollections = recollectionService.getThisWeekList(user, petId);
         return ApiResponse.onSuccess(SuccessCode.RECOLLECTION_WEEK_VIEW_SUCCESS, recollections);
     }
 
     @Operation(summary = "일간 상황 조회", description = "오늘의 추억쌓기를 조회하는 API")
     @GetMapping("/today/{petId}")
-    public ApiResponse<TodayRecollctDto> getTodaysRecollection(
+    public ApiResponse<RecollectDto.TodayRecollctDto> getTodaysRecollection(
             @PathVariable Integer petId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
-        TodayRecollctDto recollections = recollectionService.getTodayList(user, petId);
+        RecollectDto.TodayRecollctDto recollections = recollectionService.getTodayList(user, petId);
         return ApiResponse.onSuccess(SuccessCode.RECOLLECTION_WEEK_VIEW_SUCCESS, recollections);
     }
 

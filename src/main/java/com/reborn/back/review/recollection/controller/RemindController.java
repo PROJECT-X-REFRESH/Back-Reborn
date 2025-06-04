@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Tag(name = "remind", description = "remind 관련 API")
@@ -29,7 +30,7 @@ public class RemindController {
             @PathVariable Integer petId,
             @RequestBody RemindDto.RemindReqDto remindDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
-    ){
+    ) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
         Integer id = remindService.createRemind(petId, remindDto, user);
         return ApiResponse.onSuccess(SuccessCode.REMIND_CREATED, id);
@@ -77,8 +78,8 @@ public class RemindController {
             @PathVariable Integer petId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        User user=userService.findUserByUserName(customUserDetails.getUsername());
-        RemindDto.RemindInfoDto res = remindService.getRemindInfo(petId,user);
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
+        RemindDto.RemindInfoDto res = remindService.getRemindInfo(petId, user);
         return ApiResponse.onSuccess(SuccessCode.REMIND_DETAIL_VIEW_SUCCESS, res);
     }
 

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FarewellSimpleDto {
-    private String  name;
+    private String name;
     private PetType petCase;
     private boolean death;
     private PetColor color;

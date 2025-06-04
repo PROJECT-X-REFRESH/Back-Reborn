@@ -1,10 +1,16 @@
 package com.reborn.back.review.farewell.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Schema(description = "상담소 + HIRA 평가정보")
-@Getter @Builder @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CounselingCenterDto {
 
     @Schema(description = "상담소 이름")
@@ -24,7 +30,6 @@ public class CounselingCenterDto {
 
     @Schema(description = "ykiho (없으면 null)")
     private String ykiho;
-
     @Schema(description = "asmGrd09 (없으면 null)")
     private String grade;
 }

@@ -6,8 +6,8 @@ import com.reborn.back.global.api.SuccessCode;
 import com.reborn.back.global.utils.Redis.RedisUtil;
 import com.reborn.back.login.auth.dto.JwtDto;
 import com.reborn.back.login.auth.dto.TokenExchangeRequest;
-import com.reborn.back.login.dto.UserRequestDto;
 import com.reborn.back.login.converter.UserConverter;
+import com.reborn.back.login.dto.UserRequestDto;
 import com.reborn.back.login.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
 @Slf4j
 @Tag(name = "토큰", description = "access token 관련 api 입니다.")
 @RestController
@@ -38,9 +39,9 @@ public class TokenController {
             @RequestBody TokenExchangeRequest request) {
 
         // 1) authCode 검증
-        String authCode    = request.getCode();
+        String authCode = request.getCode();
         log.info("👉 받은 인증 코드: {}", request.getCode());
-        String username = redisUtil.getData("randomCode" +request.getCode());
+        String username = redisUtil.getData("randomCode" + request.getCode());
         log.info("🔍 Redis 조회 결과: {}", username);
         if (username == null) {
             throw new IllegalArgumentException("잘못되었거나 만료된 인증 코드입니다.");

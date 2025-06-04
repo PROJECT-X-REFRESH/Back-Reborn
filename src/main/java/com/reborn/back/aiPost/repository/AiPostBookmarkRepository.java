@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public interface AiPostBookmarkRepository extends JpaRepository<AiPostBookmark, Integer> {
     boolean existsByAiPostAndUser(AiPost aiPost, User user);
+
     List<AiPostBookmark> findByUser(User user, Pageable pageable);
 
     Optional<AiPostBookmark> findByAiPostAndUser(AiPost aiPost, User user);

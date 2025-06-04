@@ -44,7 +44,7 @@ public class RebirthController {
     }
 
     @Operation(summary = "컨텐츠 상태 변경", description = "Rebirth 컨텐츠(wash, clothes, ribbon{yribbon -> 노란색, bribbon -> 검정색}, outro)의 상태를 변경하는 API")
-    @ApiResponses(value =  {
+    @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "REBIRTH_2003", description = "컨텐츠가 완료되었습니다.")
     })
     @PatchMapping("/{activityType}")

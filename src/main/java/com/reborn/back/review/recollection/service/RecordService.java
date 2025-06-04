@@ -8,8 +8,8 @@ import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
 import com.reborn.back.global.utils.Redis.RedisUtil;
 import com.reborn.back.pet.repository.PetRepository;
-import com.reborn.back.review.recollection.dto.RecordDto;
 import com.reborn.back.review.recollection.converter.RecordConverter;
+import com.reborn.back.review.recollection.dto.RecordDto;
 import com.reborn.back.review.recollection.repository.RecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class RecordService {
 
     public Integer createRecord(Integer petId, RecordDto.RecordReqDto dto, User user) {
         Pet pet = petRepository.findById(petId)
-                .orElseThrow(() ->new GeneralException(ErrorCode.PET_NOT_FOUND));
+                .orElseThrow(() -> new GeneralException(ErrorCode.PET_NOT_FOUND));
         if (pet.getFarewell() != null || pet.getDeath() != null) {
             throw new GeneralException(ErrorCode.PET_ALREADY_DEAD);
         }
@@ -50,7 +50,7 @@ public class RecordService {
                 .getSeconds();
         redisUtil.setDataExpire(key, "", ttl);
         Recollection recollection = recollectionService.getOrCreateRecollection(pet);
-        Record entity = RecordConverter.toRecord(dto, pet,recollection);
+        Record entity = RecordConverter.toRecord(dto, pet, recollection);
         return recordRepository.save(entity).getId();
     }
 

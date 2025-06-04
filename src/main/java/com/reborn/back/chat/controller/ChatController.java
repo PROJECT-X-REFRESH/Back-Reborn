@@ -1,13 +1,10 @@
 package com.reborn.back.chat.controller;
 
-import com.reborn.back.chat.dto.ChatReqDto;
-import com.reborn.back.chat.dto.ChatResDto;
-import com.reborn.back.chat.dto.ChatRoomDto;
+import com.reborn.back.chat.dto.ChatDto;
 import com.reborn.back.chat.service.ChatService;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
-import com.reborn.back.login.auth.jwt.JwtTokenUtils;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.messaging.handler.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +24,7 @@ import java.util.List;
 public class ChatController {
     private final ChatService chatService;
     private final UserService userService;
+
     // 0. 목록 가져오기
     @Operation(summary = "전체 채팅 목록 조회", description = "채팅 목록 조회")
     @Parameters({
@@ -35,7 +32,7 @@ public class ChatController {
             @Parameter(name = "fetchSize", description = "한 번에 불러올 채팅 개수")
     })
     @GetMapping("/list")
-    public ApiResponse<List<ChatRoomDto.RoomList>> getListChat(
+    public ApiResponse<List<ChatDto.ChatRoomDto.RoomList>> getListChat(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestParam(name = "scrollPosition", defaultValue = "0") int scrollPosition,
             @RequestParam(name = "fetchSize", defaultValue = "50") int fetchSize
@@ -51,7 +48,7 @@ public class ChatController {
     // 1) handshake – 방이 없으면 생성
     @Operation(summary = "채팅방 생성/조회", description = "상대 UID 로 handshake")
     @GetMapping("/handshake/{partnerId}")
-    public ApiResponse<ChatRoomDto.RoomList> handshake(
+    public ApiResponse<ChatDto.ChatRoomDto.RoomList> handshake(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable String partnerId) {
 
@@ -69,7 +66,7 @@ public class ChatController {
             @Parameter(name = "fetchSize", description = "한 번에 불러올 채팅 개수")
     })
     @GetMapping("/{chatId}")
-    public ApiResponse<List<ChatResDto.MessageResponse>> getChatDetail(
+    public ApiResponse<List<ChatDto.ChatResDto>> getChatDetail(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @PathVariable Integer chatId,
             @RequestParam(name = "scrollPosition", defaultValue = "0") int scrollPosition,

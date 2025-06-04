@@ -33,11 +33,11 @@ public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
 
     /* boardIds 중 사용자가 누른 좋아요 ID를 한 번에 조회 */
     @Query("""
-           SELECT bl.board.id
-           FROM BoardLike bl
-           WHERE bl.user.uid = :uid
-             AND bl.board.id IN :boardIds
-           """)
-    List<Integer> findLikedBoardIds(@Param("uid")  String uid,
+            SELECT bl.board.id
+            FROM BoardLike bl
+            WHERE bl.user.uid = :uid
+              AND bl.board.id IN :boardIds
+            """)
+    List<Integer> findLikedBoardIds(@Param("uid") String uid,
                                     @Param("boardIds") List<Integer> boardIds);
 }

@@ -90,10 +90,12 @@ public class RecognizeService {
         return RecognizeConverter.toDto(recognize);
     }
 
-    /** 10 km 반경 “정신” 키워드 상위 3곳 + HIRA 평가정보까지 한 번에 반환 */
+    /**
+     * 10 km 반경 “정신” 키워드 상위 3곳 + HIRA 평가정보까지 한 번에 반환
+     */
     public List<CounselingCenterDto> getCounselingCentersWithGrade(double lat, double lng) {
         String json = hiraInfoService.getPsychHospitalsJson(1, 3, lng, lat, 10000.0);
-
+      
         List<CounselingCenterDto> result = new ArrayList<>();
         try {
             JsonNode items = objectMapper.readTree(json)

@@ -16,10 +16,9 @@ import java.nio.charset.StandardCharsets;
 @Service
 @Slf4j
 public class HiraEvaluationService {
+    private final RestTemplate restTemplate = new RestTemplate();
     @Value("${hira.asm.service-key}")
     private String serviceKey;
-
-    private final RestTemplate restTemplate = new RestTemplate();
 
     /**
      * ykiho에 해당하는 병원 평가 상세등급 XML을 그대로 문자열로 반환합니다.
@@ -39,7 +38,9 @@ public class HiraEvaluationService {
                 .getForObject(url, String.class);
     }
 
-    /** ykiho 로 평가등급만 추출해서 반환합니다. */
+    /**
+     * ykiho 로 평가등급만 추출해서 반환합니다.
+     */
     public String getHospitalEvaluationGrade(String ykiho) {
         try {
             String xml = getHospitalEvaluationXml(ykiho);

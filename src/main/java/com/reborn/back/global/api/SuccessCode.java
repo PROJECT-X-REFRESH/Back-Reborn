@@ -68,7 +68,7 @@ public enum SuccessCode implements BaseCode { // 성공
     COMMENT_LIST_VIEW_SUCCESS(HttpStatus.OK, "BOARD_2002", "댓글 리스트 조회가 완료되었습니다."),
 
     RECOLLECTION_WEEK_VIEW_SUCCESS(HttpStatus.OK, "RECOLLECTION_2011", "이번주 추억쌓기 조회가 완료되었습니다."),
-    RECOLLECTION_ALBUM_EXIST(HttpStatus.OK, "RECOLLECTION_2012", "추억 앨범이 있습니다." ),
+    RECOLLECTION_ALBUM_EXIST(HttpStatus.OK, "RECOLLECTION_2012", "추억 앨범이 있습니다."),
     RECOLLECTION_NOT_FOUND(HttpStatus.OK, "RECOLLECTION_2013", "추억 앨범이 없습니다."),
 
     RECORD_CREATED(HttpStatus.CREATED, "RECORD_2011", "기록 생성이 완료되었습니다."),

@@ -33,10 +33,10 @@ public class RebirthConverter {
     }
 
     private static RebirthStep calcNextStep(Rebirth r) {
-        if (!Boolean.TRUE.equals(r.getWash()))  return RebirthStep.WASH;
+        if (!Boolean.TRUE.equals(r.getWash())) return RebirthStep.WASH;
         if (!Boolean.TRUE.equals(r.getClothes())) return RebirthStep.CLOTHES;
-        if (r.getRibbon() == null)              return RebirthStep.RIBBON;
-        if (r.getPetPost() == null)             return RebirthStep.POST;
+        if (r.getRibbon() == null) return RebirthStep.RIBBON;
+        if (r.getPetPost() == null) return RebirthStep.POST;
         return RebirthStep.OUTRO;
     }
 }

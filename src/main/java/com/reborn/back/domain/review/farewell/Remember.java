@@ -41,9 +41,9 @@ public class Remember extends BaseEntity {
     private String content;
 
     @ElementCollection(targetClass = OrganizeType.class)
-    @CollectionTable(name="remember_thing", joinColumns=@JoinColumn(name="remember_id"))
+    @CollectionTable(name = "remember_thing", joinColumns = @JoinColumn(name = "remember_id"))
     @Enumerated(EnumType.STRING)
-    @Column(name="thing")
+    @Column(name = "thing")
     private Set<OrganizeType> cleanedThings = new HashSet<>();
 
     // FK: fId → Farewell(fId)

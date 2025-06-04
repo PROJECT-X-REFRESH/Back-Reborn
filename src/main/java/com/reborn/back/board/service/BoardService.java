@@ -67,8 +67,8 @@ public class BoardService {
 
         Map<Integer, Integer> viewCnt = new HashMap<>();
         for (String key : keys) {
-            Integer boardId   = Integer.parseInt(key.split(":")[1]);
-            int      cnt      = redisUtil.getSetData(key).size(); // 유저 수
+            Integer boardId = Integer.parseInt(key.split(":")[1]);
+            int cnt = redisUtil.getSetData(key).size(); // 유저 수
             viewCnt.put(boardId, cnt);
         }
 
