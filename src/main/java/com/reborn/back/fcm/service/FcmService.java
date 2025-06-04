@@ -15,13 +15,23 @@ public class FcmService {
     private final FirebaseMessaging firebaseMessaging;
 
     public String sendMessage(FcmRequestDto dto) {
-        Message message = Message.builder()
-                .setToken(dto.getToken())
-                .setNotification(Notification.builder()
-                        .setTitle(dto.getTitle())
-                        .setBody(dto.getBody())
-                        .build())
+        // ── 알림( Notification ) 구성 ─────────────────────────────
+        Notification notification = Notification.builder()
+                .setTitle(dto.getTitle())
+                .setBody(dto.getBody())
                 .build();
+
+        // ── 메시지( Message ) 빌더 ───────────────────────────────
+        Message.Builder builder = Message.builder()
+                .setToken(dto.getToken())
+                .setNotification(notification);
+
+        // ⚡ data 페이로드가 있으면 추가
+        if (dto.getData() != null && !dto.getData().isEmpty()) {
+            builder.putAllData(dto.getData());
+        }
+
+        Message message = builder.build();
 
         try {
             String response = firebaseMessaging.send(message);

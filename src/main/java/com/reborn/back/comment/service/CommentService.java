@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -27,12 +28,14 @@ public class CommentService {
     private final FcmService fcmService;
 
     @Transactional
-    public Integer createComment(Integer boardId, CommentReqDto commentDto, User user) {
+    public Integer createComment(Integer boardId,
+                                 CommentReqDto commentDto,
+                                 User user) {
+
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.BOARD_NOT_FOUND));
 
         Comment comment = CommentConverter.saveComment(commentDto, board, user);
-
         commentRepository.save(comment);
         boardRepository.incrementCommentCount(boardId); // 댓글 수 +1
 
@@ -60,6 +63,7 @@ public class CommentService {
 
     private void sendCommentPush(Board board, User writer) {
         User postAuthor = board.getUser();
+
         // 자기 글에 자기가 쓴 댓글이면 알림 건너뜀
         if (postAuthor.getUid().equals(writer.getUid())) {
             return;
@@ -72,13 +76,14 @@ public class CommentService {
         }
 
         String title = "댓글이 달렸어요";
-        String body = writer.getName() + "님이 댓글을 남겼습니다.";
+        String body  = writer.getName() + "님이 댓글을 남겼습니다.";
 
         try {
             fcmService.sendMessage(FcmRequestDto.builder()
                     .token(token)
                     .title(title)
                     .body(body)
+                    .data(Map.of("boardId", String.valueOf(board.getId())))
                     .build());
         } catch (Exception e) {
             log.error("FCM 푸시 전송 실패: {}", e.getMessage(), e);
