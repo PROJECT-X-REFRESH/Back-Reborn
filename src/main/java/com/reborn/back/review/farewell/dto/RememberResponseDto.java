@@ -64,4 +64,16 @@ public class RememberResponseDto {
         @Schema(description = "추억 정리하기 내용")
         private String contents;
     }
+
+    @Schema(description = "CleaningStatusDto")
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CleaningStatusDto {
+        private boolean snack;   // SNACK 남아있으면 false
+        private boolean toy;     // TOY 남아있으면 false
+        private boolean bath;    // BATH 남아있으면 false
+        private boolean living;  // LIVING 남아있으면 false
+    }
 }

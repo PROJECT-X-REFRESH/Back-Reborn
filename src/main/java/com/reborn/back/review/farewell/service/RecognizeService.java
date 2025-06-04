@@ -1,12 +1,11 @@
 package com.reborn.back.review.farewell.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reborn.back.domain.review.farewell.Farewell;
 import com.reborn.back.domain.review.farewell.Recognize;
 import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
-import com.reborn.back.global.utils.GCPMap.GooglePlacesResponse;
-import com.reborn.back.global.utils.GCPMap.GooglePlacesService;
-import com.reborn.back.global.utils.GCPMap.PlaceConverter;
 import com.reborn.back.global.utils.hira.HiraEvaluationService;
 import com.reborn.back.global.utils.hira.HiraInfoService;
 import com.reborn.back.review.farewell.converter.RecognizeConverter;
@@ -20,12 +19,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -33,9 +28,9 @@ import java.util.stream.Collectors;
 public class RecognizeService {
     private final RecognizeRepository recognizeRepository;
     private final FarewellRepository farewellRepository;
-    private final GooglePlacesService googlePlacesService;
     private final HiraInfoService hiraInfoService;
     private final HiraEvaluationService hiraEvalService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Transactional
     public Recognize createRecognize(Integer farewellId) {
@@ -99,59 +94,54 @@ public class RecognizeService {
      * 10 km 반경 “정신” 키워드 상위 3곳 + HIRA 평가정보까지 한 번에 반환
      */
     public List<CounselingCenterDto> getCounselingCentersWithGrade(double lat, double lng) {
-
-        // 1) Google Places (동기) 조회
-        List<GooglePlacesResponse.PlaceDto> placeDtos =
-                googlePlacesService.getNearbyCounselingCenters(lat, lng).blockOptional()
-                        .orElse(Collections.emptyList());
-
-        // 2) 각 장소마다 ykiho → asmGrd09 추출
-        return placeDtos.stream()
-                .map(PlaceConverter::toDto)             // Google → PlaceResponseDto
-                .map(place -> {                         // PlaceResponseDto → CounselingCenterDto
-                    String ykiho = extractYkiho(place.getDisplayName());
-                    String grade = (ykiho == null)
-                            ? "병원 평가정보가 없습니다"
-                            : extractGrade(ykiho);
-
-                    return CounselingCenterDto.builder()
-                            .displayName(place.getDisplayName())
-                            .formattedAddress(place.getFormattedAddress())
-                            .nationalPhoneNumber(place.getNationalPhoneNumber())
-                            .latitude(place.getLatitude())
-                            .longitude(place.getLongitude())
-                            .ykiho(ykiho)
-                            .grade(grade == null ? "병원 평가정보가 없습니다" : grade)
-                            .build();
-                })
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 병원명으로 ykiho 추출 (없으면 null)
-     */
-    private String extractYkiho(String hospName) {
-        String xml = hiraInfoService.getHospBasisListXml(1, 1, hospName);
+        String json = hiraInfoService.getPsychHospitalsJson(1, 3, lng, lat, 10000.0);
+      
+        List<CounselingCenterDto> result = new ArrayList<>();
         try {
-            var doc = DocumentBuilderFactory.newInstance()
-                    .newDocumentBuilder()
-                    .parse(new ByteArrayInputStream(
-                            xml.getBytes(StandardCharsets.UTF_8)));
-            var ykihoTags = doc.getElementsByTagName("ykiho");
-            if (ykihoTags.getLength() == 0) return null;
-            String ykiho = ykihoTags.item(0).getTextContent().trim();
-            return ykiho.isBlank() ? null : ykiho;
-        } catch (Exception e) {
-            log.error("ykiho 파싱 실패 : {}", hospName, e);
-            return null;
-        }
-    }
+            JsonNode items = objectMapper.readTree(json)
+                    .path("response")
+                    .path("body")
+                    .path("items")
+                    .path("item");
 
-    /**
-     * ykiho 로 asmGrd09 추출 (없으면 null)
-     */
-    private String extractGrade(String ykiho) {
-        return hiraEvalService.getHospitalEvaluationGrade(ykiho);
+            for (JsonNode item : items) {
+                // textValue()는 JSON에 key가 없거나 null일 때만 null 반환
+                String name  = item.path("yadmNm").textValue();
+                String addr  = item.path("addr" ).textValue();
+                String phone = item.path("telno").textValue();
+                String ykiho = item.path("ykiho").textValue();
+
+                double latitude  = item.path("YPos").asDouble(0);
+                double longitude = item.path("XPos").asDouble(0);
+
+                // 등급 조회
+                String rawGrade = (ykiho == null)
+                        ? null
+                        : hiraEvalService.getHospitalEvaluationGrade(ykiho);
+
+                String grade;
+                if (rawGrade != null && rawGrade.matches("\\d+")) {
+                    grade = rawGrade;
+                } else {
+                    grade = null;
+                }
+
+                result.add(CounselingCenterDto.builder()
+                        .displayName(name)
+                        .formattedAddress(addr)
+                        .nationalPhoneNumber(phone)
+                        .latitude(latitude)
+                        .longitude(longitude)
+                        .ykiho(ykiho)
+                        .grade(grade)
+                        .build()
+                );
+            }
+        } catch (Exception e) {
+            log.error("HIRA JSON 파싱 실패", e);
+        }
+
+        return result;
     }
 
     public RecognizeResponseDto.SimpleRecognizeResDto getReviewRecognize(Integer recognizeId) {

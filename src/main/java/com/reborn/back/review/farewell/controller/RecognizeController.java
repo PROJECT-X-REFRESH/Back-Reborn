@@ -88,12 +88,13 @@ public class RecognizeController {
             @RequestParam double lng,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        // (사용자·farewell 검증 로직 그대로)
-
         List<CounselingCenterDto> result =
                 recognizeService.getCounselingCentersWithGrade(lat, lng);
 
-        return ApiResponse.onSuccess(SuccessCode.RECOGNIZE_NEARBY_SUCCESS, result);
+        return ApiResponse.onSuccess(
+                SuccessCode.RECOGNIZE_NEARBY_SUCCESS,
+                result
+        );
     }
 
     @Operation(summary = "Recognize 진행 상황", description = "진행중인 Recognize의 상태를 전달하는 API")

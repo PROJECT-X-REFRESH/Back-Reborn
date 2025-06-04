@@ -128,6 +128,7 @@ public enum SuccessCode implements BaseCode { // 성공
     REMEMBER_SNACK_COMPLETED(HttpStatus.OK, "REMEMBER_2007", "간식주기가 완료되었습니다."),
     REMEMBER_CLEAN_COMPLETED(HttpStatus.OK, "REMEMBER_2008", "정리가 완료되었습니다."),
     REMEMBER_PLAY_COMPLETED(HttpStatus.OK, "REMEMBER_2010", "놀아주기가 완료되었습니다."),
+    REMEMBER_CLEAN_STATUS_VIEW_SUCCESS(HttpStatus.OK, "REMEMBER_2006","남아있는 물품 정리 상태 조회가 완료되었습니다."),
 
     REBIRTH_CREATED(HttpStatus.CREATED, "REBORN_2011", "건강한 작별하기 생성이 완료되었습니다."),
     REBIRTH_ACTIVITY_UPDATED(HttpStatus.OK, "REBIRTH_2003", "컨텐츠가 완료되었습니다."),
