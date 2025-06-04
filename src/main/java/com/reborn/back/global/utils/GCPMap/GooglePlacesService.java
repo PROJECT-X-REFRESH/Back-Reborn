@@ -31,7 +31,7 @@ public class GooglePlacesService {
     public Mono<List<GooglePlacesResponse.PlaceDto>> getNearbyCounselingCenters(double lat, double lng) {
 
         Map<String, Object> body = Map.of(
-                "textQuery", "정신",
+                "textQuery", "상담소",
                 "pageSize", 3,
                 "locationBias", Map.of(
                         "circle", Map.of(

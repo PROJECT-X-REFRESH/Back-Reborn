@@ -22,9 +22,6 @@ public class PlaceResponseDto {
     @Schema(description = "국가 전화번호 형식")
     private String nationalPhoneNumber;
 
-    @Schema(description = "위도")
-    private Double latitude;
-
-    @Schema(description = "경도")
-    private Double longitude;
+    @Schema(description = "사용자 위치로부터 거리(미터)")
+    private Double distanceInMeters;
 }
