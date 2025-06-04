@@ -1,25 +1,34 @@
 package com.reborn.back.global.utils.GCPMap;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.List;
 
-@Schema(description = "주변 상담소 응답 DTO")
+/**
+ * Google Places Search API 응답 객체
+ */
+@Schema(description = "Google Places API 응답 DTO")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class GooglePlacesResponse {
+
+    @Schema(description = "Place 정보 리스트")
     private List<PlaceDto> places;
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Schema(description = "Google Place 객체")
     public static class PlaceDto {
+
+        // ── 기본 필드 ───────────────────────────────────────────
         @Schema(description = "상담소 이름 정보")
         private DisplayName displayName;
 
@@ -32,13 +41,29 @@ public class GooglePlacesResponse {
         @Schema(description = "위치 정보")
         private Location location;
 
+        // ── 영업시간 정보 ──────────────────────────────────────
+        @JsonProperty("currentOpeningHours")
+        private RegularOpeningHours regularOpeningHours;
+
+        public Boolean getOpenNow() {
+            return regularOpeningHours != null ? regularOpeningHours.getOpenNow() : null;
+        }
+
+        @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Builder
+        @Schema(description = "영업시간 정보")
+        public static class RegularOpeningHours {
+            private Boolean openNow;
+        }
+
         @Data
         @NoArgsConstructor
         @AllArgsConstructor
         @Builder
         @Schema(description = "상담소 이름을 담은 객체")
         public static class DisplayName {
-            @Schema(description = "상담소 이름")
             private String text;
         }
 
@@ -48,10 +73,7 @@ public class GooglePlacesResponse {
         @Builder
         @Schema(description = "위도, 경도 정보를 담은 객체")
         public static class Location {
-            @Schema(description = "위도")
             private double latitude;
-
-            @Schema(description = "경도")
             private double longitude;
         }
     }
