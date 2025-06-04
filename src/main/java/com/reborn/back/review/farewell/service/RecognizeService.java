@@ -6,6 +6,10 @@ import com.reborn.back.domain.review.farewell.Farewell;
 import com.reborn.back.domain.review.farewell.Recognize;
 import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
+import com.reborn.back.global.utils.GCPMap.GooglePlacesResponse;
+import com.reborn.back.global.utils.GCPMap.GooglePlacesService;
+import com.reborn.back.global.utils.GCPMap.PlaceConverter;
+import com.reborn.back.global.utils.GCPMap.PlaceResponseDto;
 import com.reborn.back.global.utils.hira.HiraEvaluationService;
 import com.reborn.back.global.utils.hira.HiraInfoService;
 import com.reborn.back.review.farewell.converter.RecognizeConverter;
@@ -20,7 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,6 +36,7 @@ public class RecognizeService {
     private final FarewellRepository farewellRepository;
     private final HiraInfoService hiraInfoService;
     private final HiraEvaluationService hiraEvalService;
+    private final GooglePlacesService googlePlacesService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Transactional
@@ -149,5 +156,20 @@ public class RecognizeService {
                 .orElseThrow(() -> GeneralException.of(ErrorCode.RECOGNIZE_NOT_FOUND));
 
         return RecognizeConverter.toReviewDto(recognize);
+    }
+
+    public List<PlaceResponseDto> getNearbyCounselingCenters(double lat, double lng) {
+        // 1. Google Places API 호출
+        List<GooglePlacesResponse.PlaceDto> placeDtos =
+                googlePlacesService.getNearbyCounselingCenters(lat, lng).block();
+
+        if (placeDtos == null) {
+            return Collections.emptyList();
+        }
+
+        // 2. PlaceDto → PlaceResponseDto(거리 포함) 변환
+        return placeDtos.stream()
+                .map(dto -> PlaceConverter.toDto(dto, lat, lng))
+                .collect(Collectors.toList());
     }
 }

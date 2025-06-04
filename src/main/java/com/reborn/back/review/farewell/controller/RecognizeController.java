@@ -4,9 +4,9 @@ package com.reborn.back.review.farewell.controller;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ApiResponse;
 import com.reborn.back.global.api.SuccessCode;
+import com.reborn.back.global.utils.GCPMap.PlaceResponseDto;
 import com.reborn.back.login.auth.mapper.CustomUserDetails;
 import com.reborn.back.login.service.UserService;
-import com.reborn.back.review.farewell.dto.CounselingCenterDto;
 import com.reborn.back.review.farewell.dto.RecognizeRequestDto;
 import com.reborn.back.review.farewell.dto.RecognizeResponseDto;
 import com.reborn.back.review.farewell.service.FarewellService;
@@ -77,24 +77,21 @@ public class RecognizeController {
         return ApiResponse.onSuccess(SuccessCode.RECOGNIZE_SAVE_COMPLETED, true);
     }
 
-    @Operation(summary = "주변 상담소 + HIRA 평가정보 조회")
+    @Operation(summary = "주변 상담소 조회", description = "사용자 위치를 기반으로 주변 상담소 목록을 조회하는 API")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "RECOGNIZE_2001", description = "주변 정신과 조회가 완료되었습니다.")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "RECOGNIZE_2001", description = "주변 상담소 조회가 완료되었습니다.")
     })
     @GetMapping("/nearby")
-    public ApiResponse<List<CounselingCenterDto>> getNearbyCounselingCenters(
+    public ApiResponse<List<PlaceResponseDto>> getNearbyCounselingCenters(
             @PathVariable Integer farewellId,
             @RequestParam double lat,
             @RequestParam double lng,
-            @AuthenticationPrincipal CustomUserDetails userDetails) {
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ) {
+        User user = userService.findUserByUserName(customUserDetails.getUsername());
 
-        List<CounselingCenterDto> result =
-                recognizeService.getCounselingCentersWithGrade(lat, lng);
-
-        return ApiResponse.onSuccess(
-                SuccessCode.RECOGNIZE_NEARBY_SUCCESS,
-                result
-        );
+        List<PlaceResponseDto> places = recognizeService.getNearbyCounselingCenters(lat, lng);
+        return ApiResponse.onSuccess(SuccessCode.RECOGNIZE_NEARBY_SUCCESS, places);
     }
 
     @Operation(summary = "Recognize 진행 상황", description = "진행중인 Recognize의 상태를 전달하는 API")

@@ -95,7 +95,7 @@ public enum SuccessCode implements BaseCode { // 성공
     FAREWELL_PET_SIMPLE_SUCCESS(HttpStatus.OK, "FAREWELL_2001", "Pet 간략 정보 조회 완료되었습니다."),
     FAREWELL_REVIEW_SUCCESS(HttpStatus.OK, "FAREWELL_2002", "작별 앨범 조회가 완료되었습니다."),
 
-    RECOGNIZE_NEARBY_SUCCESS(HttpStatus.OK, "2001", "주변 정신과 조회가 완료되었습니다"),
+    RECOGNIZE_NEARBY_SUCCESS(HttpStatus.OK, "2001", "주변 상담소 조회가 완료되었습니다"),
     RECOGNIZE_DETAIL_VIEW_SUCCESS(HttpStatus.OK, "REVEAL_2002", "나의 상태 알아보기 조회가 완료되었습니다."),
     RECOGNIZE_ACTIVITY_UPDATED(HttpStatus.OK, "RECOGNIZE_2003", "컨텐츠가 완료되었습니다."),
     RECOGNIZE_CREATED(HttpStatus.CREATED, "RECOGNIZE_2011", "나의 상태 알아보기 생성이 완료되었습니다."),
