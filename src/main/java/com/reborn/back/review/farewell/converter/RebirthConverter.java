@@ -21,6 +21,7 @@ public class RebirthConverter {
     public static DetailRebirthDto toDto(Rebirth r) {
         return DetailRebirthDto.builder()
                 .nextStep(calcNextStep(r))
+                .ribbon(r.getRibbon())
                 .build();
     }
 

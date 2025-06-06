@@ -20,6 +20,9 @@ public class RebirthResponseDto {
                 example = "clothes"
         )
         private RebirthStep nextStep;
+
+        @Schema(description = "반려동물 리본")
+        private String ribbon;
     }
 
     @Schema(description = "ReviewRebirthDto")
