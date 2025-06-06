@@ -40,7 +40,7 @@ REFRESH 팀의 프로젝트, REBORN(반려동물 동반 애플리케이션)의 �
 **DevOps & Infra**
 
 ![AWS](https://img.shields.io/badge/AWS-232F3E?logo=amazonwebservices&logoColor=white&style=for-the-badge)
-![AWS EC2](https://img.shields.io/badge/AWS%20EC2-FF9900?logo=amazonec2&logoColor=white&style=for-the-badge)
+![AWS EC2](https://img.shields.io/badge/AWS%20EC2-FF9900?logo=amazonec2&logoColor=white&style=for-the-badge)https://github.com/PROJECT-X-REFRESH/Back-Reborn/blob/refactor-dto/README.md
 ![AWS RDS](https://img.shields.io/badge/AWS%20RDS-527FFF?logo=amazonrds&logoColor=white&style=for-the-badge)
 ![AWS S3](https://img.shields.io/badge/AWS%20S3-569A31?logo=amazons3&logoColor=white&style=for-the-badge)
 ![AWS VPC](https://img.shields.io/badge/AWS%20VPC-852EF8?logo=amazonvpcs&logoColor=white&style=for-the-badge)
@@ -72,18 +72,45 @@ REFRESH 팀의 프로젝트, REBORN(반려동물 동반 애플리케이션)의 �
 > 📌 **전체 이슈 목록은 [ISSUES](https://github.com/PROJECT-X-REFRESH/Back-Reborn/issues)에서 확인 가능합니다.**
 
 
-## 📂 프로젝트 구조
+## 📂 Project Architecture
 
 ```bash
 📁 back-reborn
 ├── 📁 src
 │   ├── 📁 main
 │   │   ├── 📁 java/com/reborn/back
-│   │   ├── 📁 resources
+│   │   │   ├── 📁 aiPost
+│   │   │   │    ├── 📁 controller
+│   │   │   │    ├── 📁 converter
+│   │   │   │    ├── 📁 dto
+│   │   │   │    ├── 📁 service
+│   │   │   │    └── 📁 repository
+│   │   │   ├── 📁 board
+│   │   │   ├── 📁 chat
+│   │   │   ├── 📁 comment
+│   │   │   ├── 📁 domain
+│   │   │   ├── 📁 fcm
+│   │   │   ├── 📁 global
+│   │   │   ├── 📁 login
+│   │   │   │    └── 📁 auth
+│   │   │   ├── 📁 pet
+│   │   │   └── 📁 review
+│   │   └── 📁  resources
 │   └── 📁 test
 ├── 📄 build.gradle
 ├── 📄 README.md
 └── ...
+```
+
+## ⚙️ Local Build
+
+```bash
+git clone https://github.com/PROJECT-X-REFRESH/Back-Reborn.git
+cd Back-Reborn
+./gradlew clean
+./gradlew build
+./gradlew bootRun
+./gradlew test
 ```
 
 
