@@ -2,6 +2,7 @@ package com.reborn.back.pet.service;
 
 import com.reborn.back.domain.pet.Pet;
 import com.reborn.back.domain.review.farewell.Farewell;
+import com.reborn.back.domain.review.recollection.Recollection;
 import com.reborn.back.domain.user.User;
 import com.reborn.back.global.api.ErrorCode;
 import com.reborn.back.global.exception.GeneralException;
@@ -9,6 +10,7 @@ import com.reborn.back.pet.converter.PetConverter;
 import com.reborn.back.pet.dto.PetDto;
 import com.reborn.back.pet.repository.PetRepository;
 import com.reborn.back.review.farewell.repository.FarewellRepository;
+import com.reborn.back.review.recollection.service.RecollectionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +27,7 @@ public class PetService {
 
     private final PetRepository petRepository;
     private final FarewellRepository farewellRepository;
+    private final RecollectionService recollectionService;
 
     @Transactional
     public Pet findById(Integer pId) {
@@ -41,6 +44,7 @@ public class PetService {
             pet.setFarewell(farewell);
         }
         petRepository.save(pet);
+        recollectionService.getOrCreateRecollection(pet);
         return getPetList(user, 0, 10);
     }
 
