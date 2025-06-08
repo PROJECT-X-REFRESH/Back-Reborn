@@ -49,7 +49,7 @@ public class RecollectionController {
     @GetMapping("/id/{petId}")
     public ApiResponse<Integer> getRecollectionId(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestParam Integer petId) {
+            @PathVariable Integer petId) {
         User user = userService.findUserByUserName(customUserDetails.getUsername());
         Integer result = recollectionService.checkRecollection(user, petId);
         if (result == null) {
