@@ -153,4 +153,18 @@ public class RememberService {
 
         return RememberConverter.toReviewDto(remember);
     }
+
+    public RememberResponseDto.CleaningStatusDto getCleaningStatus(Integer farewellId) {
+        Farewell farewell = farewellRepository.findById(farewellId)
+                .orElseThrow(() -> GeneralException.of(ErrorCode.FAREWELL_NOT_FOUND));
+
+        Set<OrganizeType> done = farewell.getClearedThings();
+
+        boolean snack   = done.contains(OrganizeType.SNACK);
+        boolean toy     = done.contains(OrganizeType.TOY);
+        boolean bath    = done.contains(OrganizeType.BATH);
+        boolean living  = done.contains(OrganizeType.LIVING);
+
+        return new RememberResponseDto.CleaningStatusDto(snack, toy, bath, living);
+    }
 }
