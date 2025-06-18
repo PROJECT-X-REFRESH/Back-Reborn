@@ -76,7 +76,7 @@ public class CommentService {
         }
 
         String title = "댓글이 달렸어요";
-        String body  = writer.getName() + "님이 댓글을 남겼습니다.";
+        String body  = writer.getNickname() + "님이 댓글을 남겼습니다.";
 
         try {
             fcmService.sendMessage(FcmRequestDto.builder()
